@@ -151,8 +151,23 @@ def consultarUsuario():
     resultado = cursorObj.fetchall()
     print('\n')
     if len(resultado) != 0:
+        cont = 0
         for datos in resultado[0]:
-            if datos != None: print(datos)
+            infoUsuario = ""
+            if cont == 0: infoUsuario = "No. Identificación: "
+            elif cont == 1: infoUsuario = "Nombre: "
+            elif cont == 2: infoUsuario = "Apellido: "
+            elif cont == 3: infoUsuario = "Dirección: "
+            elif cont == 4: infoUsuario = "Telefono: "
+            elif cont == 5: infoUsuario = "Correo: "
+            elif cont == 6: infoUsuario = "Ciudad: "
+            elif cont == 7: infoUsuario = "Fecha de nacimiento: "
+            elif cont == 8: infoUsuario = "Fecha de afiliacion: "
+            elif cont == 9: infoUsuario = "¿Vacunado?: "
+            else: infoUsuario = "Fecha de desafiliación: "
+            if datos != None:
+                print(infoUsuario,datos)
+                cont += 1
         print('\n')
     else: print('El paciente no se encuentra en los registros.\n')
 

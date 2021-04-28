@@ -42,6 +42,7 @@ def crearTablas():
                     "fabricante"	CHAR(12),
                     "tipoVacuna"	CHAR(21),
                     "cantidadRecibida"	NUMERIC(6),
+                    "cantidadAsignada"	NUMERIC(6),
                     "cantidadUsada"	NUMERIC(6),
                     "dosisNecesaria"	NUMERIC(1),
                     "temperatura"	NUMERIC(2,1),
@@ -52,7 +53,7 @@ def crearTablas():
                     PRIMARY KEY("noLote")
                 );
                 ''')
-    cursorObj.execute('update lote_vacunas set cantidadUsada = 0')
+    cursorObj.execute('update lote_vacunas set cantidadAsignada = cantidadUsada')
     # cursorObj.execute('''DROP TABLE plan_vacunacion''')
     cursorObj.execute('''
                 CREATE TABLE if not exists "plan_vacunacion" (
@@ -198,6 +199,7 @@ def crearLote():
         fabricante = input('Fabricante:\n').title()
         tipoVacuna = input('Tipo de vacuna:\n').title()
         cantidadRecibida = int(input('Cantidad de vacunas recibidas:\n'))
+        cantidadAsignada = int(input('Cantidad de vacunas asignadas:\n'))
         cantidadUsada = int(input('Cantidad de vacunas usadas:\n'))
         dosisNecesaria = int(input('Dosis necesarias:\n'))
         temperatura = float(input('Temperatura de almacenamiento:\n'))
@@ -214,8 +216,8 @@ def crearLote():
         rutaImagen = input('Ruta completa a la imagen:\n')
         with open(rutaImagen, "rb") as File:
             imagenBinaria = File.read()
-        info = (numeroLote, fabricante, tipoVacuna, cantidadRecibida, cantidadUsada, dosisNecesaria, temperatura, efectividad, tiempoProteccion, fechaVencimiento, imagenBinaria)
-        cursorObj.execute('INSERT INTO lote_vacunas VALUES (?,?,?,?,?,?,?,?,?,date(?),?)', info)
+        info = (numeroLote, fabricante, tipoVacuna, cantidadRecibida, cantidadAsignada, cantidadUsada, dosisNecesaria, temperatura, efectividad, tiempoProteccion, fechaVencimiento, imagenBinaria)
+        cursorObj.execute('INSERT INTO lote_vacunas VALUES (?,?,?,?,?,?,?,?,?,?,date(?),?)', info)
         con.commit()
     else:
         print('Este lote de vacunas ya existe\n')
@@ -313,6 +315,7 @@ def programacionDeVacunacion():
 def programacionPacienteLote():
     con = sqlConnection() 
     cursorObj = con.cursor()
+    crearTablas()
     cursorObj.execute('SELECT * FROM plan_vacunacion')
     planVacunacion = cursorObj.fetchall()
     for plan in planVacunacion:
@@ -321,14 +324,14 @@ def programacionPacienteLote():
         pacientesAVacunar = cursorObj.fetchall()
         for paciente in pacientesAVacunar:
             # print(paciente)
-            cursorObj.execute('SELECT noLote FROM lote_vacunas WHERE cantidadUsada<cantidadRecibida')
+            cursorObj.execute('SELECT noLote FROM lote_vacunas WHERE cantidadAsignada<cantidadRecibida')
             vacunaAAaplicar = cursorObj.fetchone()
             if vacunaAAaplicar == None:
                 print('Limite de vacunas alcanzado')
                 return
             datos = (paciente[1], paciente[0], vacunaAAaplicar[0], plan[0])
             cursorObj.execute('INSERT INTO programacion_vacunas (ciudadVacunacion, noId, noLote, idPlan) VALUES (?,?,?,?)', datos)
-            cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = cantidadUsada+1 WHERE noLote = {}'.format(vacunaAAaplicar[0]))
+            cursorObj.execute('UPDATE lote_vacunas SET cantidadAsignada = cantidadAsignada+1 WHERE noLote = {}'.format(vacunaAAaplicar[0]))
             con.commit()
 
     con.close()
@@ -374,7 +377,7 @@ def programacionFechaHora():
                 horaCita = horaInicio
         cursorObj.execute('update programacion_vacunas set fechaProgramada = ?, horaProgramada = ? where idCita = ?', (fechaCita, horaCita, persona[0]))
         con.commit()
-        enviarCorreo(persona[8], fechaCita, horaCita, persona[9])
+        # enviarCorreo(persona[8], fechaCita, horaCita, persona[9])
 
     con.close()
     print('Programacion de citas de vacunacion exitosa')
@@ -412,9 +415,18 @@ def vacunacionPacientes():
     con = sqlConnection()
     cursorObj = con.cursor()
     documentoID = int(input('Ingrese a continuacion el documento de identidad de la persona que desea vacunar:\n'))
-    vacunado = input('¿Esta persona ha sido vacunada? (S/N):\n').title()
-    cursorObj.execute('UPDATE pacientes SET vacunado = "{}" WHERE noId = {}'.format(vacunado, documentoID))
-    con.commit()
+    cursorObj.execute('SELECT fechaDesafiliacion FROM pacientes WHERE noId = {}'.format(documentoID))
+    afiliado = cursorObj.fetchall()
+    print('\n')
+    if len(afiliado) != 0:
+        if afiliado[0][0] != None:
+            print('Este paciente se encuentra desafiliado')
+        else:
+            vacunado = input('¿Esta persona ha sido vacunada? (S/N):\n').title()
+            cursorObj.execute('UPDATE pacientes SET vacunado = "{}" WHERE noId = {}'.format(vacunado, documentoID))
+            cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = cantidadUsada + 1 WHERE noLote = (SELECT noLote FROM programacion_vacunas WHERE noId = {})'.format(documentoID))
+            con.commit()
+    else: print('El paciente no se encuentra en los registros.\n')
 
     con.close()
 

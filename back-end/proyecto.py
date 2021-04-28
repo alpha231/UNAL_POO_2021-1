@@ -134,7 +134,7 @@ def crearUsuario():
         añoAfiliacion = añoAfiliacion.ljust(4)
         fechaAfiliacion = "{}-{}-{}".format(añoAfiliacion,mesAfiliacion,diaAfiliacion)
         vacunado = input('¿Ha sido vacunado? (S/N):\n').title()
-        cursorObj.execute('INSERT INTO pacientes VALUES ({a},"{b}","{c}","{d}",{e},"{f}","{g}",date("{h}"),date("{i}"),"{j}","")'.format(a=documentoID, b=nombre, c=apellido, d=direccion, e=telefono, f=correo, g=ciudad, h =fechaNacimiento, i=fechaAfiliacion, j=vacunado))
+        cursorObj.execute('INSERT INTO pacientes VALUES ({a},"{b}","{c}","{d}",{e},"{f}","{g}",date("{h}"),date("{i}"),"{j}", NULL)'.format(a=documentoID, b=nombre, c=apellido, d=direccion, e=telefono, f=correo, g=ciudad, h =fechaNacimiento, i=fechaAfiliacion, j=vacunado))
         con.commit()
     else:
         print('Este usuario ya existe\n')
@@ -150,7 +150,7 @@ def consultarUsuario():
     print('\n')
     if len(resultado) != 0:
         for datos in resultado[0]:
-            if datos != '': print(datos)
+            if datos != None: print(datos)
         print('\n')
     else: print('El paciente no se encuentra en los registros.\n')
 

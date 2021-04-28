@@ -5,6 +5,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 # from datetime import datetime, date, time, timezone
 import datetime
+from PIL import Image
 
 ## TODO comments
 
@@ -229,15 +230,23 @@ def consultarLote():
     cursorObj = con.cursor()
     noLote = int(input('Ingrese a continuacion numero de lote que desea consultar:\n'))
     cursorObj.execute('SELECT * FROM lote_vacunas WHERE noLote = {}'.format(noLote))
-    resultado = cursorObj.fetchall()
+    resultado = cursorObj.fetchone()
     print('\n')
     if len(resultado) != 0:
-        for datos in resultado[0]:
+        for datos in resultado[0:-1]:
             if datos != '': print(datos)
+        mostrarImagen(cursorObj, resultado[1], resultado[11])
         print('\n')
     else: print('El lote no se encuentra registrado.\n')
 
     con.close()
+
+def mostrarImagen(cursorObj, fabricante, imagenBinaria):
+    rutaDeGuardado = '/home/alpha23/Downloads/{}.jpg'.format(fabricante)
+    with open(rutaDeGuardado, "wb") as File:
+        File.write(imagenBinaria)
+    imagen = Image.open(rutaDeGuardado)
+    imagen.show()
 
 def menuModuloTres():
     while True:

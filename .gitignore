@@ -31,6 +31,7 @@ share/python-wheels/
 *.xlsx
 *.docx#
 *.xlsx#
+data/fam.sql
 MANIFEST
 
 # PyInstaller

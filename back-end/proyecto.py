@@ -580,10 +580,19 @@ def menuPrincipal():
             if (opcion == 4): menuModuloCuatro()
             if (opcion == 5): menuModuloCinco()
             if (opcion == 6): break
+            if (opcion == 231): reinciarValores()
         else: continue
 
 def main():
     crearTablas()
     menuPrincipal()
-    
+
+def reinciarValores():
+    con = sqlConnection()
+    cursorObj = con.cursor()
+    cursorObj.execute('UPDATE pacientes SET vacunado = "N", fechaDesafiliacion= NULL')
+    cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = 0, cantidadAsignada = 0')
+
+    con.close()
+
 main()

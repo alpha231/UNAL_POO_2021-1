@@ -272,7 +272,7 @@ def mostrarImagen(cursorObj, fabricante, imagenBinaria):
         if opcion != '': 
             opcion = int(opcion)
             if (opcion == 1): 
-                rutaDeGuardado = '/home/alpha23/Downloads/{}.jpg'.format(fabricante)
+                rutaDeGuardado = 'imagenesDescargadas/{}.jpg'.format(fabricante)
                 with open(rutaDeGuardado, "wb") as File:
                     File.write(imagenBinaria)
                 imagen = Image.open(rutaDeGuardado)
@@ -593,7 +593,7 @@ def reinciarValores():
     cursorObj.execute('UPDATE pacientes SET vacunado = "N", fechaDesafiliacion= NULL')
     cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = 0, cantidadAsignada = 0')
     con.commit()
-    
+
     con.close()
 
 main()

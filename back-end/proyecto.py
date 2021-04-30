@@ -592,7 +592,8 @@ def reinciarValores():
     cursorObj = con.cursor()
     cursorObj.execute('UPDATE pacientes SET vacunado = "N", fechaDesafiliacion= NULL')
     cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = 0, cantidadAsignada = 0')
-
+    con.commit()
+    
     con.close()
 
 main()

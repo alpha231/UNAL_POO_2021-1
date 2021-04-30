@@ -54,7 +54,6 @@ def crearTablas():
                     PRIMARY KEY("noLote")
                 );
                 ''')
-    cursorObj.execute('update lote_vacunas set cantidadAsignada = cantidadUsada')
     # cursorObj.execute('''DROP TABLE plan_vacunacion''')
     cursorObj.execute('''
                 CREATE TABLE if not exists "plan_vacunacion" (
@@ -66,7 +65,7 @@ def crearTablas():
                     PRIMARY KEY("idPlan")
                 );
                 ''')
-    cursorObj.execute('''DROP TABLE programacion_vacunas''')
+    # cursorObj.execute('''DROP TABLE programacion_vacunas''')
     cursorObj.execute('''
                 CREATE TABLE if not exists "programacion_vacunas" (
                     idCita      INTEGER,
@@ -86,10 +85,6 @@ def crearTablas():
                 CREATE INDEX if not exists "ix_programacion_vacunas_noId" ON "programacion_vacunas" (
                     "noId"	ASC
                 );
-                ''')
-    cursorObj.execute('''
-                SELECT * FROM programacion_vacunas C 
-                inner join pacientes P on (C.noId = P.noId);
                 ''')
     con.commit()
     con.close()
@@ -364,11 +359,17 @@ def menuModuloCuatro():
         else: continue
 
 def programacionDeVacunacion():
-    programacionPacienteLote()
-    programacionFechaHora()
-
-def programacionPacienteLote():
     con = sqlConnection() 
+    cursorObj = con.cursor()
+    cursorObj.execute('UPDATE lote_vacunas SET cantidadAsignada = cantidadUsada')
+    cursorObj.execute('DROP TABLE programacion_vacunas')
+    con.commit()
+    programacionPacienteLote(con)
+    programacionFechaHora(con)
+
+    con.close()
+
+def programacionPacienteLote(con):
     cursorObj = con.cursor()
     crearTablas()
     cursorObj.execute('SELECT * FROM plan_vacunacion')
@@ -389,10 +390,7 @@ def programacionPacienteLote():
             cursorObj.execute('UPDATE lote_vacunas SET cantidadAsignada = cantidadAsignada+1 WHERE noLote = {}'.format(vacunaAAaplicar[0]))
             con.commit()
 
-    con.close()
-
-def programacionFechaHora():
-    con = sqlConnection() 
+def programacionFechaHora(con):
     cursorObj = con.cursor()
     horaInicio = "08:00:00"
     horaFin = "17:00:00"
@@ -433,8 +431,6 @@ def programacionFechaHora():
         cursorObj.execute('update programacion_vacunas set fechaProgramada = ?, horaProgramada = ? where idCita = ?', (fechaCita, horaCita, cita[0]))
         con.commit()
         # enviarCorreo(cita[8], fechaCita, horaCita, cita[9])
-
-    con.close()
     print('Programacion de citas de vacunacion exitosa')
 
 def enviarCorreo(destinatario, dia, hora, vacuna):

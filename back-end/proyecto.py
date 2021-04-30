@@ -148,11 +148,11 @@ def consultarUsuario():
     cursorObj = con.cursor()
     documentoID = int(input('Ingrese a continuacion el documento de identidad de la persona que desea consultar:\n'))
     cursorObj.execute('SELECT * FROM pacientes WHERE noId = {}'.format(documentoID))
-    resultado = cursorObj.fetchall()
+    resultado = cursorObj.fetchone()
     print('\n')
-    if len(resultado) != 0:
+    if resultado != None:
         cont = 0
-        for datos in resultado[0]:
+        for datos in resultado:
             infoUsuario = ""
             if cont == 0: infoUsuario = "No. Identificación: "
             elif cont == 1: infoUsuario = "Nombre: "
@@ -247,9 +247,24 @@ def consultarLote():
     cursorObj.execute('SELECT * FROM lote_vacunas WHERE noLote = {}'.format(noLote))
     resultado = cursorObj.fetchone()
     print('\n')
-    if len(resultado) != 0:
+    if resultado != None:
+        cont = 0
         for datos in resultado[0:-1]:
-            if datos != '': print(datos)
+            infoLote = ""
+            if cont == 0: infoLote = "No. de Lote: "
+            elif cont == 1: infoLote = "Fabricante: "
+            elif cont == 2: infoLote = "Tipo de vacuna: "
+            elif cont == 3: infoLote = "Cantidad de vacunas recibidas: "
+            elif cont == 4: infoLote = "Cantidad de asignadas recibidas: "
+            elif cont == 5: infoLote = "Cantidad de usadas recibidas: "
+            elif cont == 6: infoLote = "Dosis necesarias: "
+            elif cont == 7: infoLote = "Temperatura de almacenamiento: "
+            elif cont == 8: infoLote = "Efectividad: "
+            elif cont == 9: infoLote = "Tiempo de proteccion: "
+            elif cont == 10: infoLote = "Fecha de vencimiento: "
+            if datos != None:
+                print(infoLote,datos)
+                cont += 1
         mostrarImagen(cursorObj, resultado[1], resultado[11])
         print('\n')
     else: print('El lote no se encuentra registrado.\n')
@@ -257,11 +272,18 @@ def consultarLote():
     con.close()
 
 def mostrarImagen(cursorObj, fabricante, imagenBinaria):
-    rutaDeGuardado = '/home/alpha23/Downloads/{}.jpg'.format(fabricante)
-    with open(rutaDeGuardado, "wb") as File:
-        File.write(imagenBinaria)
-    imagen = Image.open(rutaDeGuardado)
-    imagen.show()
+    while True:
+        opcion = input('¿Desea abrir la imagen?:\n1. Si\n2. No\n')
+        if opcion != '': 
+            opcion = int(opcion)
+            if (opcion == 1): 
+                rutaDeGuardado = '/home/alpha23/Downloads/{}.jpg'.format(fabricante)
+                with open(rutaDeGuardado, "wb") as File:
+                    File.write(imagenBinaria)
+                imagen = Image.open(rutaDeGuardado)
+                imagen.show()
+            break
+        else: continue
 
 def menuModuloTres():
     while True:
@@ -311,11 +333,20 @@ def consultarPlanVacunacion():
     cursorObj = con.cursor()
     idPlan = int(input('Ingrese a continuacion el codigo del plan de vacunacion que desea consultar:\n'))
     cursorObj.execute('SELECT * FROM plan_vacunacion WHERE idPlan = {}'.format(idPlan))
-    resultado = cursorObj.fetchall()
+    resultado = cursorObj.fetchone()
     print('\n')
-    if len(resultado) != 0:
-        for datos in resultado[0]:
-            if datos != '': print(datos)
+    if resultado != None:
+        cont = 0
+        for datos in resultado:
+            infoLote = ""
+            if cont == 0: infoLote = "Id. de Plan: "
+            elif cont == 1: infoLote = "Edad minima: "
+            elif cont == 2: infoLote = "Edad maxima: "
+            elif cont == 3: infoLote = "Fecha de inicio: "
+            elif cont == 4: infoLote = "Fecha de finalizacion: "
+            if datos != None:
+                print(infoLote,datos)
+                cont += 1
         print('\n')
     else: print('El plan de vacunación no se encuentra registrado.\n')
 
@@ -370,13 +401,13 @@ def programacionFechaHora():
                         INNER JOIN pacientes pc ON (pc.noid = pgv.noid) 
                         INNER JOIN lote_vacunas lv ON (lv.noLote = pgv.noLote) 
                         WHERE fechaProgramada IS NULL''')
-    personasAVacunar = cursorObj.fetchall()
-    for persona in personasAVacunar:
+    citaAProgramar = cursorObj.fetchall()
+    for cita in citaAProgramar:
         cursorObj.execute('SELECT fechaProgramada, max(horaProgramada) FROM programacion_vacunas WHERE fechaProgramada = (SELECT max(fechaProgramada) FROM programacion_vacunas)')
         ultimaCitaProgramada =  cursorObj.fetchone()
         # print(ultimaCitaProgramada)
         if ultimaCitaProgramada[0] == None:
-            fechaCita = persona[7]
+            fechaCita = cita[7]
             horaCita = horaInicio
         else:
             fechaMaxima = ultimaCitaProgramada[0]
@@ -395,13 +426,13 @@ def programacionFechaHora():
                 fechaCita = fechaMaxima
 
             fechaCitaDt = datetime.datetime.strptime(fechaCita, "%Y-%m-%d")
-            fechaInicioDt = datetime.datetime.strptime(persona[7], "%Y-%m-%d")
+            fechaInicioDt = datetime.datetime.strptime(cita[7], "%Y-%m-%d")
             if fechaCitaDt < fechaInicioDt:
                 fechaCita = fechaInicioDt.strftime("%Y-%m-%d")
                 horaCita = horaInicio
-        cursorObj.execute('update programacion_vacunas set fechaProgramada = ?, horaProgramada = ? where idCita = ?', (fechaCita, horaCita, persona[0]))
+        cursorObj.execute('update programacion_vacunas set fechaProgramada = ?, horaProgramada = ? where idCita = ?', (fechaCita, horaCita, cita[0]))
         con.commit()
-        # enviarCorreo(persona[8], fechaCita, horaCita, persona[9])
+        # enviarCorreo(cita[8], fechaCita, horaCita, cita[9])
 
     con.close()
     print('Programacion de citas de vacunacion exitosa')
@@ -439,17 +470,26 @@ def vacunacionPacientes():
     con = sqlConnection()
     cursorObj = con.cursor()
     documentoID = int(input('Ingrese a continuacion el documento de identidad de la persona que desea vacunar:\n'))
-    cursorObj.execute('SELECT fechaDesafiliacion FROM pacientes WHERE noId = {}'.format(documentoID))
-    afiliado = cursorObj.fetchall()
+    cursorObj.execute('SELECT fechaDesafiliacion, vacunado FROM pacientes WHERE noId = {}'.format(documentoID))
+    afiliado = cursorObj.fetchone()
     print('\n')
-    if len(afiliado) != 0:
-        if afiliado[0][0] != None:
+    if afiliado != None:
+        if afiliado[0] != None:
             print('Este paciente se encuentra desafiliado')
+        elif afiliado[1] == 'S':
+            print('Este paciente ya se encuentra vacunado')
         else:
-            vacunado = input('¿Esta persona ha sido vacunada? (S/N):\n').title()
-            cursorObj.execute('UPDATE pacientes SET vacunado = "{}" WHERE noId = {}'.format(vacunado, documentoID))
-            cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = cantidadUsada + 1 WHERE noLote = (SELECT noLote FROM programacion_vacunas WHERE noId = {})'.format(documentoID))
-            con.commit()
+            cursorObj.execute('''SELECT pc.fechaDesafiliacion , pc.vacunado FROM programacion_vacunas pgv 
+                            INNER JOIN pacientes pc ON (pc.noid = pgv.noid)
+                            WHERE pc.noId = {}'''.format(documentoID))
+            cita = cursorObj.fetchone()
+            if cita != None: 
+                vacunado = input('¿Desea vacunar a esta persona? (S/N):\n').title()
+                if vacunado == 'S':
+                    cursorObj.execute('UPDATE pacientes SET vacunado = "{}" WHERE noId = {}'.format(vacunado, documentoID))
+                    cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = cantidadUsada + 1 WHERE noLote = (SELECT noLote FROM programacion_vacunas WHERE noId = {})'.format(documentoID))
+                    con.commit()
+            else: print('El paciente no tiene cita programada.\n')
     else: print('El paciente no se encuentra en los registros.\n')
 
     con.close()

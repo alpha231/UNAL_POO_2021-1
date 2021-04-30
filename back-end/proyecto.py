@@ -91,7 +91,7 @@ def crearTablas():
 
 def menuModuloUno():
     while True:
-        opcion = input('Ingrese el numero de la opcion que desea realizar:\n1. Crear nuevo afiliado\n2. Consultar afiliado\n3. Desafiliar usuario\n4. Salir\n')
+        opcion = input('Ingrese el numero de la opcion que desea realizar:\n1. Crear nuevo afiliado\n2. Consultar afiliado\n3. Desafiliar usuario\n4. Atras\n')
         if opcion != '': 
             opcion = int(opcion)
             if (opcion == 1): crearUsuario()
@@ -191,7 +191,7 @@ def desafiliarUsuario():
 
 def menuModuloDos():
     while True:
-        opcion = input('Ingrese el numero de la opcion que desea realizar:\n1. Crear nuevo lote de vacunas\n2. Consultar lote de vacunas\n3. Salir\n')
+        opcion = input('Ingrese el numero de la opcion que desea realizar:\n1. Crear nuevo lote de vacunas\n2. Consultar lote de vacunas\n3. Atras\n')
         if opcion != '': 
             opcion = int(opcion)
             if (opcion == 1): crearLote()
@@ -282,7 +282,7 @@ def mostrarImagen(cursorObj, fabricante, imagenBinaria):
 
 def menuModuloTres():
     while True:
-        opcion = input('Ingrese el numero de la opcion que desea realizar:\n1. Crear plan de vacunación\n2. Consultar plan de vacunación\n3. Salir\n')
+        opcion = input('Ingrese el numero de la opcion que desea realizar:\n1. Crear plan de vacunación\n2. Consultar plan de vacunación\n3. Atras\n')
         if opcion != '': 
             opcion = int(opcion)
             if (opcion == 1): crearPlanVacunacion()
@@ -349,13 +349,30 @@ def consultarPlanVacunacion():
 
 def menuModuloCuatro():
     while True:
-        opcion = input('¿Desea crear la programacion de vacunacion?:\n1. Si\n2. No\n')
+        opcion = input('Ingrese el numero de la opcion que desea realizar:\n1. Crear la programacion de vacunas\n2. Consultar la programacion de vacunas\n3. Consultar vacunacion de un paciente\n4. Atras\n')
         if opcion != '': 
             opcion = int(opcion)
-            if (opcion == 1): 
-                programacionDeVacunacion()
-                break
-            if (opcion == 2): break
+            if (opcion == 1): programacionDeVacunacion()
+            if (opcion == 2): 
+                while True:
+                    opcion = input('''Por que campo desea organizar la consulta:\n1. Numero de Identificacion\n2. Nombre\n3. Apellido\n4. Direccion\n5. Telefono\n6. Correo\n7. Fecha Programada\n8. Hora Programada\n9. Numero de lote\n10. Fabricante\n11. Salir de la consulta''')
+                    if opcion != '': 
+                        opcion = int(opcion)
+                        if (opcion ==1): datoConsulta = 'pc.noId'
+                        if (opcion ==2): datoConsulta = 'pc.nombre'
+                        if (opcion ==3): datoConsulta = 'pc.apellido'
+                        if (opcion ==4): datoConsulta = 'pc.direccion'
+                        if (opcion ==5): datoConsulta = 'pc.telefono'
+                        if (opcion ==6): datoConsulta = 'pc.correo'
+                        if (opcion ==7): datoConsulta = 'pgv.fechaProgramada'
+                        if (opcion ==8): datoConsulta = 'pgv.horaProgramada'
+                        if (opcion ==9): datoConsulta = 'lv.noLote'
+                        if (opcion ==10): datoConsulta = 'lv.fabricante'
+                        if (opcion ==11): break
+                    else: continue
+                    consultarProgramacionCompleta(datoConsulta)
+            if (opcion == 3): consultarProgramacionIndividual()
+            if (opcion == 4): break
         else: continue
 
 def programacionDeVacunacion():
@@ -452,6 +469,68 @@ def enviarCorreo(destinatario, dia, hora, vacuna):
         server.quit()
     except:
         print('error')
+
+def consultarProgramacionCompleta(datoConsulta):
+    con = sqlConnection()
+    cursorObj = con.cursor()
+    cursorObj.execute('''SELECT pgv.idCita, pc.noId, pc.nombre, pc.apellido, pc.direccion, pc.telefono, pc.correo, pgv.fechaProgramada, pgv.horaProgramada, lv.noLote, lv.fabricante  FROM programacion_vacunas pgv 
+                        INNER JOIN pacientes pc ON (pc.noid = pgv.noid) 
+                        INNER JOIN lote_vacunas lv ON (lv.noLote = pgv.noLote)
+                        ORDER BY {} ASC'''.format(datoConsulta))
+    citasProgramadas = cursorObj.fetchall()
+    for cita in citasProgramadas:
+        cont = 0
+        for dato in cita:
+            infoCita = ""
+            if cont == 1: infoCita = "No. Identificación: "
+            elif cont == 2: infoCita = "Nombre: "
+            elif cont == 3: infoCita = "Apellido: "
+            elif cont == 4: infoCita = "Dirección: "
+            elif cont == 5: infoCita = "Telefono: "
+            elif cont == 6: infoCita = "Correo: "
+            elif cont == 7: infoCita = "Fecha programada: "
+            elif cont == 8: infoCita = "Hora programada: "
+            elif cont == 9: infoCita = "Numero de lote de vacuna: "
+            else: infoCita = "Fabricante de la vacuna: "
+            if dato != None and dato != 0:
+                print(infoCita,dato)
+                cont += 1
+        print('\n')
+
+def consultarProgramacionIndividual():
+    con = sqlConnection()
+    cursorObj = con.cursor()
+    documentoID = int(input('Ingrese a continuacion el documento de identidad de la persona cuya cita desea consultar:\n'))
+    cursorObj.execute('''SELECT pc.noId, pc.nombre, pc.apellido, pc.direccion, pc.telefono, pc.correo, pgv.fechaProgramada, pgv.horaProgramada, lv.noLote, lv.fabricante  FROM programacion_vacunas pgv 
+                        INNER JOIN pacientes pc ON (pc.noid = pgv.noid) 
+                        INNER JOIN lote_vacunas lv ON (lv.noLote = pgv.noLote)
+                        WHERE pgv.noId = {}'''.format(documentoID))
+    resultado = cursorObj.fetchone()
+    print('\n')
+    if resultado != None:
+        cont = 0
+        for datos in resultado:
+            infoCita = ""
+            if cont == 0: infoCita = "No. Identificación: "
+            elif cont == 1: infoCita = "Nombre: "
+            elif cont == 2: infoCita = "Apellido: "
+            elif cont == 3: infoCita = "Dirección: "
+            elif cont == 4: infoCita = "Telefono: "
+            elif cont == 5: infoCita = "Correo: "
+            elif cont == 6: infoCita = "Fecha programada: "
+            elif cont == 7: infoCita = "Hora programada: "
+            elif cont == 8: infoCita = "Numero de lote de vacuna: "
+            else: infoCita = "Fabricante de la vacuna: "
+            if datos != None:
+                print(infoCita,datos)
+                cont += 1
+        print('\n')
+    else: print('El paciente no tiene cita.\n')
+
+    con.close()
+    
+
+    con.close()
 
 def menuModuloCinco():
     while True:

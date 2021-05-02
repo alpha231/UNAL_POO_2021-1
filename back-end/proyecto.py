@@ -1,18 +1,19 @@
-#Libreria sqlite3 esta incluida por defecto, permite elaborar y manipular bases de datos
+#Librería sqlite3 esta incluida por defecto, permite elaborar y manipular bases de datos
 import sqlite3 
 from sqlite3 import Error
-#Libreria smtplib esta incluida por defecto, permite la creación y envio de correos electronicos
+#Librería smtplib esta incluida por defecto, permite la creación y envio de correos electronicos
 import smtplib
-#Libreria incluida por defecto, MIMEMultipart con el fin de organizar los datos relacionados a la aplicación de correos electronicos (remitente y destinatario)
+#Librería incluida por defecto, MIMEMultipart con el fin de organizar los datos relacionados a la aplicación de correos electronicos (remitente y destinatario)
 from email.mime.multipart import MIMEMultipart 
-#Libreria incluida por defecto, se importa MIMEText para permitir la redacción del mensaje a enviar por correo electronico
+#Librería incluida por defecto, se importa MIMEText para permitir la redacción del mensaje a enviar por correo electronico
 from email.mime.text import MIMEText 
 # from datetime import datetime, date, time, timezone
-#Libreria datetime esta incluida por defecto, permite la correcta elaboración para foematos de fecha
+#Librería datetime esta incluida por defecto, permite la correcta elaboración para foematos de fecha
 import datetime 
-#Libreria PIL esta incluida por defecto, importa el metodo Image con el fin de producir una imagen
+#Librería PIL esta incluida por defecto, importa el metodo Image con el fin de producir una imagen
 from PIL import Image 
-
+#Librería webbrowser esta incluida por defecto, será usada para abrir una dirección en el navegador
+import webbrowser
 ## TODO comments
 
 #Función que da conexión a la base de datos mencionada (Vacunacion.db) creada con sqlite3 utilizando el parametro creado (con), por el metodo sqlite3.connect()
@@ -714,7 +715,7 @@ def vacunacionPacientes():
 def menuPrincipal(): 
     #Se crea ciclo que solo termina cuando (opcion) sea igual a 6
     while True:
-        opcion = input('Seleccione el modulo al que desea ingresar:\n1. Afiliados\n2. Lotes\n3. Planes de vacunacion\n4. Programacion de vacunacion\n5. Vacunar\n6. Salir\n')
+        opcion = input('Seleccione el modulo al que desea ingresar:\n1. Afiliados\n2. Lotes\n3. Planes de vacunacion\n4. Programacion de vacunacion\n5. Vacunar\n6. Salir\n7. Documentación de usuario\n')
         if opcion != '': 
             opcion = int(opcion)
             if (opcion == 1): menuModuloUno()
@@ -723,9 +724,17 @@ def menuPrincipal():
             if (opcion == 4): menuModuloCuatro()
             if (opcion == 5): menuModuloCinco()
             if (opcion == 6): break
+            if (opcion == 7): documentacionUsuario()
             if (opcion == 231): reinciarValores()
         else: continue
-        
+
+# Función para abrir documentación de usuario
+def documentacionUsuario():
+    # Se almacena un link correspondiente a la ubicación del pdf
+    path = 'https://drive.google.com/file/d/1L8BBeJP-mc_QLmNplzYemZgxe4j1F_Bx/view?usp=sharing'
+    # Abrimos el archivo en el navegador siguiendo la variable (path) por el metodo webbrowser.open_new() de la librería webbrowser
+    webbrowser.open_new(path)
+  
 # Función principal del programa, inicia las funciones basicas
 def main(): 
     crearTablas()

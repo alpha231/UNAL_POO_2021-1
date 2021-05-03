@@ -14,6 +14,7 @@ import datetime
 from PIL import Image 
 #Librería webbrowser esta incluida por defecto, será usada para abrir una dirección en el navegador
 import webbrowser
+
 ## TODO comments
 
 #Función que da conexión a la base de datos mencionada (Vacunacion.db) creada con sqlite3 utilizando el parametro creado (con), por el metodo sqlite3.connect()
@@ -153,9 +154,11 @@ def crearUsuario():
         #Se juntan y almacenan los valores pertenecientes a la fecha de afiliación del usuario en la variable (fechaAfiliacion)
         fechaAfiliacion = "{}-{}-{}".format(añoAfiliacion,mesAfiliacion,diaAfiliacion) 
         #Se crea variable (vacunado) que identifica si el usuario esta vacunado o no, ("S" vacunado) o ("N" no vacunado)
-        vacunado = input('¿Ha sido vacunado? (S/N):\n').title() 
+        while True:
+            vacunado = input('¿Ha sido vacunado? (S/N):\n').title() 
+            if vacunado == 'N': break
         # Se almacenan los datos de usuario recogidos dentro de la tabla pacientes por el metodo INSERT INTO
-        cursorObj.execute('INSERT INTO pacientes VALUES ({a},"{b}","{c}","{d}",{e},"{f}","{g}",date("{h}"),date("{i}"),"{j}", NULL)'.format(a=documentoID, b=nombre, c=apellido, d=direccion, e=telefono, f=correo, g=ciudad, h =fechaNacimiento, i=fechaAfiliacion, j=vacunado))
+        cursorObj.execute('INSERT INTO pacientes VALUES ({a},"{b}","{c}","{d}",{e},"{f}","{g}",date("{h}"),date("{i}"),"{j}", NULL)'.format(a=documentoID, b=nombre[0:20], c=apellido[0:20], d=direccion[0:20], e=telefono, f=correo[0:20], g=ciudad[0:20], h =fechaNacimiento, i=fechaAfiliacion, j=vacunado))
         con.commit()
     else:
         #Se mostrara el mensaje si la variable (resultado) es diferente de 0, en caso de que ya hubieran datos almacenados en la variable noId digitada por el usuario
@@ -191,11 +194,13 @@ def consultarUsuario():
             elif cont == 9: infoUsuario = "¿Vacunado?: "
             else: infoUsuario = "Fecha de desafiliación: "
             #Se da una cadena para (infoUsuario) y se imprime junto al dato correspondiente
-            print(infoUsuario,datos)
-            cont += 1
+            if datos != None:
+                print(infoUsuario,datos)
+                cont += 1
         print('\n')
     #Se mostrara el mensaje si la variable (resultado) esta vacia, en caso de que no hallan datos almacenados en la variable noId digitada por el usuario
     else: print('El paciente no se encuentra en los registros.\n') 
+
     #se cierra la table
     con.close()
 
@@ -224,6 +229,7 @@ def desafiliarUsuario():
         con.commit() 
     #Se mostrara el mensaje si la variable (resultado) es igual a 0, en caso de que no hallan datos almacenados en la variable noId digitada por el usuario
     else: print('El paciente no se encuentra en los registros.') 
+
     #Se cierra la tabla
     con.close()
 
@@ -258,8 +264,10 @@ def crearLote():
         fabricante = input('Fabricante:\n').title()
         tipoVacuna = input('Tipo de vacuna:\n').title()
         cantidadRecibida = int(input('Cantidad de vacunas recibidas:\n'))
-        cantidadAsignada = int(input('Cantidad de vacunas asignadas:\n'))
-        cantidadUsada = int(input('Cantidad de vacunas usadas:\n'))
+        # cantidadAsignada = int(input('Cantidad de vacunas asignadas:\n'))
+        # cantidadUsada = int(input('Cantidad de vacunas usadas:\n'))
+        cantidadAsignada = 0
+        cantidadUsada = 0
         dosisNecesaria = int(input('Dosis necesarias:\n'))
         temperatura = float(input('Temperatura de almacenamiento:\n'))
         efectividad = float(input('Efectividad de la vacuna:\n'))
@@ -322,6 +330,7 @@ def consultarLote():
         print('\n')
     #Se mostrará un mensaje si el valor de (noLote) es nulo 
     else: print('El lote no se encuentra registrado.\n') 
+
     con.close()
 
 # Función para visualizar una imagen, recoge (cursorObj) de la función .cursor(), (fabricante) y (imagenBinaria) información almacenada en la tabla lote_vacunas
@@ -338,12 +347,11 @@ def mostrarImagen(cursorObj, fabricante, imagenBinaria):
                     File.write(imagenBinaria)
                 #Se abre la imagen abriendo su ruta almacenada en (rutaDeGuardado) con el metodo .open() y se visualiza con el metodo .show()
                 imagen = Image.open(rutaDeGuardado)
-                imagen.show() 
-            break
-            if (opcion == 2): 
+                imagen.show()
+                break
+            elif (opcion == 2): 
                 #Termina el bucle
-                break 
-            else: continue
+                break
         else: continue
 
 #Función para mostrar un menú de opciones relacionados a los planes de vacunación
@@ -403,7 +411,8 @@ def consultarPlanVacunacion():
     cursorObj = con.cursor()
     idPlan = int(input('Ingrese a continuacion el codigo del plan de vacunacion que desea consultar:\n'))
     cursorObj.execute('SELECT * FROM plan_vacunacion WHERE idPlan = {}'.format(idPlan))
-    resultado = cursorObj.fetchone() #se toma un valor correspondiente con el (idPlan) ingresado
+    #se toma un valor correspondiente con el (idPlan) ingresado
+    resultado = cursorObj.fetchone()
     print('\n')
     #si el valor obtenido de (resultado) no es nulo, proseguira
     if resultado != None: 
@@ -423,6 +432,7 @@ def consultarPlanVacunacion():
         print('\n')
     #se mostrara un mensaje si (resultado) es nulo
     else: print('El plan de vacunación no se encuentra registrado.\n') 
+
     #se cierra tabla
     con.close()
 
@@ -452,7 +462,7 @@ def menuModuloCuatro():
                         elif (opcion ==8): datoConsulta = 'pgv.horaProgramada'
                         elif (opcion ==9): datoConsulta = 'lv.noLote'
                         elif (opcion ==10): datoConsulta = 'lv.fabricante'
-                        else: break
+                        elif (opcion ==11): break
                     else: continue
                     #Se llama a la función consultarProgramacionCompleta() con la entrada (datoConsulta)
                     consultarProgramacionCompleta(datoConsulta)
@@ -487,11 +497,13 @@ def programacionPacienteLote(con):
     planVacunacion = cursorObj.fetchall()
     # se crea un bucle que recorre los datos en (planVacunacion)
     for plan in planVacunacion:
+        # print(plan)
         # Se toman datos de la tabla paciente según un rango de edad tomado de los valores de (planVacunacion)
         cursorObj.execute('SELECT noId, ciudad, CAST((julianday("now") - julianday(fechaNacimiento))/365.25 as INTEGER) as Edad FROM pacientes WHERE (Edad >= {}) AND (Edad <= {}) AND vacunado = "N" AND fechaDesafiliacion is Null'.format(plan[1], plan[2])) 
         pacientesAVacunar = cursorObj.fetchall()
         #Se hace un bucle que recorre los valores de (pacientesAVacunar)
         for paciente in pacientesAVacunar:
+            # print(paciente)
             #Se toman los valores de cantidadAsignada y cantidadRecibida de la tabla lote_vacunas y se busca un valor en donde cantidadAsignada < cantidadRecibida
             cursorObj.execute('SELECT noLote FROM lote_vacunas WHERE cantidadAsignada<cantidadRecibida')
             vacunaAAaplicar = cursorObj.fetchone()

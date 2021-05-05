@@ -14,7 +14,7 @@ import datetime
 from PIL import Image 
 #Librería webbrowser esta incluida por defecto, será usada para abrir una dirección en el navegador
 import webbrowser
-from dateutil.relativedelta import relativedelta
+# from dateutil.relativedelta import relativedelta
 
 ## TODO comments
 
@@ -167,9 +167,10 @@ def crearUsuario():
                 break
             print('La fecha ingresada es invalida')
         #Se crea variable (vacunado) que identifica si el usuario esta vacunado o no, ("S" vacunado) o ("N" no vacunado)
-        while True:
-            vacunado = input('¿Ha sido vacunado? (S/N):\n').title() 
-            if vacunado == 'N': break
+        # while True:
+        #     vacunado = input('¿Ha sido vacunado? (S/N):\n').title() 
+        #     if vacunado == 'N': break
+        vacunado = 'N'
         # Se almacenan los datos de usuario recogidos dentro de la tabla pacientes por el metodo INSERT INTO
         cursorObj.execute('INSERT INTO pacientes VALUES ({a},"{b}","{c}","{d}",{e},"{f}","{g}",date("{h}"),date("{i}"),"{j}", NULL)'.format(a=documentoID, b=nombre[0:20], c=apellido[0:20], d=direccion[0:20], e=telefono, f=correo[0:20], g=ciudad[0:20], h =fechaNacimiento, i=fechaAfiliacion, j=vacunado))
         con.commit()
@@ -303,7 +304,8 @@ def crearLote():
             fechaVencimiento = "{}-{}-{}".format(añoVencimiento,mesVencimiento,diaVencimiento)
             fechaVencimientoDt = datetime.datetime.strptime(fechaVencimiento, "%Y-%m-%d")
             fechaActualDt = datetime.datetime.now() 
-            if fechaVencimientoDt > fechaActualDt + relativedelta(months=1):
+            # if fechaVencimientoDt > fechaActualDt + relativedelta(months=1):
+            if fechaVencimientoDt > fechaActualDt:
                 break
             print('La fecha ingresada es invalida')
         # se da la opcion para ingresar una imagen del lote segun su ruta
@@ -437,7 +439,8 @@ def crearPlanVacunacion():
             fechaFinal = "{}-{}-{}".format(añoFinal,mesFinal,diaFinal)
             fechaFinalDt = datetime.datetime.strptime(fechaFinal, "%Y-%m-%d")
             fechaActual = datetime.datetime.now()
-            if fechaFinalDt >= fechaInicioDt + relativedelta(months=1):
+            # if fechaFinalDt >= fechaInicioDt + relativedelta(months=1):
+            if fechaFinalDt >= fechaInicioDt:
                 break
             print('La fecha ingresada es invalida')
         #los valores tomados se insertan en la tabla plan_vacunacion por el metodo INSERT INTO

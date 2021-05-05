@@ -14,6 +14,7 @@ import datetime
 from PIL import Image 
 #Librería webbrowser esta incluida por defecto, será usada para abrir una dirección en el navegador
 import webbrowser
+from dateutil.relativedelta import relativedelta
 
 ## TODO comments
 
@@ -41,7 +42,7 @@ def crearTablas():
                     "correo"	CHAR(20),
                     "ciudad"	CHAR(20),
                     "fechaNacimiento"	DATE,
-                    "fechaAfiliacion"	CHAR(10),
+                    "fechaAfiliacion"	DATE,
                     "vacunado"	CHAR(20),
                     "fechaDesafiliacion"	CHAR(10),
                     PRIMARY KEY("noId")
@@ -60,7 +61,7 @@ def crearTablas():
                     "temperatura"	NUMERIC(2,1),
                     "efectividad"	NUMERIC(2,1),
                     "tiempoProteccion"	NUMERIC(3),
-                    "fechaVencimiento"	CHAR(10),
+                    "fechaVencimiento"	DATE,
                     "imagen"	LARGEBLOB,
                     PRIMARY KEY("noLote")
                 );
@@ -133,26 +134,38 @@ def crearUsuario():
         telefono = int(input('Telefono:\n')) 
         correo = input('Correo:\n') 
         ciudad = input('Ciudad:\n').title() 
-        print('Fecha de nacimiento:')
-        #se crean variables (diaNacimiento, mesNacimiento y añoNacimiento) que contienen los numero de dia, mes y fecha de nacimiento respectivamente con la cantidad de digitos marcada usando el metodo .ljust() 
-        diaNacimiento = input("Dia: ") 
-        diaNacimiento = diaNacimiento.ljust(2)
-        mesNacimiento = input("Mes: ")
-        mesNacimiento = mesNacimiento.ljust(2)
-        añoNacimiento = input("Año: ")
-        añoNacimiento = añoNacimiento.ljust(4)
-        #Se juntan y almacenan los valores anteriores pertenecientes a la fecha de nacimiento del usuario en la variable (fechaNacimiento) con el metodo .format()
-        fechaNacimiento = "{}-{}-{}".format(añoNacimiento,mesNacimiento,diaNacimiento) 
-        print('Fecha de afiliacion:')
-        #se crean variables (diaAfiliacion, mesAfiliacion y añoAfiliacion) pertenecientes a la fecha de afiliación del usuario
-        diaAfiliacion = input("Dia: ") 
-        diaAfiliacion = diaAfiliacion.ljust(2)
-        mesAfiliacion = input("Mes: ")
-        mesAfiliacion = mesAfiliacion.ljust(2)
-        añoAfiliacion = input("Año: ")
-        añoAfiliacion = añoAfiliacion.ljust(4)
-        #Se juntan y almacenan los valores pertenecientes a la fecha de afiliación del usuario en la variable (fechaAfiliacion)
-        fechaAfiliacion = "{}-{}-{}".format(añoAfiliacion,mesAfiliacion,diaAfiliacion) 
+        while True:
+            print('Fecha de nacimiento:')
+            #se crean variables (diaNacimiento, mesNacimiento y añoNacimiento) que contienen los numero de dia, mes y fecha de nacimiento respectivamente con la cantidad de digitos marcada usando el metodo .ljust() 
+            diaNacimiento = input("Dia: ") 
+            diaNacimiento = diaNacimiento.ljust(2)
+            mesNacimiento = input("Mes: ")
+            mesNacimiento = mesNacimiento.ljust(2)
+            añoNacimiento = input("Año: ")
+            añoNacimiento = añoNacimiento.ljust(4)
+            #Se juntan y almacenan los valores anteriores pertenecientes a la fecha de nacimiento del usuario en la variable (fechaNacimiento) con el metodo .format()
+            fechaNacimiento = "{}-{}-{}".format(añoNacimiento,mesNacimiento,diaNacimiento) 
+            fechaNacimientoDt = datetime.datetime.strptime(fechaNacimiento, "%Y-%m-%d")
+            fechaActual = datetime.datetime.now()
+            if fechaNacimientoDt < fechaActual:
+                break
+            print('La fecha ingresada es invalida')
+        while True:
+            print('Fecha de afiliacion:')
+            #se crean variables (diaAfiliacion, mesAfiliacion y añoAfiliacion) pertenecientes a la fecha de afiliación del usuario
+            diaAfiliacion = input("Dia: ") 
+            diaAfiliacion = diaAfiliacion.ljust(2)
+            mesAfiliacion = input("Mes: ")
+            mesAfiliacion = mesAfiliacion.ljust(2)
+            añoAfiliacion = input("Año: ")
+            añoAfiliacion = añoAfiliacion.ljust(4)
+            #Se juntan y almacenan los valores pertenecientes a la fecha de afiliación del usuario en la variable (fechaAfiliacion)
+            fechaAfiliacion = "{}-{}-{}".format(añoAfiliacion,mesAfiliacion,diaAfiliacion) 
+            fechaAfiliacionDt = datetime.datetime.strptime(fechaAfiliacion, "%Y-%m-%d")
+            fechaActual = datetime.datetime.now()
+            if fechaAfiliacionDt < fechaActual and fechaAfiliacionDt > fechaNacimientoDt:
+                break
+            print('La fecha ingresada es invalida')
         #Se crea variable (vacunado) que identifica si el usuario esta vacunado o no, ("S" vacunado) o ("N" no vacunado)
         while True:
             vacunado = input('¿Ha sido vacunado? (S/N):\n').title() 
@@ -211,18 +224,25 @@ def desafiliarUsuario():
     # se pide el documento de idetidad del usuario a desafiliar
     documentoID = int(input('Ingrese a continuacion el documento de identidad de la persona que desea desafiliar:\n')) 
     #se busca dentro de la tabla pacientes el valor (noId) que corresponda con la variable(documentoID)
-    cursorObj.execute('SELECT * FROM pacientes WHERE noId = {}'.format(documentoID)) 
-    resultado = cursorObj.fetchall()
+    cursorObj.execute('SELECT noId, fechaAfiliacion FROM pacientes WHERE noId = {}'.format(documentoID)) 
+    resultado = cursorObj.fetchone()
     #Si el usuario se encuentra registrado en la tabla pacientes se procede a crear una fecha de desafiliación
-    if len(resultado) != 0: 
-        print('Fecha de desafiliacion:')
-        diaDesafiliacion = input("Dia: ")
-        diaDesafiliacion = diaDesafiliacion.ljust(2)
-        mesDesafiliacion = input("Mes: ")
-        mesDesafiliacion = mesDesafiliacion.ljust(2)
-        añoDesafiliacion = input("Año: ")
-        añoDesafiliacion = añoDesafiliacion.ljust(4)
-        fechaDesafiliacion = "{}-{}-{}".format(añoDesafiliacion,mesDesafiliacion,diaDesafiliacion)
+    if resultado != None: 
+        while True:
+            print('Fecha de desafiliacion:')
+            diaDesafiliacion = input("Dia: ")
+            diaDesafiliacion = diaDesafiliacion.ljust(2)
+            mesDesafiliacion = input("Mes: ")
+            mesDesafiliacion = mesDesafiliacion.ljust(2)
+            añoDesafiliacion = input("Año: ")
+            añoDesafiliacion = añoDesafiliacion.ljust(4)
+            fechaDesafiliacion = "{}-{}-{}".format(añoDesafiliacion,mesDesafiliacion,diaDesafiliacion)
+            fechaDesafiliacionDt = datetime.datetime.strptime(fechaDesafiliacion, "%Y-%m-%d")
+            fechaAfiliacionDt = datetime.datetime.strptime(resultado[1], "%Y-%m-%d")
+            fechaActual = datetime.datetime.now()
+            if fechaDesafiliacionDt < fechaActual and fechaDesafiliacionDt > fechaAfiliacionDt:
+                break
+            print('La fecha ingresada es invalida')
         #se actualia la variable (fechaDesafiliacion) de la tabla paciente cuando noID = documentoID por el metodo .UPDATE
         cursorObj.execute('UPDATE pacientes SET fechaDesafiliacion = date("{}") WHERE noID = {}'.format(fechaDesafiliacion, documentoID))  
         #Se afirman los cambios realizados
@@ -272,14 +292,20 @@ def crearLote():
         temperatura = float(input('Temperatura de almacenamiento:\n'))
         efectividad = float(input('Efectividad de la vacuna:\n'))
         tiempoProteccion = int(input('Tiempo de proteccion (meses):\n'))
-        print('Fecha de vencimiento:')
-        diaVencimiento = input("Dia: ")
-        diaVencimiento = diaVencimiento.ljust(2)
-        mesVencimiento = input("Mes: ")
-        mesVencimiento = mesVencimiento.ljust(2)
-        añoVencimiento = input("Año: ")
-        añoVencimiento = añoVencimiento.ljust(4)
-        fechaVencimiento = "{}-{}-{}".format(añoVencimiento,mesVencimiento,diaVencimiento)
+        while True:
+            print('Fecha de vencimiento:')
+            diaVencimiento = input("Dia: ")
+            diaVencimiento = diaVencimiento.ljust(2)
+            mesVencimiento = input("Mes: ")
+            mesVencimiento = mesVencimiento.ljust(2)
+            añoVencimiento = input("Año: ")
+            añoVencimiento = añoVencimiento.ljust(4)
+            fechaVencimiento = "{}-{}-{}".format(añoVencimiento,mesVencimiento,diaVencimiento)
+            fechaVencimientoDt = datetime.datetime.strptime(fechaVencimiento, "%Y-%m-%d")
+            fechaActualDt = datetime.datetime.now() 
+            if fechaVencimientoDt > fechaActualDt + relativedelta(months=1):
+                break
+            print('La fecha ingresada es invalida')
         # se da la opcion para ingresar una imagen del lote segun su ruta
         rutaImagen = input('Ruta completa a la imagen:\n')
         # se abre el archivo respectivo y se lee, almacenandose en la variable (imagenBinaria)
@@ -377,25 +403,43 @@ def crearPlanVacunacion():
     #se toman los valores de la tabla con un (idPlan) igual al ingresado
     resultado = cursorObj.fetchall() 
     if len(resultado) == 0:
+        cursorObj.execute('SELECT edadMinima, edadMaxima FROM plan_vacunacion') 
+        rangoFechas = cursorObj.fetchall()
         #Se toman del usuario los valores correspondientes
-        edadMinima = int(input('Edad minima requerida:\n'))
-        edadMaxima = int(input('Edad maxima requerida:\n'))
-        print('Fecha de inicio:')
-        diaInicio = input("Dia: ")
-        diaInicio = diaInicio.ljust(2)
-        mesInicio = input("Mes: ")
-        mesInicio = mesInicio.ljust(2)
-        añoInicio = input("Año: ")
-        añoInicio = añoInicio.ljust(4)
-        fechaInicio = "{}-{}-{}".format(añoInicio,mesInicio,diaInicio)
-        print('Fecha de finalizacion:')
-        diaFinal = input("Dia: ")
-        diaFinal = diaFinal.ljust(2)
-        mesFinal = input("Mes: ")
-        mesFinal = mesFinal.ljust(2)
-        añoFinal = input("Año: ")
-        añoFinal = añoFinal.ljust(4)
-        fechaFinal = "{}-{}-{}".format(añoFinal,mesFinal,diaFinal)
+        while True:
+            edadMinima = int(input('Edad minima requerida:\n'))
+            if verificarEdad(edadMinima, rangoFechas): break
+        while True:
+            edadMaxima = int(input('Edad maxima requerida:\n'))
+            if verificarEdad(edadMaxima, rangoFechas): break
+        while True:
+            print('Fecha de inicio:')
+            diaInicio = input("Dia: ")
+            diaInicio = diaInicio.ljust(2)
+            mesInicio = input("Mes: ")
+            mesInicio = mesInicio.ljust(2)
+            añoInicio = input("Año: ")
+            añoInicio = añoInicio.ljust(4)
+            fechaInicio = "{}-{}-{}".format(añoInicio,mesInicio,diaInicio)
+            fechaInicioDt = datetime.datetime.strptime(fechaInicio, "%Y-%m-%d")
+            fechaActual = datetime.datetime.now()
+            if fechaInicioDt > fechaActual:
+                break
+            print('La fecha ingresada es invalida')
+        while True:
+            print('Fecha de finalizacion:')
+            diaFinal = input("Dia: ")
+            diaFinal = diaFinal.ljust(2)
+            mesFinal = input("Mes: ")
+            mesFinal = mesFinal.ljust(2)
+            añoFinal = input("Año: ")
+            añoFinal = añoFinal.ljust(4)
+            fechaFinal = "{}-{}-{}".format(añoFinal,mesFinal,diaFinal)
+            fechaFinalDt = datetime.datetime.strptime(fechaFinal, "%Y-%m-%d")
+            fechaActual = datetime.datetime.now()
+            if fechaFinalDt >= fechaInicioDt + relativedelta(months=1):
+                break
+            print('La fecha ingresada es invalida')
         #los valores tomados se insertan en la tabla plan_vacunacion por el metodo INSERT INTO
         cursorObj.execute('INSERT INTO plan_vacunacion VALUES ({a},{b},{c},date("{d}"),date("{e}"))'.format(a=idPlan, b=edadMinima, c=edadMaxima, d=fechaInicio, e=fechaFinal))
         con.commit()
@@ -404,6 +448,15 @@ def crearPlanVacunacion():
         print('Este plan de vacunacion ya existe\n') 
     
     con.close()
+
+def verificarEdad(edad, rangoFechas):
+    flag = True
+    for rango in rangoFechas:
+        if edad >= rango[0] and edad <= rango[1]:
+            flag = False
+            print('La edad seleccionada se encuentra dentro de otro rango')
+            break
+    return flag
     
 #Función para ver los datos de un plan de vacunación ya existente en la tabla plan_vacunacion
 def consultarPlanVacunacion(): 

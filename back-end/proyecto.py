@@ -507,7 +507,7 @@ def menuModuloCuatro():
             elif opcion == 2:
                 # se inicia un bucle para obtener un dato de consulta según lo elija el usuario, este bucle solo se detendrá cuando (opcion) sea 11
                 while True:
-                    opcion = input('Por que campo desea organizar la consulta:\n1. Número de Identificación\n2. Nombre\n3. Apellido\n4. Dirección\n5. Teléfono\n6. Correo\n7. Fecha Programada\n8. Hora Programada\n9. Número de lote\n10. Fabricante\n11. Salir de la consulta')
+                    opcion = input('Por que campo desea organizar la consulta:\n1. Número de Identificación\n2. Nombre\n3. Apellido\n4. Dirección\n5. Teléfono\n6. Correo\n7. Fecha Programada\n8. Hora Programada\n9. Número de lote\n10. Fabricante\n11. Salir de la consulta\n')
                     if opcion != '':
                         opcion = int(opcion)
                         # Se realiza una selección para organizar la consulta según (opcion) digitada por el usuario
@@ -673,7 +673,7 @@ def consultarProgramacionCompleta(datoConsulta):
     con = sqlConnection()
     cursorObj = con.cursor()
     # se seleccionan variables de la tabla programacion_vacunas y se unen los valores que coincidan con el método INNER JOIN
-    cursorObj.execute('''SELECT pgv.idCita, pc.noId, pc.nombre, pc.apellido, pc.direccion, pc.telefono, pc.correo, pgv.fechaProgramada, pgv.horaProgramada, lv.noLote, lv.fabricante  FROM programacion_vacunas pgv 
+    cursorObj.execute('''SELECT pc.noId, pc.nombre, pc.apellido, pc.direccion, pc.telefono, pc.correo, pgv.fechaProgramada, pgv.horaProgramada, lv.noLote, lv.fabricante  FROM programacion_vacunas pgv 
                         INNER JOIN pacientes pc ON (pc.noid = pgv.noid) 
                         INNER JOIN lote_vacunas lv ON (lv.noLote = pgv.noLote)
                         ORDER BY {}'''.format(datoConsulta))
@@ -683,15 +683,15 @@ def consultarProgramacionCompleta(datoConsulta):
         # Se crea un bucle que recorre los datos en (resultado)
         for dato in cita:
             # la variable (infoCita) toma un contenido str que corresponde a la descripción de la información
-            if cont == 1: infoCita = "No. Identificación: "
-            elif cont == 2: infoCita = "Nombre: "
-            elif cont == 3: infoCita = "Apellido: "
-            elif cont == 4: infoCita = "Dirección: "
-            elif cont == 5: infoCita = "Teléfono: "
-            elif cont == 6: infoCita = "Correo: "
-            elif cont == 7: infoCita = "Fecha programada: "
-            elif cont == 8: infoCita = "Hora programada: "
-            elif cont == 9: infoCita = "Número de lote de vacuna: "
+            if cont == 0: infoCita = "No. Identificación: "
+            elif cont == 1: infoCita = "Nombre: "
+            elif cont == 2: infoCita = "Apellido: "
+            elif cont == 3: infoCita = "Dirección: "
+            elif cont == 4: infoCita = "Teléfono: "
+            elif cont == 5: infoCita = "Correo: "
+            elif cont == 6: infoCita = "Fecha programada: "
+            elif cont == 7: infoCita = "Hora programada: "
+            elif cont == 8: infoCita = "Número de lote de vacuna: "
             else: infoCita = "Fabricante de la vacuna: "
             if dato is not None and dato != 0:
                 # se imprime (infoCita) junto al valor al que corresponde (datos)

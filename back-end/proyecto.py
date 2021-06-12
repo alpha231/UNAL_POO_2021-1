@@ -795,10 +795,10 @@ def formatoFechas():
     dia = dia.ljust(2)
     mes = input("Mes: ")
     mes = mes.ljust(2)
-    año = input("Año: ")
-    año = año.ljust(4)
+    anio = input("Año: ")
+    anio = anio.ljust(4)
     # Se juntan y almacenan los valores anteriores pertenecientes a la fecha en la variable (fecha) con el método .format()
-    fecha = "{}-{}-{}".format(año, mes, dia)
+    fecha = "{}-{}-{}".format(anio, mes, dia)
     return fecha
 
 

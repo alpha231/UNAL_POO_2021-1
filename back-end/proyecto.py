@@ -18,6 +18,7 @@ import webbrowser
 
 ## TODO comments
 
+
 # Función que da conexión a la base de datos mencionada (Vacunacion.db) creada con sqlite3 utilizando el parámetro creado (con), por el método sqlite3.connect()
 def sqlConnection():
     try:
@@ -128,7 +129,7 @@ def crearUsuario():
         try:
             documentoID = int(input('Documento de Identidad:\n'))
             break
-        except:
+        except ValueError:
             print('El documento de identidad debe contener solo números')
     # se toma la variable (documentoID) como el indicador noId de la tabla pacientes por el método SELECT
     cursorObj.execute('SELECT * FROM pacientes WHERE noId = {}'.format(documentoID))
@@ -150,17 +151,17 @@ def crearUsuario():
                 fechaActual = datetime.datetime.now()
                 assert fechaNacimientoDt < fechaActual
                 break
-            except:
+            except AssertionError:
                 print('La fecha ingresada es invalida')
         while True:
-            print('Fecha de afiliacion:')
+            print('Fecha de afiliación:')
             fechaAfiliacion = formatoFechas()
             try:
                 fechaAfiliacionDt = datetime.datetime.strptime(fechaAfiliacion, "%Y-%m-%d")
                 fechaActual = datetime.datetime.now()
                 assert (fechaActual > fechaAfiliacionDt > fechaNacimientoDt)
                 break
-            except:
+            except AssertionError:
                 print('La fecha ingresada es invalida')
         # Se crea variable (vacunado) que identifica si el usuario esta vacunado o no, ("S" vacunado) o ("N" no vacunado)
         # while True:
@@ -238,7 +239,7 @@ def desafiliarUsuario():
                 fechaActual = datetime.datetime.now()
                 assert (fechaActual > fechaDesafiliacionDt > fechaAfiliacionDt)
                 break
-            except:
+            except AssertionError:
                 print('La fecha ingresada es invalida')
         # se actualiza la variable (fechaDesafiliacion) de la tabla paciente cuando noID = documentoID por el método .UPDATE
         cursorObj.execute('UPDATE pacientes SET fechaDesafiliacion = date("{}") WHERE noID = {}'.format(fechaDesafiliacion, documentoID))
@@ -277,7 +278,7 @@ def crearLote():
         try:
             numeroLote = int(input('Número del lote:\n'))
             break
-        except:
+        except ValueError:
             print('El número del lote debe contener solo números')
     # el número identificador se compara con los existentes en la tabla lote_vacuna
     cursorObj.execute('SELECT * FROM lote_vacunas WHERE noLote = {}'.format(numeroLote))
@@ -305,7 +306,7 @@ def crearLote():
                 # if fechaVencimientoDt > fechaActualDt + relativedelta(months=1):
                 assert fechaVencimientoDt > fechaActualDt
                 break
-            except:
+            except AssertionError:
                 print('La fecha ingresada es invalida')
         # se da la opcion para ingresar una imagen del lote según su ruta
         rutaImagen = input('Ruta completa a la imagen:\n')
@@ -406,7 +407,7 @@ def crearPlanVacunacion():
         try:
             idPlan = int(input('Código del plan:\n'))
             break
-        except:
+        except ValueError:
             print('El código del plan debe contener solo números')
     # se selecciona un valor para (idPlan) y se busca dentro de la tabla plan_vacunacion
     cursorObj.execute('SELECT * FROM plan_vacunacion WHERE idPlan = {}'.format(idPlan))
@@ -430,7 +431,7 @@ def crearPlanVacunacion():
                 fechaActual = datetime.datetime.now()
                 assert fechaInicioDt > fechaActual
                 break
-            except:
+            except AssertionError:
                 print('La fecha ingresada es invalida')
         while True:
             print('Fecha de finalización:')
@@ -441,7 +442,7 @@ def crearPlanVacunacion():
                 # if fechaFinalDt >= fechaInicioDt + relativedelta(months=1):
                 assert fechaFinalDt >= fechaInicioDt
                 break
-            except:
+            except AssertionError:
                 print('La fecha ingresada es invalida')
         # los valores tomados se insertan en la tabla plan_vacunacion por el método INSERT INTO
         cursorObj.execute('INSERT INTO plan_vacunacion VALUES ({a},{b},{c},date("{d}"),date("{e}"))'.format(a=idPlan, b=edadMinima, c=edadMaxima, d=fechaInicio, e=fechaFinal))

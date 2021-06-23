@@ -14,7 +14,11 @@ import datetime
 from PIL import Image
 # Librería webbrowser esta incluida por defecto, será usada para abrir una dirección en el navegador
 import webbrowser
-# from dateutil.relativedelta import relativedelta
+# Libreria incluida por defecto que permite crear directorio en la maquina
+import os
+# Libreria incluida por defecto para eliminar directorios recursivamente
+import shutil
+# # from dateutil.relativedelta import relativedelta
 
 ## TODO comments
 
@@ -373,12 +377,18 @@ def mostrarImagen(fabricante, imagenBinaria):
             opcion = int(opcion)
             if opcion == 1:
                 # Se toma la información de la ruta en donde se encuentra la imagen
-                rutaDeGuardado = 'imagenesDescargadas/{}.jpg'.format(fabricante)
+                directorio = "imagenesDescargadas/"
+                try:
+                    os.stat(directorio)
+                except FileNotFoundError:
+                    os.mkdir(directorio)
+                rutaDeGuardado = '{}{}.jpg'.format(directorio, fabricante)
                 with open(rutaDeGuardado, "wb") as File:
                     File.write(imagenBinaria)
                 # Se abre la imagen abriendo su ruta almacenada en (rutaDeGuardado) con el método .open() y se visualiza con el método .show()
                 imagen = Image.open(rutaDeGuardado)
                 imagen.show()
+                shutil.rmtree(directorio)
                 break
             # Termina el bucle
             elif opcion == 2: break

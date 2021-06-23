@@ -599,10 +599,16 @@ def programacionFechaHora(con):
         # Se toman los valores de (horaProgramada) y (fechaProgramada) que sean mayores usando max()
         cursorObj.execute('SELECT fechaProgramada, max(horaProgramada) FROM programacion_vacunas WHERE fechaProgramada = (SELECT max(fechaProgramada) FROM programacion_vacunas)')
         ultimaCitaProgramada = cursorObj.fetchone()
+        fechaInicioDt = datetime.datetime.strptime(cita[7], "%Y-%m-%d")
         # print(ultimaCitaProgramada)
         # En caso de iniciarse la programación de vacunación, se empezará con la hora inicial (horaInicio)
         if ultimaCitaProgramada[0] is None:
-            fechaCita = cita[7]
+            fechaActual = datetime.datetime.now()
+            if fechaInicioDt > fechaActual:
+                fechaCita = cita[7]
+            else:
+                fechaCitaDt = fechaActual + datetime.timedelta(days=1)
+                fechaCita = fechaCitaDt.strftime("%Y-%m-%d")
             horaCita = horaInicio
         # se toma la ultima hora registrada y se le suma 1
         else:
@@ -625,7 +631,6 @@ def programacionFechaHora(con):
                 fechaCita = fechaMaxima
 
             fechaCitaDt = datetime.datetime.strptime(fechaCita, "%Y-%m-%d")
-            fechaInicioDt = datetime.datetime.strptime(cita[7], "%Y-%m-%d")
             # en caso de que el valor de (fechaCitaDt) sea menor a (fechaInicioDt), se le asigna el valor de (horaInicio) a (horaCita)
             if fechaCitaDt < fechaInicioDt:
                 fechaCita = fechaInicioDt.strftime("%Y-%m-%d")

@@ -9,7 +9,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 # from datetime import datetime, date, time, timezone
 # Librería datetime esta incluida por defecto, permite la correcta elaboración para formatos de fecha
-import datetime
+# import datetime
+from datetime import datetime, timedelta
 # Librería PIL esta incluida por defecto, importa el método Image con el fin de producir una imagen
 from PIL import Image
 # Librería webbrowser esta incluida por defecto, será usada para abrir una dirección en el navegador
@@ -113,7 +114,11 @@ def crearTablas():
 # Función para mostrar opciones relacionadas a la tabla (usuarios)
 def menuModuloUno():
     while True:
-        opcion = input('Ingrese el número de la opcion que desea realizar:\n1. Crear nuevo afiliado\n2. Consultar afiliado\n3. Desafiliar usuario\n4. Atras\n')
+        opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
+                       '1. Crear nuevo afiliado\n'+
+                       '2. Consultar afiliado\n'+
+                       '3. Desafiliar usuario\n'+
+                       '4. Atras\n')
         if opcion != '':
             opcion = int(opcion)
             if opcion == 1: crearUsuario()
@@ -151,8 +156,8 @@ def crearUsuario():
             print('Fecha de nacimiento:')
             fechaNacimiento = formatoFechas()
             try:
-                fechaNacimientoDt = datetime.datetime.strptime(fechaNacimiento, "%Y-%m-%d")
-                fechaActual = datetime.datetime.now()
+                fechaNacimientoDt = datetime.strptime(fechaNacimiento, "%Y-%m-%d")
+                fechaActual = datetime.now()
                 assert fechaNacimientoDt < fechaActual
                 break
             except AssertionError:
@@ -161,8 +166,8 @@ def crearUsuario():
             print('Fecha de afiliación:')
             fechaAfiliacion = formatoFechas()
             try:
-                fechaAfiliacionDt = datetime.datetime.strptime(fechaAfiliacion, "%Y-%m-%d")
-                fechaActual = datetime.datetime.now()
+                fechaAfiliacionDt = datetime.strptime(fechaAfiliacion, "%Y-%m-%d")
+                fechaActual = datetime.now()
                 assert (fechaActual > fechaAfiliacionDt > fechaNacimientoDt)
                 break
             except AssertionError:
@@ -238,9 +243,9 @@ def desafiliarUsuario():
             print('Fecha de desafiliacion:')
             fechaDesafiliacion = formatoFechas()
             try:
-                fechaDesafiliacionDt = datetime.datetime.strptime(fechaDesafiliacion, "%Y-%m-%d")
-                fechaAfiliacionDt = datetime.datetime.strptime(resultado[1], "%Y-%m-%d")
-                fechaActual = datetime.datetime.now()
+                fechaDesafiliacionDt = datetime.strptime(fechaDesafiliacion, "%Y-%m-%d")
+                fechaAfiliacionDt = datetime.strptime(resultado[1], "%Y-%m-%d")
+                fechaActual = datetime.now()
                 assert (fechaActual > fechaDesafiliacionDt > fechaAfiliacionDt)
                 break
             except AssertionError:
@@ -260,7 +265,10 @@ def desafiliarUsuario():
 def menuModuloDos():
     # se crea un ciclo que finaliza únicamente cuando el usuario elige la opción (3. Atras)
     while True:
-        opcion = input('Ingrese el número de la opcion que desea realizar:\n1. Crear nuevo lote de vacunas\n2. Consultar lote de vacunas\n3. Atras\n')
+        opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
+                       '1. Crear nuevo lote de vacunas\n'+
+                       '2. Consultar lote de vacunas\n'+
+                       '3. Atras\n')
         if opcion != '':
             opcion = int(opcion)
             # Trae la función (crearLote)
@@ -305,8 +313,8 @@ def crearLote():
             print('Fecha de vencimiento:')
             fechaVencimiento = formatoFechas()
             try:
-                fechaVencimientoDt = datetime.datetime.strptime(fechaVencimiento, "%Y-%m-%d")
-                fechaActualDt = datetime.datetime.now()
+                fechaVencimientoDt = datetime.strptime(fechaVencimiento, "%Y-%m-%d")
+                fechaActualDt = datetime.now()
                 # if fechaVencimientoDt > fechaActualDt + relativedelta(months=1):
                 assert fechaVencimientoDt > fechaActualDt
                 break
@@ -372,7 +380,9 @@ def consultarLote():
 def mostrarImagen(fabricante, imagenBinaria):
     # Se crea un ciclo que solo se cierra cuando el usuario halla terminado de visualizar una imagen o hasta que la variable (opcion) sea 2
     while True:
-        opcion = input('¿Desea abrir la imagen?:\n1. Si\n2. No\n')
+        opcion = input('¿Desea abrir la imagen?:\n'+
+                       '1. Si\n'+
+                       '2. No\n')
         if opcion != '':
             opcion = int(opcion)
             if opcion == 1:
@@ -399,7 +409,10 @@ def mostrarImagen(fabricante, imagenBinaria):
 def menuModuloTres():
     # se crea un bucle que solo se detiene cuando la variable (opcion) sea igual a 3
     while True:
-        opcion = input('Ingrese el número de la opcion que desea realizar:\n1. Crear plan de vacunación\n2. Consultar plan de vacunación\n3. Atras\n')
+        opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
+                       '1. Crear plan de vacunación\n'+
+                       '2. Consultar plan de vacunación\n'+
+                       '3. Atras\n')
         if opcion != '':
             opcion = int(opcion)
             if opcion == 1: crearPlanVacunacion()
@@ -437,8 +450,8 @@ def crearPlanVacunacion():
             print('Fecha de inicio:')
             fechaInicio = formatoFechas()
             try:
-                fechaInicioDt = datetime.datetime.strptime(fechaInicio, "%Y-%m-%d")
-                fechaActual = datetime.datetime.now()
+                fechaInicioDt = datetime.strptime(fechaInicio, "%Y-%m-%d")
+                fechaActual = datetime.now()
                 assert fechaInicioDt > fechaActual
                 break
             except AssertionError:
@@ -447,8 +460,8 @@ def crearPlanVacunacion():
             print('Fecha de finalización:')
             fechaFinal = formatoFechas()
             try:
-                fechaFinalDt = datetime.datetime.strptime(fechaFinal, "%Y-%m-%d")
-                # fechaActual = datetime.datetime.now()
+                fechaFinalDt = datetime.strptime(fechaFinal, "%Y-%m-%d")
+                # fechaActual = datetime.now()
                 # if fechaFinalDt >= fechaInicioDt + relativedelta(months=1):
                 assert fechaFinalDt >= fechaInicioDt
                 break
@@ -510,7 +523,11 @@ def consultarPlanVacunacion():
 def menuModuloCuatro():
     # Se genera un bucle que solo se detiene cunado (opcion) sea igual a 4
     while True:
-        opcion = input('Ingrese el número de la opcion que desea realizar:\n1. Crear la programación de vacunas\n2. Consultar la programación de vacunas\n3. Consultar vacunación de un paciente\n4. Atras\n')
+        opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
+                       '1. Crear la programación de vacunas\n'+
+                       '2. Consultar la programación de vacunas\n'+
+                       '3. Consultar vacunación de un paciente\n'+
+                       '4. Atras\n')
         if opcion != '':
             opcion = int(opcion)
             # Si (opcion) es igual a 1, se inicia la función programacionDeVacunacion()
@@ -518,7 +535,19 @@ def menuModuloCuatro():
             elif opcion == 2:
                 # se inicia un bucle para obtener un dato de consulta según lo elija el usuario, este bucle solo se detendrá cuando (opcion) sea 11
                 while True:
-                    opcion = input('Por que campo desea organizar la consulta:\n1. Número de Identificación\n2. Nombre\n3. Apellido\n4. Dirección\n5. Teléfono\n6. Correo\n7. Fecha Programada\n8. Hora Programada\n9. Número de lote\n10. Fabricante\n11. Salir de la consulta\n')
+                    opcion = input('Por que campo desea organizar la consulta:\n'+
+                                   '1. Número de Identificación\n'+
+                                   '2. Nombre\n'+
+                                   '3. Apellido\n'+
+                                   '4. Dirección\n'+
+                                   '5. Teléfono\n'+
+                                   '6. Correo\n'+
+                                   '7. Fecha Programada\n'+
+                                   '8. Hora Programada\n'+
+                                   '9. Número de lote\n'+
+                                   '10. Fabricante\n'+
+                                   '11. Salir de la consulta\n'+
+                                   '')
                     if opcion != '':
                         opcion = int(opcion)
                         # Se realiza una selección para organizar la consulta según (opcion) digitada por el usuario
@@ -546,6 +575,16 @@ def menuModuloCuatro():
 
 # Función para programar vacunación
 def programacionDeVacunacion():
+    while True:
+        print('Ingrese la fecha a partir de la cual desea vacunar:')
+        fechaInicioIngresada = formatoFechas()
+        try:
+            fechaInicioIngresadaDt = datetime.strptime(fechaInicioIngresada, "%Y-%m-%d")
+            fechaActual = datetime.now()
+            assert fechaInicioIngresadaDt > fechaActual
+            break
+        except AssertionError:
+            print('La fecha ingresada es invalida')
     con = sqlConnection()
     cursorObj = con.cursor()
     # se actualiza la tabla lote_vacunas de manera que cantidadAsignada tenga el valor de cantidadUsada con el método UPDATE
@@ -556,7 +595,7 @@ def programacionDeVacunacion():
     # Se llama a la función programacionPacienteLote(con)
     programacionPacienteLote(con)
     # Se llama a la función programacionFechaHora(con)
-    programacionFechaHora(con)
+    programacionFechaHora(con, fechaInicioIngresadaDt)
 
     con.close()
 
@@ -592,13 +631,13 @@ def programacionPacienteLote(con):
 
 
 # Función para programar una fecha y hora de vacunación
-def programacionFechaHora(con):
+def programacionFechaHora(con, fechaInicioIngresadaDt):
     cursorObj = con.cursor()
     # se crean variables str para acomodar la hora (horaInicio) y (horaFin)
-    horaInicio = "08:00:00"
-    horaFin = "17:00:00"
+    horaInicio = "00:00:00"
+    horaFin = "24:00:00"
     # se seleccionan variables de la tabla programacion_vacunas y se unen los valores que coincidan con (fechaProgramada) estando vacía, con el método INNER JOIN
-    cursorObj.execute('''SELECT pgv.*, plv.fechaInicio, pc.correo, lv.fabricante FROM programacion_vacunas pgv 
+    cursorObj.execute('''SELECT pgv.*, plv.fechaInicio, plv.fechaFinal, pc.correo, lv.fabricante FROM programacion_vacunas pgv 
                         INNER JOIN plan_vacunacion plv ON (plv.idPlan = pgv.idPlan) 
                         INNER JOIN pacientes pc ON (pc.noid = pgv.noid) 
                         INNER JOIN lote_vacunas lv ON (lv.noLote = pgv.noLote) 
@@ -609,15 +648,18 @@ def programacionFechaHora(con):
         # Se toman los valores de (horaProgramada) y (fechaProgramada) que sean mayores usando max()
         cursorObj.execute('SELECT fechaProgramada, max(horaProgramada) FROM programacion_vacunas WHERE fechaProgramada = (SELECT max(fechaProgramada) FROM programacion_vacunas)')
         ultimaCitaProgramada = cursorObj.fetchone()
-        fechaInicioDt = datetime.datetime.strptime(cita[7], "%Y-%m-%d")
+        fechaInicioDt = datetime.strptime(cita[7], "%Y-%m-%d")
+        if fechaInicioIngresadaDt > fechaInicioDt:
+            fechaInicioDt = fechaInicioIngresadaDt
+        fechaFinDt = datetime.strptime(cita[8], "%Y-%m-%d")
         # print(ultimaCitaProgramada)
         # En caso de iniciarse la programación de vacunación, se empezará con la hora inicial (horaInicio)
         if ultimaCitaProgramada[0] is None:
-            fechaActual = datetime.datetime.now()
+            fechaActual = datetime.now()
             if fechaInicioDt > fechaActual:
-                fechaCita = cita[7]
+                fechaCita = fechaInicioDt.strftime("%Y-%m-%d")
             else:
-                fechaCitaDt = fechaActual + datetime.timedelta(days=1)
+                fechaCitaDt = fechaActual + timedelta(days=1)
                 fechaCita = fechaCitaDt.strftime("%Y-%m-%d")
             horaCita = horaInicio
         # se toma la ultima hora registrada y se le suma 1
@@ -626,11 +668,11 @@ def programacionFechaHora(con):
             horaMaxima = ultimaCitaProgramada[1]
             hora = int(horaMaxima[0:2])
             hora += 1
-            # se da la fecha y hora almacenándola en dt con el método datetime.datetime.strptime()
+            # se da la fecha y hora almacenándola en dt con el método datetime.strptime()
             if hora >= int(horaFin[0:2]):
                 horaCita = horaInicio
-                dt = datetime.datetime.strptime(fechaMaxima, "%Y-%m-%d")
-                fechaCitaDt = dt + datetime.timedelta(days=1)
+                dt = datetime.strptime(fechaMaxima, "%Y-%m-%d")
+                fechaCitaDt = dt + timedelta(days=1)
                 fechaCita = fechaCitaDt.strftime("%Y-%m-%d")
             # Se agrega la hora conseguida a (horaCita)
             else:
@@ -640,14 +682,17 @@ def programacionFechaHora(con):
                 # Se iguala la fecha de la cita obtenida (fechaCita) como la fecha maxima que se tiene (fechaMaxima)
                 fechaCita = fechaMaxima
 
-            fechaCitaDt = datetime.datetime.strptime(fechaCita, "%Y-%m-%d")
+            fechaCitaDt = datetime.strptime(fechaCita, "%Y-%m-%d")
             # en caso de que el valor de (fechaCitaDt) sea menor a (fechaInicioDt), se le asigna el valor de (horaInicio) a (horaCita)
             if fechaCitaDt < fechaInicioDt:
                 fechaCita = fechaInicioDt.strftime("%Y-%m-%d")
                 horaCita = horaInicio
+        fechaCitaDt = datetime.strptime(fechaCita, "%Y-%m-%d")
+        if fechaCitaDt > fechaFinDt:
+            continue
         cursorObj.execute('update programacion_vacunas set fechaProgramada = ?, horaProgramada = ? where idCita = ?', (fechaCita, horaCita, cita[0]))
         con.commit()
-        # enviarCorreo(cita[8], fechaCita, horaCita, cita[9])
+        # enviarCorreo(cita[9], fechaCita, horaCita, cita[10])
     print('Programación de citas de vacunacion exitosa')
 
 
@@ -758,7 +803,9 @@ def consultarProgramacionIndividual():
 # Función para generar un menú de opciones para confirmar la vacunación de un paciente
 def menuModuloCinco():
     while True:
-        opcion = input('Desea vacunar pacientes?:\n1. Si\n2. No\n')
+        opcion = input('Desea vacunar pacientes?:\n'+
+                       '1. Si\n'+
+                       '2. No\n')
         if opcion != '':
             opcion = int(opcion)
             if opcion == 1: vacunacionPacientes()
@@ -822,7 +869,14 @@ def formatoFechas():
 def menuPrincipal():
     # Se crea ciclo que solo termina cuando (opcion) sea igual a 6
     while True:
-        opcion = input('Seleccione el modulo al que desea ingresar:\n1. Afiliados\n2. Lotes\n3. Planes de vacunacion\n4. Programación de vacunacion\n5. Vacunar\n6. Documentación de usuario\n7. Salir\n')
+        opcion = input('Seleccione el modulo al que desea ingresar:\n'+
+                       '1. Afiliados\n'+
+                       '2. Lotes\n'+
+                       '3. Planes de vacunacion\n'+
+                       '4. Programación de vacunacion\n'+
+                       '5. Vacunar\n'+
+                       '6. Documentación de usuario\n'+
+                       '7. Salir\n')
         if opcion != '':
             opcion = int(opcion)
             if opcion == 1: menuModuloUno()

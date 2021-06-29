@@ -27,10 +27,7 @@ share/python-wheels/
 *.egg
 *.db
 *.json
-*.docx
-*.xlsx
-*.docx#
-*.xlsx#
+documentacion
 data/fam.sql
 .idea
 MANIFEST

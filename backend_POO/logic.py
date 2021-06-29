@@ -38,7 +38,7 @@ class Lote:
     def crearLote(self, info):
         if info != None:
             self.lote = info
-            self.metodosConexion.setLote(self, self.lote)
+            self.metodosConexion.setLote(self.lote)
 
     def consultarLote(self,id):
         resultado = self.metodosConexion.getLote(id)
@@ -46,3 +46,6 @@ class Lote:
             self.lote = resultado
             return self.lote
         return resultado
+    
+def crearTablas():
+    connect.crearTablas()

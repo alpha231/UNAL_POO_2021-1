@@ -1,10 +1,19 @@
 import logic
 import model
-import connect
 # from datetime import datetime, date, time, timezone
 # Librería datetime esta incluida por defecto, permite la correcta elaboración para formatos de fecha
 # import datetime
 from datetime import datetime, timedelta
+# Librería PIL esta incluida por defecto, importa el método Image con el fin de producir una imagen
+from PIL import Image
+# Librería webbrowser esta incluida por defecto, será usada para abrir una dirección en el navegador
+import webbrowser
+# Libreria incluida por defecto que permite crear directorio en la maquina
+import os
+# Libreria incluida por defecto para eliminar directorios recursivamente
+import shutil
+# # from dateutil.relativedelta import relativedelta
+
 
 class Persona:
     def __init__(self) -> None:
@@ -120,11 +129,11 @@ class Persona:
 
 class Lote:
     def __init__(self) -> None:
-        self.lote = model.Persona()
-        self.logicaLote = logic.Persona()
+        self.lote = model.Lote()
+        self.logicaLote = logic.Lote()
         
     # Función de menú para las opciones crearLote() y consultarLote()
-    def menuModuloDos(self):
+    def imprimirMenu(self):
         # se crea un ciclo que finaliza únicamente cuando el usuario elige la opción (3. Atras)
         while True:
             opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
@@ -134,14 +143,110 @@ class Lote:
             if opcion != '':
                 opcion = int(opcion)
                 # Trae la función (crearLote)
-                if opcion == 1: self.logicaLote.crearLote()
+                if opcion == 1: 
+                    self.logicaLote.crearLote(self.infoLote())
                 # Trae la función (consultarLote)
-                if opcion == 2: self.logicaLote.consultarLote()
-                if opcion == 3: break
+                elif opcion == 2: 
+                    texto = 'Ingrese a continuación número de lote que desea consultar:\n'
+                    resultado = self.logicaLote.consultarLote(self.pedirNoLote(texto))
+                    if resultado:
+                        self.lote = resultado
+                        print("No. de Lote:", self.lote.noLote)
+                        print("Fabricante:", self.lote.fabricante)
+                        print("Tipo de vacuna:", self.lote.tipoVacuna)
+                        print("Cantidad de vacunas recibidas:", self.lote.cantidadRecibida)
+                        print("Cantidad de vacunas asignadas:", self.lote.cantidadAsignada)
+                        print("Cantidad de vacunas usadas:", self.lote.cantidadUsada)
+                        print("Dosis necesarias:", self.lote.dosisNecesaria)
+                        print("Temperatura de almacenamiento:", self.lote.temperatura)
+                        print("Efectividad:", self.lote.efectividad)
+                        print("Tiempo de protección:", self.lote.tiempoProteccion)
+                        print("Fecha de vencimiento:", self.lote.fechaVencimiento)
+                        # se muestra una imagen recogiendo los datos de fabricante, imagenBinaria de la tabla lote_vacunas y la variable (cursorObj)
+                        self.mostrarImagen(self.lote.fabricante, self.lote.imagen)
+                        print('\n')
+                    # Se mostrará un mensaje si el valor de (noLote) es nulo
+                    else: print('El lote no se encuentra registrado.\n')
+                elif opcion == 3: 
+                    break
             # El programa dara otra vuelta en caso de que la variable (opcion) este vacía
             else: continue
-
-
+            
+    def infoLote(self):
+        print('Ingrese a continuación los datos del lote que desea registrar:')
+        while True:
+            try:
+                self.lote.noLote = int(input('Número del lote:\n'))
+                break
+            except ValueError:
+                print('El número del lote debe contener solo números')
+        resultado = self.logicaLote.consultarLote(self.lote.noLote)
+        if not resultado:
+            # Se ingresan datos respectivos al nuevo lote
+            self.lote.fabricante = input('Fabricante:\n').title()
+            self.lote.tipoVacuna = input('Tipo de vacuna:\n').title()
+            self.lote.cantidadRecibida = int(input('Cantidad de vacunas recibidas:\n'))
+            # self.lote.cantidadAsignada = int(input('Cantidad de vacunas asignadas:\n'))
+            # self.lote.cantidadUsada = int(input('Cantidad de vacunas usadas:\n'))
+            self.lote.cantidadAsignada = 0
+            self.lote.cantidadUsada = 0
+            self.lote.dosisNecesaria = int(input('Dosis necesarias:\n'))
+            self.lote.temperatura = float(input('Temperatura de almacenamiento:\n'))
+            self.lote.efectividad = float(input('Efectividad de la vacuna:\n'))
+            self.lote.tiempoProteccion = int(input('Tiempo de protección (meses):\n'))
+            while True:
+                print('Fecha de vencimiento:')
+                self.lote.fechaVencimiento = formatoFechas()
+                try:
+                    fechaVencimientoDt = datetime.strptime(self.lote.fechaVencimiento, "%Y-%m-%d")
+                    fechaActualDt = datetime.now()
+                    # if fechaVencimientoDt > fechaActualDt + relativedelta(months=1):
+                    assert fechaVencimientoDt > fechaActualDt
+                    break
+                except AssertionError:
+                    print('La fecha ingresada es invalida')
+            # se da la opcion para ingresar una imagen del lote según su ruta
+            rutaImagen = input('Ruta completa a la imagen:\n')
+            # se abre el archivo respectivo y se lee, almacenándose en la variable (imagenBinaria)
+            with open(rutaImagen, "rb") as File:
+                self.lote.imagen = File.read()
+            return self.lote
+        else:
+            # se mostrara un mensaje si el número identificador digitado ya existe dentro de la tabla lote_vacuna
+            print('Este lote de vacunas ya existe\n')
+    
+    def pedirNoLote(self, texto):
+        noLote = int(input(texto))
+        return noLote
+        
+    def mostrarImagen(self, fabricante, imagenBinaria):
+        # Se crea un ciclo que solo se cierra cuando el usuario halla terminado de visualizar una imagen o hasta que la variable (opcion) sea 2
+        while True:
+            opcion = input('¿Desea abrir la imagen?:\n'+
+                        '1. Si\n'+
+                        '2. No\n')
+            if opcion != '':
+                opcion = int(opcion)
+                if opcion == 1:
+                    # Se toma la información de la ruta en donde se encuentra la imagen
+                    directorio = "imagenesDescargadas/"
+                    try:
+                        os.stat(directorio)
+                    except FileNotFoundError:
+                        os.mkdir(directorio)
+                    rutaDeGuardado = '{}{}.jpg'.format(directorio, fabricante)
+                    with open(rutaDeGuardado, "wb") as File:
+                        File.write(imagenBinaria)
+                    # Se abre la imagen abriendo su ruta almacenada en (rutaDeGuardado) con el método .open() y se visualiza con el método .show()
+                    imagen = Image.open(rutaDeGuardado)
+                    imagen.show()
+                    shutil.rmtree(directorio)
+                    break
+                # Termina el bucle
+                elif opcion == 2: break
+            else: continue
+        
+    
 # Función para mostrar un menú de opciones relacionados a los planes de vacunación
 def menuModuloTres():
     miPlan = model.PlanDeVacunacion()
@@ -230,6 +335,7 @@ def menuModuloCinco():
 # Función para generar un menú principal con las opciones de las funcionalidades del programa
 def menuPrincipal():
     persona = Persona()
+    lote = Lote()
     # Se crea ciclo que solo termina cuando (opcion) sea igual a 6
     while True:
         opcion = input('Seleccione el modulo al que desea ingresar:\n'+
@@ -243,7 +349,7 @@ def menuPrincipal():
         if opcion != '':
             opcion = int(opcion)
             if opcion == 1: persona.imprimirMenu()
-            if opcion == 2: persona.menuModuloDos()
+            if opcion == 2: lote.imprimirMenu()
             if opcion == 3: menuModuloTres()
             if opcion == 4: menuModuloCuatro()
             if opcion == 5: menuModuloCinco()
@@ -255,7 +361,7 @@ def menuPrincipal():
 
 # Función principal del programa, inicia las funciones básicas
 def main():
-    connect.crearTablas()
+    logic.crearTablas()
     menuPrincipal()
 
 

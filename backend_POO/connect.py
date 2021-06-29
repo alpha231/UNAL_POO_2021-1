@@ -166,7 +166,7 @@ class Lote:
             self.lote.tiempoProteccion = resultado[9]
             self.lote.fechaVencimiento = resultado[10]
             self.lote.imagen = resultado[11]
-            return self.persona
+            return self.lote
         return False
     
     def setLote(self, lote):

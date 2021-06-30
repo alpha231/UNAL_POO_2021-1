@@ -11,7 +11,6 @@ def sqlConnection():
     except Error:
         print(Error)
 
-
 # Esta función creara las tablas mencionadas si estas no se encuentran dentro de la base de datos con el método .execute que permite la manipulación de la información de la base de datos
 def crearTablas():
     con = sqlConnection()
@@ -138,6 +137,33 @@ class Persona:
         # Se afirman los cambios realizados
         con.commit()
         con.close()
+        
+    def getEstadoPersonaCitada(self, id):
+        self.id = id
+        con = sqlConnection()
+        cursorObj = con.cursor()
+        # Se obtiene el valor de (cita) con la tabla programacion_vacunas donde corresponda con (documentoID) usando el método INNER JOIN en la tabla pacientes
+        cursorObj.execute('''SELECT pc.fechaDesafiliacion , pc.vacunado FROM programacion_vacunas pgv 
+                        INNER JOIN pacientes pc ON (pc.noid = pgv.noid)
+                        WHERE pc.noId = {}'''.format(self.id))
+        resultado = cursorObj.fetchone()
+        con.close()
+        if resultado != None:
+            self.persona.fechaDesafiliacion = resultado[0]
+            self.persona.vacunado = resultado[1]
+            return self.persona
+        return False
+    
+    def setPacienteVacunado(self, persona):
+        self.persona = persona
+        con = sqlConnection()
+        cursorObj = con.cursor()
+        # se actualiza el estado de vacunación del paciente y se suma 1 a (cantidadUsada) de la tabla lote_vacunas con el método UPDATE
+        cursorObj.execute('UPDATE pacientes SET vacunado = "{}" WHERE noId = {}'.format(self.persona.vacunado, self.persona.noId))
+        cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = cantidadUsada + 1 WHERE noLote = (SELECT noLote FROM programacion_vacunas WHERE noId = {})'.format(self.persona.noId))
+        # Se afirman los cambios realizados
+        con.commit()
+        con.close()
 
 class Lote:
     def __init__(self) -> None:
@@ -179,3 +205,54 @@ class Lote:
         cursorObj.execute('INSERT INTO lote_vacunas VALUES (?,?,?,?,?,?,?,?,?,?,date(?),?)', info)
         con.commit()
         con.close()
+        
+    def setValoresVacunasDefault(self):
+        con = sqlConnection()
+        cursorObj = con.cursor()
+        # Se cambian los datos de la tabla paciente: vacunados a "N" y fechaDesafiliacion a NULL
+        cursorObj.execute('UPDATE pacientes SET vacunado = "N", fechaDesafiliacion= NULL')
+        # Se cambian los datos de la tabla lote_vacunas: cantidadUsada a 0 y cantidadAsignada a 0
+        cursorObj.execute('UPDATE lote_vacunas SET cantidadUsada = 0, cantidadAsignada = 0')
+        con.commit()
+        con.close()
+
+class PlanDeVacunacion:
+    def __init__(self) -> None:
+        self.plan = model.PlanDeVacunacion()
+        self.id = None
+        
+    def getPlan(self, id):
+        self.id = id
+        con = sqlConnection()
+        cursorObj = con.cursor()
+        # se busca dentro de la tabla pacientes el valor (noId) que corresponda con la variable(documentoID)
+        cursorObj.execute('SELECT * FROM plan_vacunacion WHERE idPlan = {}'.format(self.id))
+        # se usa el método fetchall() del objeto cursor para almacenar los valores en la variable (resultado).
+        resultado = cursorObj.fetchone()
+        con.close()
+        if resultado != None:
+            self.plan.idPlan = resultado[0]
+            self.plan.edadMinima = resultado[1]
+            self.plan.edadMaxima = resultado[2]
+            self.plan.fechaInicio = resultado[3]
+            self.plan.fechaFinal = resultado[4]
+            return self.plan
+        return False
+    
+    def setPlan(self, plan):
+        self.plan = plan
+        con = sqlConnection()
+        cursorObj = con.cursor()
+        info = (self.plan.idPlan, self.plan.edadMinima, self.plan.edadMaxima, self.plan.fechaInicio, self.plan.fechaFinal)
+        # Se insertan los datos de (info) dentro de la tabla plan_vacunas por el método INSERT INTO, teniendo en cuenta que el penúltimo valor entra con un formato de fecha con el método date()
+        cursorObj.execute('INSERT INTO plan_vacunacion VALUES (?,?,?,date(?),date(?))', info)
+        con.commit()
+        con.close()
+        
+    def getRangoEdades(self):
+        con = sqlConnection()
+        cursorObj = con.cursor()
+        cursorObj.execute('SELECT edadMinima, edadMaxima FROM plan_vacunacion')
+        rangoFechas = cursorObj.fetchall()
+        con.close()
+        return rangoFechas

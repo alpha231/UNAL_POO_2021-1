@@ -268,14 +268,16 @@ def menuModuloDos():
         opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
                        '1. Crear nuevo lote de vacunas\n'+
                        '2. Consultar lote de vacunas\n'+
-                       '3. Atras\n')
+                       '3. Consultar todos los lotes de vacunas\n'+
+                       '4. Atras\n')
         if opcion != '':
             opcion = int(opcion)
             # Trae la función (crearLote)
             if opcion == 1: crearLote()
             # Trae la función (consultarLote)
             if opcion == 2: consultarLote()
-            if opcion == 3: break
+            if opcion == 3: consultarLotes()
+            if opcion == 4: break
         # El programa dara otra vuelta en caso de que la variable (opcion) este vacía
         else: continue
 
@@ -372,6 +374,38 @@ def consultarLote():
         print('\n')
     # Se mostrará un mensaje si el valor de (noLote) es nulo
     else: print('El lote no se encuentra registrado.\n')
+
+
+# Función con la finalidad de consultar todos los lotes de vacunas ingresados con anterioridad
+def consultarLotes():
+    con = sqlConnection()
+    cursorObj = con.cursor()
+    cursorObj.execute('SELECT * FROM lote_vacunas'.format())
+    # Se trae el valor individual de la tabla lote_vacunas que concuerda con (noLote)
+    resultado = cursorObj.fetchall()
+    if len(resultado) != 0:
+        for cita in resultado:
+            cont = 0
+            # Se realiza un bucle que recorre los datos de la variable (resultado) si esta tiene un valor no nulo
+            for datos in cita[0:-1]:
+                if cont == 0: infoLote = "No. de Lote: "
+                elif cont == 1: infoLote = "Fabricante: "
+                elif cont == 2: infoLote = "Tipo de vacuna: "
+                elif cont == 3: infoLote = "Cantidad de vacunas recibidas: "
+                elif cont == 4: infoLote = "Cantidad de asignadas recibidas: "
+                elif cont == 5: infoLote = "Cantidad de usadas recibidas: "
+                elif cont == 6: infoLote = "Dosis necesarias: "
+                elif cont == 7: infoLote = "Temperatura de almacenamiento: "
+                elif cont == 8: infoLote = "Efectividad: "
+                elif cont == 9: infoLote = "Tiempo de protección: "
+                elif cont == 10: infoLote = "Fecha de vencimiento: "
+                if datos is not None:
+                    # Se imprime (infoLote) correspondiente a la descripción de la información junto con el valor correspondiente (datos)
+                    print(infoLote, datos)
+                    cont += 1
+            print('\n')
+        # Se mostrará un mensaje si el valor de (noLote) es nulo
+    else: print('No hay lotes registrados.\n')
 
     con.close()
 
@@ -861,7 +895,7 @@ def formatoFechas():
     anio = input("Año: ")
     anio = anio.ljust(4)
     # Se juntan y almacenan los valores anteriores pertenecientes a la fecha en la variable (fecha) con el método .format()
-    fecha = "{}-{}-{}".format(anio, mes, dia)
+    fecha = "{}-{}-{}".format(anio[:4], mes[:2], dia[:2])
     return fecha
 
 

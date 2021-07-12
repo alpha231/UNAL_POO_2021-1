@@ -441,17 +441,19 @@ def mostrarImagen(fabricante, imagenBinaria):
 
 # Función para mostrar un menú de opciones relacionados a los planes de vacunación
 def menuModuloTres():
-    # se crea un bucle que solo se detiene cuando la variable (opcion) sea igual a 3
+    # se crea un bucle que solo se detiene cuando la variable (opcion) sea igual a 4
     while True:
         opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
                        '1. Crear plan de vacunación\n'+
                        '2. Consultar plan de vacunación\n'+
-                       '3. Atras\n')
+                       '3. Consultar Todos los planes de vacunación\n'+
+                       '4. Atras\n')
         if opcion != '':
             opcion = int(opcion)
             if opcion == 1: crearPlanVacunacion()
             if opcion == 2: consultarPlanVacunacion()
-            if opcion == 3: break
+            if opcion == 3: consultarTodoPlanVacunacion()
+            if opcion == 4: break
         else: continue
 
 
@@ -552,6 +554,24 @@ def consultarPlanVacunacion():
     # se cierra tabla
     con.close()
 
+# Función para ver los datos de un plan de vacunación ya existente en la tabla plan_vacunacion
+def consultarTodoPlanVacunacion():
+    con = sqlConnection()
+    cursorObj = con.cursor()
+    # Se seleccionan las filas de información de la tabla plan_vacunacion
+    cursorObj.execute('SELECT * FROM plan_vacunacion')
+    # Se crea la variable resultado para contener las filas de información obtenidas con el metodo .fetchall()
+    resultado = cursorObj.fetchall()
+    # si el valor obtenido de (resultado) no es nulo, continuara con un bucle que presentara las filas de información
+    if resultado is not None:
+        for datos in resultado:
+            print ("Id. de Plan:",datos[0]," Edad minima:",datos[1]," Edad maxima:",datos[2]," Fecha de inicio:",datos[3]," Fecha de finalización:",datos[4])
+    # se mostrara un mensaje si (resultado) es nulo
+    else: print('No existen planes de vacunación vigentes\n')
+    print('\n')
+
+    # se cierra tabla
+    con.close()
 
 # Función que genera un menú para las opciones relacionadas a las programaciones de vacunación
 def menuModuloCuatro():

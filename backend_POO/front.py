@@ -1,3 +1,4 @@
+from typing import Text
 import logic
 import model
 # from datetime import datetime, date, time, timezone
@@ -31,21 +32,20 @@ class Persona:
                     self.logicaPersona.crearUsuario(self.infoUsuario())
                 elif opcion == 2: 
                     texto = 'Ingrese a continuación el documento de identidad de la persona que desea consultar:\n'
-                    resultado = self.logicaPersona.consultarUsuario(self.pedirDocumento(texto))
-                    if resultado:
-                        self.persona = resultado
-                        print("No. Identificación:", self.persona.noId)
-                        print("Nombre:", self.persona.nombre)
-                        print("Apellido:", self.persona.apellido)
-                        print("Dirección:", self.persona.direccion)
-                        print("Teléfono:", self.persona.telefono)
-                        print("Correo:", self.persona.correo)
-                        print("Ciudad:", self.persona.ciudad)
-                        print("Fecha de nacimiento:", self.persona.fechaNacimiento)
-                        print("Fecha de afiliacion:", self.persona.fechaAfiliacion)
-                        print("¿Vacunado?:", self.persona.vacunado)
-                        if self.persona.fechaDesafiliacion != None:
-                            print("Fecha de desafiliación:", self.persona.fechaDesafiliacion)
+                    persona = self.logicaPersona.consultarUsuario(self.pedirDocumento(texto))
+                    if persona:
+                        print("No. Identificación:", persona.noId)
+                        print("Nombre:", persona.nombre)
+                        print("Apellido:", persona.apellido)
+                        print("Dirección:", persona.direccion)
+                        print("Teléfono:", persona.telefono)
+                        print("Correo:", persona.correo)
+                        print("Ciudad:", persona.ciudad)
+                        print("Fecha de nacimiento:", persona.fechaNacimiento)
+                        print("Fecha de afiliacion:", persona.fechaAfiliacion)
+                        print("¿Vacunado?:", persona.vacunado)
+                        if persona.fechaDesafiliacion != None:
+                            print("Fecha de desafiliación:", persona.fechaDesafiliacion)
                     else:
                         print('El paciente no se encuentra en los registros.\n')
                 elif opcion == 3: 
@@ -79,7 +79,7 @@ class Persona:
                     fechaActual = datetime.now()
                     assert fechaNacimientoDt < fechaActual
                     break
-                except AssertionError:
+                except (AssertionError, ValueError):
                     print('La fecha ingresada es invalida')
             while True:
                 print('Fecha de afiliación:')
@@ -89,7 +89,7 @@ class Persona:
                     fechaActual = datetime.now()
                     assert (fechaActual > fechaAfiliacionDt > fechaNacimientoDt)
                     break
-                except AssertionError:
+                except (AssertionError, ValueError):
                     print('La fecha ingresada es invalida')
             # Se crea variable (vacunado) que identifica si el usuario esta vacunado o no, ("S" vacunado) o ("N" no vacunado)
             # while True:
@@ -119,7 +119,7 @@ class Persona:
                     fechaActual = datetime.now()
                     assert (fechaActual > fechaDesafiliacionDt > fechaAfiliacionDt)
                     break
-                except AssertionError:
+                except (AssertionError, ValueError):
                     print('La fecha ingresada es invalida')
             return self.persona
         # Se mostrara el mensaje si la variable (resultado) es igual a 0, en caso de que no hallan datos almacenados en la variable noId digitada por el usuario
@@ -137,7 +137,8 @@ class Lote:
             opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
                         '1. Crear nuevo lote de vacunas\n'+
                         '2. Consultar lote de vacunas\n'+
-                        '3. Atras\n')
+                       '3. Consultar todos los lotes de vacunas\n'+
+                       '4. Atras\n')
             if opcion != '':
                 opcion = int(opcion)
                 # Trae la función (crearLote)
@@ -146,26 +147,42 @@ class Lote:
                 # Trae la función (consultarLote)
                 elif opcion == 2: 
                     texto = 'Ingrese a continuación número de lote que desea consultar:\n'
-                    resultado = self.logicaLote.consultarLote(self.pedirNoLote(texto))
-                    if resultado:
-                        self.lote = resultado
-                        print("No. de Lote:", self.lote.noLote)
-                        print("Fabricante:", self.lote.fabricante)
-                        print("Tipo de vacuna:", self.lote.tipoVacuna)
-                        print("Cantidad de vacunas recibidas:", self.lote.cantidadRecibida)
-                        print("Cantidad de vacunas asignadas:", self.lote.cantidadAsignada)
-                        print("Cantidad de vacunas usadas:", self.lote.cantidadUsada)
-                        print("Dosis necesarias:", self.lote.dosisNecesaria)
-                        print("Temperatura de almacenamiento:", self.lote.temperatura)
-                        print("Efectividad:", self.lote.efectividad)
-                        print("Tiempo de protección:", self.lote.tiempoProteccion)
-                        print("Fecha de vencimiento:", self.lote.fechaVencimiento)
+                    lote = self.logicaLote.consultarLote(self.pedirNoLote(texto))
+                    if lote:
+                        print("No. de Lote:", lote.noLote)
+                        print("Fabricante:", lote.fabricante)
+                        print("Tipo de vacuna:", lote.tipoVacuna)
+                        print("Cantidad de vacunas recibidas:", lote.cantidadRecibida)
+                        print("Cantidad de vacunas asignadas:", lote.cantidadAsignada)
+                        print("Cantidad de vacunas usadas:", lote.cantidadUsada)
+                        print("Dosis necesarias:", lote.dosisNecesaria)
+                        print("Temperatura de almacenamiento:", lote.temperatura)
+                        print("Efectividad:", lote.efectividad)
+                        print("Tiempo de protección:", lote.tiempoProteccion)
+                        print("Fecha de vencimiento:", lote.fechaVencimiento)
                         # se muestra una imagen recogiendo los datos de fabricante, imagenBinaria de la tabla lote_vacunas y la variable (cursorObj)
-                        self.mostrarImagen(self.lote.imagen)
+                        self.mostrarImagen(lote.imagen)
                         print('\n')
                     # Se mostrará un mensaje si el valor de (noLote) es nulo
                     else: print('El lote no se encuentra registrado.\n')
-                elif opcion == 3: 
+                elif opcion == 3:
+                    resultados = self.logicaLote.consultarLotes()
+                    if resultados:
+                        for lote in resultados:
+                            print("No. de Lote:", lote.noLote)
+                            print("Fabricante:", lote.fabricante)
+                            print("Tipo de vacuna:", lote.tipoVacuna)
+                            print("Cantidad de vacunas recibidas:", lote.cantidadRecibida)
+                            print("Cantidad de vacunas asignadas:", lote.cantidadAsignada)
+                            print("Cantidad de vacunas usadas:", lote.cantidadUsada)
+                            print("Dosis necesarias:", lote.dosisNecesaria)
+                            print("Temperatura de almacenamiento:", lote.temperatura)
+                            print("Efectividad:", lote.efectividad)
+                            print("Tiempo de protección:", lote.tiempoProteccion)
+                            print("Fecha de vencimiento:", lote.fechaVencimiento)
+                            print()
+                            
+                elif opcion == 4: 
                     break
             # El programa dara otra vuelta en caso de que la variable (opcion) este vacía
             else: continue
@@ -201,7 +218,7 @@ class Lote:
                     # if fechaVencimientoDt > fechaActualDt + relativedelta(months=1):
                     assert fechaVencimientoDt > fechaActualDt
                     break
-                except AssertionError:
+                except (AssertionError, ValueError):
                     print('La fecha ingresada es invalida')
             # se da la opcion para ingresar una imagen del lote según su ruta
             rutaImagen = input('Ruta completa a la imagen:\n')
@@ -262,14 +279,13 @@ class PlanDeVacunacion:
                     self.logicaPlan.crearPlanVacunacion(self.infoPlan())
                 elif opcion == 2: 
                     texto = 'Ingrese a continuación el código del plan de vacunacion que desea consultar:\n'
-                    resultado = self.logicaPlan.consultarPlanVacunacion(self.pedirIdPlan(texto))
-                    if resultado:
-                        self.plan = resultado
-                        print("Id. de Plan:", self.plan.idPlan)
-                        print("Edad minima:", self.plan.edadMinima)
-                        print("Edad maxima:", self.plan.edadMaxima)
-                        print("Fecha de inicio:", self.plan.fechaInicio)
-                        print("Fecha de finalización:", self.plan.fechaFinal)
+                    plan = self.logicaPlan.consultarPlanVacunacion(self.pedirIdPlan(texto))
+                    if plan:
+                        print("Id. de Plan:", plan.idPlan)
+                        print("Edad minima:", plan.edadMinima)
+                        print("Edad maxima:", plan.edadMaxima)
+                        print("Fecha de inicio:", plan.fechaInicio)
+                        print("Fecha de finalización:", plan.fechaFinal)
                     # se mostrara un mensaje si (resultado) es nulo
                     else: 
                         print('El plan de vacunación no se encuentra registrado.\n')
@@ -306,7 +322,7 @@ class PlanDeVacunacion:
                     fechaActual = datetime.now()
                     assert fechaInicioDt > fechaActual
                     break
-                except AssertionError:
+                except (AssertionError, ValueError):
                     print('La fecha ingresada es invalida')
             while True:
                 print('Fecha de finalización:')
@@ -317,7 +333,7 @@ class PlanDeVacunacion:
                     # if fechaFinalDt >= fechaInicioDt + relativedelta(months=1):
                     assert fechaFinalDt >= fechaInicioDt
                     break
-                except AssertionError:
+                except (AssertionError, ValueError):
                     print('La fecha ingresada es invalida')
             return self.plan
         else:
@@ -328,14 +344,14 @@ class PlanDeVacunacion:
         idPlan = int(input(texto))
         return idPlan
 
-class ProgramacionDeVacunas:
+class ProgramacionDeVacunas(Persona, Lote, PlanDeVacunacion):
     def __init__(self) -> None:
         self.programacion = model.ProgramacionDeVacunas()
         self.logicaProgramacion = logic.ProgramacionDeVacunas()
+        self.fechaInicioIngresada = None
         
     # Función que genera un menú para las opciones relacionadas a las programaciones de vacunación
     def imprimirMenu(self):
-        miProgramacion = model.ProgramacionDeVacunas()
         # Se genera un bucle que solo se detiene cunado (opcion) sea igual a 4
         while True:
             opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
@@ -346,7 +362,12 @@ class ProgramacionDeVacunas:
             if opcion != '':
                 opcion = int(opcion)
                 # Si (opcion) es igual a 1, se inicia la función programacionDeVacunacion()
-                if opcion == 1: miProgramacion.programacionDeVacunacion()
+                if opcion == 1: 
+                    message = self.logicaProgramacion.crearProgramacion(self.pedirFechaInicio())
+                    if message[0]:
+                        print('{}\n{}\n'.format(message[0], message[1]))
+                    else:
+                        print (message[1] + '\n')
                 elif opcion == 2:
                     # se inicia un bucle para obtener un dato de consulta según lo elija el usuario, este bucle solo se detendrá cuando (opcion) sea 11
                     while True:
@@ -366,26 +387,67 @@ class ProgramacionDeVacunas:
                         if opcion != '':
                             opcion = int(opcion)
                             # Se realiza una selección para organizar la consulta según (opcion) digitada por el usuario
-                            if opcion == 1: datoConsulta = 'pc.noId'
-                            elif opcion == 2: datoConsulta = 'pc.nombre'
-                            elif opcion == 3: datoConsulta = 'pc.apellido'
-                            elif opcion == 4: datoConsulta = 'pc.direccion'
-                            elif opcion == 5: datoConsulta = 'pc.telefono'
-                            elif opcion == 6: datoConsulta = 'pc.correo'
-                            elif opcion == 7: datoConsulta = 'pgv.fechaProgramada'
-                            elif opcion == 8: datoConsulta = 'pgv.horaProgramada'
-                            elif opcion == 9: datoConsulta = 'lv.noLote'
-                            elif opcion == 10: datoConsulta = 'lv.fabricante'
+                            if 1 <= opcion <= 10:
+                                datoConsulta = opcion-1
                             elif opcion == 11: break
                             else: continue
                         else: continue
                         # Se llama a la función consultarProgramacionCompleta() con la entrada (datoConsulta)
-                        miProgramacion.consultarProgramacionCompleta(datoConsulta)
+                        citasProgramadas = self.logicaProgramacion.consultarProgramacionCompleta(datoConsulta)
+                        if citasProgramadas:
+                            for cita in citasProgramadas:
+                                persona = cita[0]
+                                programacion = cita[1]
+                                lote = cita[2]
+                                print("No. Identificación: ", persona.noId)
+                                print("Nombre: ", persona.nombre)
+                                print("Apellido: ", persona.apellido)
+                                print("Dirección: ", persona.direccion)
+                                print("Teléfono: ", persona.telefono)
+                                print("Correo: ", persona.correo)
+                                print("Fecha programada: ", programacion.fechaProgramada)
+                                print("Hora programada: ", programacion.horaProgramada)
+                                print("Número de lote de vacuna: ", lote.noLote)
+                                print("Fabricante de la vacuna: ", lote.fabricante)
+                                print('\n')
                 # Si (opcion) es igual a 3, se inicia la función consultarProgramacionIndividual()
-                elif opcion == 3: miProgramacion.consultarProgramacionIndividual()
+                elif opcion == 3: 
+                    texto = 'Ingrese a continuación el documento de identidad de la persona cuya cita desea consultar:\n'
+                    self.persona = model.Persona()
+                    resultado = self.logicaProgramacion.consultarProgramacionIndividual(self.pedirDocumento(texto))
+                    if resultado:
+                        persona = resultado[0]
+                        programacion = resultado[1]
+                        lote = resultado[2]
+                        print("No. Identificación: ", persona.noId)
+                        print("Nombre: ", persona.nombre)
+                        print("Apellido: ", persona.apellido)
+                        print("Dirección: ", persona.direccion)
+                        print("Teléfono: ", persona.telefono)
+                        print("Correo: ", persona.correo)
+                        print("Fecha programada: ", programacion.fechaProgramada)
+                        print("Hora programada: ", programacion.horaProgramada)
+                        print("Número de lote de vacuna: ", lote.noLote)
+                        print("Fabricante de la vacuna: ", lote.fabricante)
+                        print('\n')
+                    # se muestra mensaje si (resultado) esta vacío
+                    else: print('El paciente no tiene cita.\n')
                 # el programa deja el bucle por medio de la función break
                 elif opcion == 4: break
             else: continue
+
+    def pedirFechaInicio(self):
+        while True:
+            print('Ingrese la fecha a partir de la cual desea vacunar:')
+            self.fechaInicioIngresada = formatoFechas()
+            try:
+                fechaInicioIngresadaDt = datetime.strptime(self.fechaInicioIngresada, "%Y-%m-%d")
+                fechaActual = datetime.now()
+                assert fechaInicioIngresadaDt > fechaActual
+                break
+            except (AssertionError, ValueError):
+                print('La fecha ingresada es invalida')
+        return fechaInicioIngresadaDt
 
 class Vacunacion(Persona):
     def __init__(self) -> None:
@@ -406,23 +468,22 @@ class Vacunacion(Persona):
 
     def vacunarPaciente(self):
         texto = 'Ingrese a continuación el documento de identidad de la persona que desea vacunar:\n'
-        resultado = self.logicaPersona.consultarUsuario(self.pedirDocumento(texto))
-        if resultado:
-            self.persona = resultado
+        persona = self.logicaPersona.consultarUsuario(self.pedirDocumento(texto))
+        if persona:
             # si (afiliado) no esta vacío, se compara su casilla de desafiliado
-            if self.persona.fechaDesafiliacion is not None:
+            if persona.fechaDesafiliacion is not None:
                 print('Este paciente se encuentra desafiliado')
             # se compara la casilla vacunado de (afiliado) con "S" de otra manera almacenaría a "N"
-            elif self.persona.vacunado == 'S':
+            elif persona.vacunado == 'S':
                 print('Este paciente ya se encuentra vacunado')
             else:
-                cita = self.logicaPersona.consultarEstadoPersonaCitada(self.persona.noId)
+                cita = self.logicaPersona.consultarEstadoPersonaCitada(persona.noId)
                 if cita:
                     # se pide confirmación de vacunación al usuario si (cita) no esta vacío
                     vacunado = input('¿Desea vacunar a esta persona? (S/N):\n').title()
                     if vacunado == 'S':
-                        self.persona.vacunado = vacunado
-                        self.logicaPersona.vacunarPacientes(self.persona)
+                        persona.vacunado = vacunado
+                        self.logicaPersona.vacunarPacientes(persona)
                         
                 # se mostrará un mensaje si el valor (cita) esta vacío
                 else: print('El paciente no tiene cita programada.\n')
@@ -452,7 +513,7 @@ def menuPrincipal():
             if opcion == 2: lote.imprimirMenu()
             if opcion == 3: plan.imprimirMenu()
             if opcion == 4: programacion.imprimirMenu()
-            if opcion == 5: vacunacion.imprimirMenu()
+            if opcion == 5: vacunacion.imprimirMenu() 
             if opcion == 6: logic.documentacionUsuario()
             if opcion == 7: break
             if opcion == 231: lote.logicaLote.reiniciarValores()

@@ -11,6 +11,7 @@ class Persona:
         self.__fechaAfiliacion = None
         self.__vacunado = None
         self.__fechaDesafiliacion = None
+        self.edad = None
     
     @property
     def noId(self):
@@ -153,4 +154,6 @@ class ProgramacionDeVacunas:
         self.idPlan = None
         self.ciudadVacunacion = None
         self.fechaProgramada = None
-        self.horaProgramada = None  
+        self.horaProgramada = None
+        self.horaInicio = "00:00:00"
+        self.horaFin = "24:00:00"

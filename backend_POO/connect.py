@@ -195,7 +195,7 @@ class Lote:
     def getLotes(self):
         con = sqlConnection()
         cursorObj = con.cursor()
-        cursorObj.execute('SELECT * FROM lote_vacunas'.format())
+        cursorObj.execute('SELECT * FROM lote_vacunas')
         # Se trae el valor individual de la tabla lote_vacunas que concuerda con (noLote)
         resultados = cursorObj.fetchall()
         con.close()
@@ -218,8 +218,7 @@ class Lote:
             return listaDeLotes
         else:
             return False
-            
-    
+
     def setLote(self, lote):
         con = sqlConnection()
         cursorObj = con.cursor()

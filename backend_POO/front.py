@@ -129,8 +129,7 @@ class Lote:
     def __init__(self) -> None:
         self.lote = model.Lote()
         self.logicaLote = logic.Lote()
-        
-    # Función de menú para las opciones crearLote() y consultarLote()
+
     def imprimirMenu(self):
         # se crea un ciclo que finaliza únicamente cuando el usuario elige la opción (3. Atras)
         while True:
@@ -272,7 +271,8 @@ class PlanDeVacunacion:
             opcion = input('Ingrese el número de la opcion que desea realizar:\n'+
                         '1. Crear plan de vacunación\n'+
                         '2. Consultar plan de vacunación\n'+
-                        '3. Atras\n')
+                        '3. Consultar Todos los planes de vacunación\n'+
+                        '4. Atras\n')
             if opcion != '':
                 opcion = int(opcion)
                 if opcion == 1: 
@@ -290,6 +290,16 @@ class PlanDeVacunacion:
                     else: 
                         print('El plan de vacunación no se encuentra registrado.\n')
                 elif opcion == 3: 
+                    resultados = self.logicaPlan.consultarPlanesVacunacion()
+                    if resultados:
+                        for plan in resultados:
+                            print("Id. de Plan:", plan.idPlan)
+                            print("Edad minima:", plan.edadMinima)
+                            print("Edad maxima:", plan.edadMaxima)
+                            print("Fecha de inicio:", plan.fechaInicio)
+                            print("Fecha de finalización:", plan.fechaFinal)
+                            print()
+                elif opcion == 4: 
                     break
             else: continue
     

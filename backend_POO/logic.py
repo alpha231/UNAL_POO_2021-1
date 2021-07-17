@@ -80,6 +80,10 @@ class PlanDeVacunacion:
     def consultarPlanVacunacion(self,id):
         resultado = self.metodosConexionPlan.getPlan(id)
         return resultado
+
+    def consultarPlanesVacunacion(self):
+        resultado = self.metodosConexionPlan.getPlanes()
+        return resultado
     
     def consultarRangoEdades(self):
         rangoEdades = self.metodosConexionPlan.getRangoEdades()

@@ -1,3 +1,4 @@
+# se importa las librerias necesarias para el funcionamiento del programa
 import model
 # Librería sqlite3 esta incluida por defecto, permite elaborar y manipular bases de datos
 import sqlite3
@@ -88,20 +89,23 @@ def crearTablas():
     # Se cierra la base de datos por el método .close()
     con.close()
 
+# Se crea una clase identificada como persona, relacionada a los valores y funciones propias de los pacientes
 class Persona:
     def __init__(self) -> None:
         self.persona = model.Persona()
         self.id = None
-        
+    
+    # se crea la propiedad con el proposito de obtener los datos de un paciente registrado dentro de la tabla pacientes
     def getPersona(self, id):
         self.id = id
         con = sqlConnection()
         cursorObj = con.cursor()
-        # se busca dentro de la tabla pacientes el valor (noId) que corresponda con la variable(documentoID)
+        # se busca dentro de la tabla pacientes el valor (noId) que corresponda con la variable(id)
         cursorObj.execute('SELECT * FROM pacientes WHERE noId = {}'.format(self.id))
-        # se usa el método fetchall() del objeto cursor para almacenar los valores en la variable (resultado).
+        # se usa el método fetchone() del objeto cursor para almacenar el valor en la variable (resultado).
         resultado = cursorObj.fetchone()
         con.close()
+        # si (resultado) NO esta vacio, se obtendran todos los valores que almacena
         if resultado != None:
             self.persona.noId = resultado[0]
             self.persona.nombre = resultado[1]
@@ -117,17 +121,21 @@ class Persona:
             return self.persona
         return False
     
+    # se crea la propiedad setPersona, para añadir afiliados a la base de datos (pacientes)
     def setPersona(self, persona):
         self.persona = persona
         con = sqlConnection()
         cursorObj = con.cursor()
+        # se almacenan los valores recividos para un nuevo afiliado dentro de la base de datos 
         cursorObj.execute(
             'INSERT INTO pacientes VALUES ({a},"{b}","{c}","{d}",{e},"{f}","{g}",date("{h}"),date("{i}"),"{j}", NULL)'.format(
                 a=self.persona.noId, b=self.persona.nombre[0:20], c=self.persona.apellido[0:20], d=self.persona.direccion[0:20], e=self.persona.telefono, f=self.persona.correo[0:20],
                 g=self.persona.ciudad[0:20], h=self.persona.fechaNacimiento, i=self.persona.fechaAfiliacion, j=self.persona.vacunado))
+        # se afirman los cambios realizados
         con.commit()
         con.close()
-        
+     
+    # Se realiza la propiedad capaz de actualizar el estado de afiliacion de un usuario a "desafiliado"
     def updatePersona(self, persona):
         self.persona = persona
         con = sqlConnection()
@@ -137,12 +145,13 @@ class Persona:
         # Se afirman los cambios realizados
         con.commit()
         con.close()
-        
+    
+    # se crea la propiedad getEstadoPersonaCita con el objetivo de vizualizar el estado de un usuario citado
     def getEstadoPersonaCitada(self, id):
         self.id = id
         con = sqlConnection()
         cursorObj = con.cursor()
-        # Se obtiene el valor de (cita) con la tabla programacion_vacunas donde corresponda con (documentoID) usando el método INNER JOIN en la tabla pacientes
+        # Se obtienen los valores (fechaDesafiliacion) y (vacunado) de la tabla programacion_vacunas correspondientes con (noid) usando el método INNER JOIN en la tabla pacientes
         cursorObj.execute('''SELECT pc.fechaDesafiliacion , pc.vacunado FROM programacion_vacunas pgv 
                         INNER JOIN pacientes pc ON (pc.noid = pgv.noid)
                         WHERE pc.noId = {}'''.format(self.id))
@@ -154,6 +163,7 @@ class Persona:
             return self.persona
         return False
     
+    # Metodo para la actualización del estado de "vacunado" del paciente y de "cantidadUsada" de un lote de vacunas
     def setPacienteVacunado(self, persona):
         self.persona = persona
         con = sqlConnection()
@@ -165,20 +175,23 @@ class Persona:
         con.commit()
         con.close()
 
+# Se crea una clase identificada como lote, relacionada a los valores y funciones propias para los lotes de vacunas
 class Lote:
     def __init__(self) -> None:
         self.lote = model.Lote()
         self.id = None
-        
+     
+    # se crea la propiedad que obtiene los datos de un lote de vacunas
     def getLote(self, id):
         self.id = id
         con = sqlConnection()
         cursorObj = con.cursor()
-        # se busca dentro de la tabla pacientes el valor (noId) que corresponda con la variable(documentoID)
+        # se busca dentro de la tabla lote_vacunas el valor (noLote) que corresponda con la variable(id)
         cursorObj.execute('SELECT * FROM lote_vacunas WHERE noLote = {}'.format(self.id))
-        # se usa el método fetchall() del objeto cursor para almacenar los valores en la variable (resultado).
+        # se usa el método fetchone() del objeto cursor para almacenar el valor unico en la variable (resultado).
         resultado = cursorObj.fetchone()
         con.close()
+        # si la variable (resultado) NO esta vacia, se obtendran todos los valores que almacena
         if resultado != None:
             self.lote.noLote = resultado[0]
             self.lote.fabricante = resultado[1]
@@ -194,18 +207,21 @@ class Lote:
             self.lote.imagen = resultado[11]
             return self.lote
         return False
-    
+   
+    # se crea la propiedad setLote para almacenar valores de un nuevo lote de vacunas
     def setLote(self, lote):
         self.lote = lote
         con = sqlConnection()
         cursorObj = con.cursor()
+        # se recive la información respecto al nuevo lote dentro de la variable (info)
         info = (self.lote.noLote, self.lote.fabricante, self.lote.tipoVacuna, self.lote.cantidadRecibida, self.lote.cantidadAsignada, self.lote.cantidadUsada, self.lote.dosisNecesaria,
                 self.lote.temperatura, self.lote.efectividad, self.lote.tiempoProteccion, self.lote.fechaVencimiento, self.lote.imagen)
         # Se insertan los datos de (info) dentro de la tabla lote_vacunas por el método INSERT INTO, teniendo en cuenta que el penúltimo valor entra con un formato de fecha con el método date()
         cursorObj.execute('INSERT INTO lote_vacunas VALUES (?,?,?,?,?,?,?,?,?,?,date(?),?)', info)
         con.commit()
         con.close()
-        
+     
+    # se crea la propiedad setValoresVacunasDefault para reiniciar los valores (vacunado) y (lote_vacunas)
     def setValoresVacunasDefault(self):
         con = sqlConnection()
         cursorObj = con.cursor()
@@ -216,20 +232,23 @@ class Lote:
         con.commit()
         con.close()
 
+# Se crea una clase identificada como PlanDeVacunacion, relacionada a los valores y funciones requeridas para los planes de vacunación
 class PlanDeVacunacion:
     def __init__(self) -> None:
         self.plan = model.PlanDeVacunacion()
         self.id = None
-        
+    
+    # Se crea la propiedad de la clase (PlanDeVacunacion) que obtiene la información de un plan de vacunación existente
     def getPlan(self, id):
         self.id = id
         con = sqlConnection()
         cursorObj = con.cursor()
-        # se busca dentro de la tabla pacientes el valor (noId) que corresponda con la variable(documentoID)
+        # se busca dentro de la tabla plan_vacunacion el valor (idPlan) que corresponda con la variable(id)
         cursorObj.execute('SELECT * FROM plan_vacunacion WHERE idPlan = {}'.format(self.id))
-        # se usa el método fetchall() del objeto cursor para almacenar los valores en la variable (resultado).
+        # se usa el método fetchone() del objeto cursor para almacenar los valores en la variable (resultado).
         resultado = cursorObj.fetchone()
         con.close()
+        # si la variable (resultado) NO esta vacia, se obtendran todos los valores que almacena
         if resultado != None:
             self.plan.idPlan = resultado[0]
             self.plan.edadMinima = resultado[1]
@@ -239,20 +258,25 @@ class PlanDeVacunacion:
             return self.plan
         return False
     
+    # Se crea la propiedad setPlan() para crear un plan de vacunación nuevo
     def setPlan(self, plan):
         self.plan = plan
         con = sqlConnection()
         cursorObj = con.cursor()
+        # se recive la información respecto al nuevo plan de vacunación dentro de la variable (info)
         info = (self.plan.idPlan, self.plan.edadMinima, self.plan.edadMaxima, self.plan.fechaInicio, self.plan.fechaFinal)
-        # Se insertan los datos de (info) dentro de la tabla plan_vacunas por el método INSERT INTO, teniendo en cuenta que el penúltimo valor entra con un formato de fecha con el método date()
+        # Se insertan los datos de (info) dentro de la tabla plan_vacunas por el método INSERT INTO, teniendo en cuenta que el penúltimo y ultimo valor usan el formato de fecha con el método date()
         cursorObj.execute('INSERT INTO plan_vacunacion VALUES (?,?,?,date(?),date(?))', info)
         con.commit()
         con.close()
-        
+    
+    # se crea la propiedad getRangoEdades() para obtener un rango de edades para un plan de vacunación
     def getRangoEdades(self):
         con = sqlConnection()
         cursorObj = con.cursor()
+        # se seleccionan los valores de (edadMinima) y (edadMaxima) de la tabla plan_vacunacion
         cursorObj.execute('SELECT edadMinima, edadMaxima FROM plan_vacunacion')
+        # dicho rango se almacena en la varible (rangoFechas) con el metodo del objeto cursor fetchall
         rangoFechas = cursorObj.fetchall()
         con.close()
         return rangoFechas

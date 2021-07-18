@@ -131,7 +131,6 @@ class Persona:
                 a=persona.noId, b=persona.nombre[0:20], c=persona.apellido[0:20], d=persona.direccion[0:20], e=persona.telefono, f=persona.correo[0:20],
                 g=persona.ciudad[0:20], h=persona.fechaNacimiento, i=persona.fechaAfiliacion, j=persona.vacunado))
         # se afirman los cambios realizados
-        
         con.commit()
         con.close()
      

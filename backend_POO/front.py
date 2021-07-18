@@ -1,4 +1,4 @@
-# se importan logic.py, model.py y connect.py, requeridos para el programa
+# se importan logic.py, model.py, requeridos para el programa
 import logic
 import model
 # from datetime import datetime, date, time, timezone
@@ -503,20 +503,22 @@ class Vacunacion(Persona):
     def __init__(self) -> None:
         super().__init__()
 
-# Función para generar un menú de opciones para confirmar la vacunación de un paciente
-def menuModuloCinco():
-    # Se genera un bucle que se detiene cuando la variable (opcion) sea igual a 2
-    while True:
-        opcion = input('Desea vacunar pacientes?:\n'+
-                       '1. Si\n'+
-                       '2. No\n')
-        # Si la variable (opcion) no esta vacía se convertirá a un número entero
-        if opcion != '':
-            opcion = int(opcion)
-            # Se llama al método vacunacionPacientes de logic
-            if opcion == 1: logic.vacunacionPacientes()
-            if opcion == 2: break
-        else: continue
+    # Función para generar un menú de opciones para confirmar la vacunación de un paciente
+    def imprimirMenu(self):
+        # Se genera un bucle que se detiene cuando la variable (opcion) sea igual a 2
+        while True:
+            opcion = input('Desea vacunar pacientes?:\n'+
+                        '1. Si\n'+
+                        '2. No\n')
+            # Si la variable (opcion) no esta vacía se convertirá a un número entero
+            if opcion != '':
+                opcion = int(opcion)
+                # Se llama al método vacunarPaciente
+                if opcion == 1: 
+                    self.vacunarPaciente()
+                elif opcion == 2: 
+                    break
+            else: continue
 
     def vacunarPaciente(self):
         texto = 'Ingrese a continuación el documento de identidad de la persona que desea vacunar:\n'
@@ -546,6 +548,10 @@ def menuModuloCinco():
 def menuPrincipal():
     # Se introduce valores de la clase Persona() en la variable (persona)
     persona = Persona()
+    lote = Lote()
+    plan = PlanDeVacunacion()
+    vacunacion = Vacunacion()
+    programacion = ProgramacionDeVacunas()
     # Se crea ciclo que solo termina cuando (opcion) sea igual a 7
     while True:
         opcion = input('Seleccione el modulo al que desea ingresar:\n'+
@@ -573,19 +579,14 @@ def menuPrincipal():
             # Se detiene el bucle
             if opcion == 7: break
             # Se llama a la función reiniciarValores() para reiniciar valores de la base de datos
-            if opcion == 231: reiniciarValores()
+            if opcion == 231: lote.logicaLote.reiniciarValores()
         else: continue
 
 
 # Función principal del programa, inicia las funciones básicas
 def main():
-    connect.crearTablas()
+    logic.crearTablas()
     menuPrincipal()
-
-
-# Función para reiniciar valores de los pacientes y usos o asignaciones de vacunas
-def reiniciarValores():
-    pass
 
 # Función para designar el formato con el que se manejan las fechas
 def formatoFechas():

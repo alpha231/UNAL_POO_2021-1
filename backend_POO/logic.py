@@ -108,76 +108,84 @@ class ProgramacionDeVacunas(Persona, Lote, PlanDeVacunacion):
     def crearProgramacion(self, fechaInicioIngresada):
         self.metodosConexionProgramacion.reiniciarProgramacion()
         retornoInfoVacunas = self.programacionPacienteLote()
-        retornoInfoProgramacion = self.programacionFechaHora(fechaInicioIngresada)
-        if not retornoInfoVacunas[0]:
+        retornoInfoProgramacion = 'No se realizo la programacion de vacunas'
+        if retornoInfoVacunas[0] in (0,1):
+            retornoInfoProgramacion = self.programacionFechaHora(fechaInicioIngresada)
             return retornoInfoVacunas[1], retornoInfoProgramacion[1]
-        return False, retornoInfoProgramacion[1]
+        return retornoInfoVacunas[1], retornoInfoProgramacion
 
     def programacionPacienteLote(self):
         planesVacunacion = self.metodosConexionPlan.getPlanes()
         message = ''
-        flag = True
-        for plan in planesVacunacion:
-            pacientesAVacunar = self.metodosConexionProgramacion.getPacientesAVacunar(plan.edadMinima, plan.edadMaxima)
-            if pacientesAVacunar:
-                for persona in pacientesAVacunar:
-                    lote = self.metodosConexionProgramacion.getVacunaDisponible()
-                    if lote:
-                        self.metodosConexionProgramacion.setProgramacion(persona, lote, plan)
-                    else:
-                        message = 'Limite de vacunas alcanzado'
-                        flag = lote
+        flag = 0
+        if planesVacunacion: 
+            for plan in planesVacunacion:
+                pacientesAVacunar = self.metodosConexionProgramacion.getPacientesAVacunar(plan.edadMinima, plan.edadMaxima)
+                if pacientesAVacunar:
+                    for persona in pacientesAVacunar:
+                        lote = self.metodosConexionProgramacion.getVacunaDisponible()
+                        if lote:
+                            self.metodosConexionProgramacion.setProgramacion(persona, lote, plan)
+                        else:
+                            message = 'Limite de vacunas alcanzado'
+                            flag = 1
+                else:
+                    message = 'No hay pacientes a vacunar'
+                    flag = 2
+        else:
+            message = 'No hay planes de vacunacion'
+            flag = 3
         return(flag, message)
 
     def programacionFechaHora(self, fechaInicioIngresadaDt):
         citasAProgramar = self.metodosConexionProgramacion.getCitasAProgramar()
-        for i in citasAProgramar:
-            self.programacion = i[0]
-            plan = i[1]
-            persona = i[2]
-            lote = i[3]
-            ultimaCitaProgramada = self.metodosConexionProgramacion.getUltimacita()
-            fechaInicioDt = datetime.strptime(plan.fechaInicio, "%Y-%m-%d")
-            if fechaInicioIngresadaDt > fechaInicioDt:
-                fechaInicioDt = fechaInicioIngresadaDt
-            fechaFinDt = datetime.strptime(plan.fechaFinal, "%Y-%m-%d")
-            if not ultimaCitaProgramada:
-                fechaActual = datetime.now()
-                if fechaInicioDt > fechaActual:
-                    self.programacion.fechaProgramada = fechaInicioDt.strftime("%Y-%m-%d")
-                else:
-                    fechaCitaDt = fechaActual + timedelta(days=1)
-                    self.programacion.fechaProgramada = fechaCitaDt.strftime("%Y-%m-%d")
-                self.programacion.horaProgramada = self.programacion.horaInicio
-            else:
-                fechaMaxima = ultimaCitaProgramada.fechaProgramada
-                horaMaxima = ultimaCitaProgramada.horaProgramada
-                hora = int(horaMaxima[0:2])
-                hora += 1
-                # se da la fecha y hora almacenándola en dt con el método datetime.strptime()
-                if hora >= int(self.programacion.horaFin[0:2]):
+        if citasAProgramar:
+            for i in citasAProgramar:
+                self.programacion = i[0]
+                plan = i[1]
+                persona = i[2]
+                lote = i[3]
+                ultimaCitaProgramada = self.metodosConexionProgramacion.getUltimacita()
+                fechaInicioDt = datetime.strptime(plan.fechaInicio, "%Y-%m-%d")
+                if fechaInicioIngresadaDt > fechaInicioDt:
+                    fechaInicioDt = fechaInicioIngresadaDt
+                fechaFinDt = datetime.strptime(plan.fechaFinal, "%Y-%m-%d")
+                if not ultimaCitaProgramada:
+                    fechaActual = datetime.now()
+                    if fechaInicioDt > fechaActual:
+                        self.programacion.fechaProgramada = fechaInicioDt.strftime("%Y-%m-%d")
+                    else:
+                        fechaCitaDt = fechaActual + timedelta(days=1)
+                        self.programacion.fechaProgramada = fechaCitaDt.strftime("%Y-%m-%d")
                     self.programacion.horaProgramada = self.programacion.horaInicio
-                    dt = datetime.strptime(fechaMaxima, "%Y-%m-%d")
-                    fechaCitaDt = dt + timedelta(days=1)
-                    self.programacion.fechaProgramada = fechaCitaDt.strftime("%Y-%m-%d")
-                # Se agrega la hora conseguida a (self.programacion.horaProgramada)
                 else:
-                    self.programacion.horaProgramada = '{}:00:00'.format(hora)
-                    if hora < 10:
-                        self.programacion.horaProgramada = '0{}:00:00'.format(hora)
-                    # Se iguala la fecha de la cita obtenida (self.programacion.fechaProgramada) como la fecha maxima que se tiene (fechaMaxima)
-                    self.programacion.fechaProgramada = fechaMaxima
-
+                    fechaMaxima = ultimaCitaProgramada.fechaProgramada
+                    horaMaxima = ultimaCitaProgramada.horaProgramada
+                    hora = int(horaMaxima[0:2])
+                    hora += 1
+                    # se da la fecha y hora almacenándola en dt con el método datetime.strptime()
+                    if hora >= int(self.programacion.horaFin[0:2]):
+                        self.programacion.horaProgramada = self.programacion.horaInicio
+                        dt = datetime.strptime(fechaMaxima, "%Y-%m-%d")
+                        fechaCitaDt = dt + timedelta(days=1)
+                        self.programacion.fechaProgramada = fechaCitaDt.strftime("%Y-%m-%d")
+                    # Se agrega la hora conseguida a (self.programacion.horaProgramada)
+                    else:
+                        self.programacion.horaProgramada = '{}:00:00'.format(hora)
+                        if hora < 10:
+                            self.programacion.horaProgramada = '0{}:00:00'.format(hora)
+                        # Se iguala la fecha de la cita obtenida (self.programacion.fechaProgramada) como la fecha maxima que se tiene (fechaMaxima)
+                        self.programacion.fechaProgramada = fechaMaxima
+                    fechaCitaDt = datetime.strptime(self.programacion.fechaProgramada, "%Y-%m-%d")
+                    # en caso de que el valor de (self.programacion.fechaProgramadaDt) sea menor a (fechaInicioDt), se le asigna el valor de (horaInicio) a (self.programacion.horaProgramada)
+                    if fechaCitaDt < fechaInicioDt:
+                        self.programacion.fechaProgramada = fechaInicioDt.strftime("%Y-%m-%d")
+                        self.programacion.horaProgramada = self.programacion.horaInicio
                 fechaCitaDt = datetime.strptime(self.programacion.fechaProgramada, "%Y-%m-%d")
-                # en caso de que el valor de (self.programacion.fechaProgramadaDt) sea menor a (fechaInicioDt), se le asigna el valor de (horaInicio) a (self.programacion.horaProgramada)
-                if fechaCitaDt < fechaInicioDt:
-                    self.programacion.fechaProgramada = fechaInicioDt.strftime("%Y-%m-%d")
-                    self.programacion.horaProgramada = self.programacion.horaInicio
-            fechaCitaDt = datetime.strptime(self.programacion.fechaProgramada, "%Y-%m-%d")
-            if fechaCitaDt > fechaFinDt:
-                continue
-            self.metodosConexionProgramacion.setFechaHora(self.programacion)
-            # self.enviarCorreo(persona.correo, self.programacion.fechaProgramada, self.programacion.horaProgramada, lote.fabricante)
+                if fechaCitaDt > fechaFinDt:
+                    continue
+                self.metodosConexionProgramacion.setFechaHora(self.programacion)
+                # self.enviarCorreo(persona.correo, self.programacion.fechaProgramada, self.programacion.horaProgramada, lote.fabricante)
         return (True, 'Programación de citas de vacunacion exitosa')
     
     def enviarCorreo(destinatario, dia, hora, vacuna):

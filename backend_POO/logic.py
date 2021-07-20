@@ -1,3 +1,4 @@
+# se importan connect y model requeridos para el programa
 import model
 import connect
 # Librería webbrowser esta incluida por defecto, será usada para abrir una dirección en el navegador
@@ -14,81 +15,98 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
+# se da la clase persona con sus funciones basicas en el programa
 class Persona:
     def __init__(self) -> None:
         self.persona = model.Persona()
         self.metodosConexionPersona = connect.Persona()
-
+    
+    # función para añadir nuevo afiliado
     def crearUsuario(self, info):
         if info != None:
             self.persona = info
             self.metodosConexionPersona.setPersona(self.persona)
 
+    # función para consultar afiliado existente
     def consultarUsuario(self,id):
         resultado = self.metodosConexionPersona.getPersona(id)
         return resultado
     
+    # función para desafiliar afiliado existente
     def desafiliarUsuario(self, persona):
         if persona != None:
             self.persona = persona
             self.metodosConexionPersona.updatePersona(self.persona)
-
+    
+    # función para consultar estado de afiliado existente
     def consultarEstadoPersonaCitada(self, id):
         resultado = self.metodosConexionPersona.getEstadoPersonaCitada(id)
         return resultado
 
-    # Función para cambiar estado de vacunación de un usuario si cumple con los requisitos
+    # función para cambiar estado de vacunación de un usuario si cumple con los requisitos
     def vacunarPacientes(self, persona):
         if persona != None:
             self.persona = persona
             self.metodosConexionPersona.setPacienteVacunado(self.persona)
-
+    
+    # función para visualizar la documentación de usuario
     def documentacionDeUsuario(self):
         pass
 
+# se da la clase Lote con sus funciones basicas en el programa
 class Lote:
     def __init__(self) -> None:
         self.lote = model.Lote()
         self.metodosConexionLote = connect.Lote()
-
+    
+    # función para crear un nuevo lote de vacunas
     def crearLote(self, info):
         if info != None:
             self.lote = info
             self.metodosConexionLote.setLote(self.lote)
 
+    # función para consultar un lote de vacunas existente
     def consultarLote(self,id):
         resultado = self.metodosConexionLote.getLote(id)
         return resultado
     
+    # función para consultar todos los lotes de vacunas existentes
     def consultarLotes(self):
         resultados = self.metodosConexionLote.getLotes()
         return resultados
     
+    # función para reiniciar los valore de lote de vacunas existente
     def reiniciarValores(self):
         self.metodosConexionLote.setValoresVacunasDefault()
 
+# se da la clase PlanDeVacunacion con sus funciones basicas en el programa
 class PlanDeVacunacion:
     def __init__(self) -> None:
         self.plan = model.PlanDeVacunacion()
         self.metodosConexionPlan = connect.PlanDeVacunacion()
 
+    # función para crear un nuevo plan de vacunación
     def crearPlanVacunacion(self, info):
         if info != None:
             self.plan = info
             self.metodosConexionPlan.setPlan(self.plan)
 
+    # función para consultar un  plan de vacunación ya existente
     def consultarPlanVacunacion(self,id):
         resultado = self.metodosConexionPlan.getPlan(id)
         return resultado
 
+    # función para consultar todos los planes de vacunación ya existentes
     def consultarPlanesVacunacion(self):
         resultado = self.metodosConexionPlan.getPlanes()
         return resultado
     
+    # función para consultar un rango de edades a usar en un plan de vacunación
     def consultarRangoEdades(self):
         rangoEdades = self.metodosConexionPlan.getRangoEdades()
         return rangoEdades
     
+    # función para verificar la edad de un afiliado según un rango de edades dado
     def verificarEdad(self, edad):
         rangoEdades = self.consultarRangoEdades()
         flag = True
@@ -99,12 +117,14 @@ class PlanDeVacunacion:
                 return (flag, message)
         return (flag,)
 
+# se da la clase ProgramacionDeVacunas con sus funciones basicas en el programa
 class ProgramacionDeVacunas(Persona, Lote, PlanDeVacunacion):
     def __init__(self) -> None:
         self.programacion = model.ProgramacionDeVacunas()
         self.metodosConexionProgramacion = connect.ProgramacionDeVacunas()
         self.metodosConexionPlan = connect.PlanDeVacunacion()
 
+    # función para crear una nuevo programación de vacunas
     def crearProgramacion(self, fechaInicioIngresada):
         self.metodosConexionProgramacion.reiniciarProgramacion()
         retornoInfoVacunas = self.programacionPacienteLote()
@@ -113,7 +133,8 @@ class ProgramacionDeVacunas(Persona, Lote, PlanDeVacunacion):
             retornoInfoProgramacion = self.programacionFechaHora(fechaInicioIngresada)
             return retornoInfoVacunas[1], retornoInfoProgramacion[1]
         return retornoInfoVacunas[1], retornoInfoProgramacion
-
+    
+    # función para asignar un programa de vacunación a un afiliado verificado
     def programacionPacienteLote(self):
         planesVacunacion = self.metodosConexionPlan.getPlanes()
         message = ''
@@ -137,6 +158,7 @@ class ProgramacionDeVacunas(Persona, Lote, PlanDeVacunacion):
             flag = 3
         return(flag, message)
 
+    # función para asignar una fecha a una cita de vacunación a un afiliado verificado
     def programacionFechaHora(self, fechaInicioIngresadaDt):
         citasAProgramar = self.metodosConexionProgramacion.getCitasAProgramar()
         if citasAProgramar:
@@ -188,6 +210,7 @@ class ProgramacionDeVacunas(Persona, Lote, PlanDeVacunacion):
                 # self.enviarCorreo(persona.correo, self.programacion.fechaProgramada, self.programacion.horaProgramada, lote.fabricante)
         return (True, 'Programación de citas de vacunacion exitosa')
     
+    # función para enviar un correo electronico con la información de la cita asignada al afiliado correspondiente
     def enviarCorreo(destinatario, dia, hora, vacuna):
         # se crea el mensaje electrónico con todos sus componentes como (mensajeObj) con la función MIMEMultipart() del repositorio email.mime.multipart
         mensajeObj = MIMEMultipart()
@@ -221,17 +244,18 @@ class ProgramacionDeVacunas(Persona, Lote, PlanDeVacunacion):
         finally:
             return message  
 
+    # función para consultar la programación completao de vacunación
     def consultarProgramacionCompleta(self, datoConsulta):
         datosConsulta = ('pc.noId', 'pc.nombre', 'pc.apellido', 'pc.direccion', 'pc.telefono', 'pc.correo', 'pgv.fechaProgramada', 'pgv.horaProgramada', 'lv.noLote', 'lv.fabricante')
         resultados = self.metodosConexionProgramacion.getProgramacionCompleta(datosConsulta[datoConsulta])
         return resultados
 
-    # Función para programar la vacunación de un usuario individual
+    # Función para consultar la programación de vacunación de un usuario individual
     def consultarProgramacionIndividual(self, id):
         resultado = self.metodosConexionProgramacion.getProgramacionIndividual(id)
         return resultado
 
-
+# función establecida para la creación de las tablas de la base de datos, en caso de que no existan ya
 def crearTablas():
     connect.crearTablas()
 

@@ -23,6 +23,11 @@ class mywindow(QtWidgets.QMainWindow):
             self.ui.pushButton_2.setEnabled(True)
             self.ui.vacunado.setEnabled(False)
             self.ui.fechaDesafiliacion.setEnabled(False)
+        else:
+            self.ui.splitter_3.setEnabled(False)
+            self.ui.pushButton_2.setEnabled(False)
+            self.ui.vacunado.setEnabled(False)
+            self.ui.fechaDesafiliacion.setEnabled(False)
             
     def btnGuardarClicked(self):
         self.persona.noId = self.ui.noId.text()

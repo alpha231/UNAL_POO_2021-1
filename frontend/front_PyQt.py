@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from user_interface.crearVacunado import Ui_MainWindow  # importa nuestro archivo generado
 import sys
-sys.path.append('/home/alpha23/Juan/Programacion/unal/poo_2021/UNAL_POO_2021-1/backend_POO')
+sys.path.append('backend_POO')
 import model
 import logic
 

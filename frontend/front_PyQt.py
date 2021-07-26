@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
-from user_interface.crearVacunado import Ui_MainWindow  # importa nuestro archivo generado
+from user_interface.crearUsuario import Ui_crearUsuario  # importa nuestro archivo generado
 import sys
 sys.path.append('backend_POO')
 import model
@@ -8,7 +8,7 @@ import logic
 class mywindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(mywindow, self).__init__()
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_crearUsuario()
         self.ui.setupUi(self)
         self.persona = model.Persona()
         self.logicaPersona = logic.Persona()

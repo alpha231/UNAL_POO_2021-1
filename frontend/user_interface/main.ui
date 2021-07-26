@@ -27,10 +27,10 @@
     <property name="title">
      <string>Usuarios</string>
     </property>
-    <addaction name="actionCrear"/>
-    <addaction name="actionConsultar"/>
-    <addaction name="actionDesafiliar"/>
-    <addaction name="actionVacunar"/>
+    <addaction name="actionCrearUsuario"/>
+    <addaction name="actionConsultarUsuario"/>
+    <addaction name="actionDesafiliarUsuario"/>
+    <addaction name="actionVacunarUsuario"/>
    </widget>
    <widget class="QMenu" name="menuLote">
     <property name="title">
@@ -40,10 +40,10 @@
      <property name="title">
       <string>Consultar</string>
      </property>
-     <addaction name="actionConsulta_completa"/>
-     <addaction name="actionConsulta_individual"/>
+     <addaction name="actionConsultaCompletaLote"/>
+     <addaction name="actionConsultaIndividualLote"/>
     </widget>
-    <addaction name="actionCrear_2"/>
+    <addaction name="actionCrearLote"/>
     <addaction name="menuConsultar"/>
    </widget>
    <widget class="QMenu" name="menuPlanes_de_vacunacion">
@@ -54,10 +54,10 @@
      <property name="title">
       <string>Consultar</string>
      </property>
-     <addaction name="actionConsulta_completa_2"/>
-     <addaction name="actionConsulta_individual_2"/>
+     <addaction name="actionConsultaCompletaPlan"/>
+     <addaction name="actionConsultaIndividualPlan"/>
     </widget>
-    <addaction name="actionCrear_3"/>
+    <addaction name="actionCrearPlan"/>
     <addaction name="menuConsultar_2"/>
    </widget>
    <widget class="QMenu" name="menuProgramacion_de_vacunacion">
@@ -68,10 +68,10 @@
      <property name="title">
       <string>Consultar</string>
      </property>
-     <addaction name="actionConsulta_completa_3"/>
-     <addaction name="actionConsulta_individual_3"/>
+     <addaction name="actionConsultaCompletaProgramacion"/>
+     <addaction name="actionConsultaIndividualProgramacion"/>
     </widget>
-    <addaction name="actionCrear_4"/>
+    <addaction name="actionCrearProgramacion"/>
     <addaction name="menuConsultar_3"/>
    </widget>
    <addaction name="menuUsuario"/>
@@ -80,67 +80,67 @@
    <addaction name="menuProgramacion_de_vacunacion"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionCrear">
+  <action name="actionCrearUsuario">
    <property name="text">
     <string>Crear</string>
    </property>
   </action>
-  <action name="actionConsultar">
+  <action name="actionConsultarUsuario">
    <property name="text">
     <string>Consultar</string>
    </property>
   </action>
-  <action name="actionDesafiliar">
+  <action name="actionDesafiliarUsuario">
    <property name="text">
     <string>Desafiliar</string>
    </property>
   </action>
-  <action name="actionCrear_2">
+  <action name="actionCrearLote">
    <property name="text">
     <string>Crear</string>
    </property>
   </action>
-  <action name="actionConsulta_completa">
+  <action name="actionConsultaCompletaLote">
    <property name="text">
     <string>Consulta completa</string>
    </property>
   </action>
-  <action name="actionConsulta_individual">
+  <action name="actionConsultaIndividualLote">
    <property name="text">
     <string>Consulta individual</string>
    </property>
   </action>
-  <action name="actionCrear_3">
+  <action name="actionCrearPlan">
    <property name="text">
     <string>Crear</string>
    </property>
   </action>
-  <action name="actionConsulta_completa_2">
+  <action name="actionConsultaCompletaPlan">
    <property name="text">
     <string>Consulta Completa</string>
    </property>
   </action>
-  <action name="actionConsulta_individual_2">
+  <action name="actionConsultaIndividualPlan">
    <property name="text">
     <string>Consulta individual</string>
    </property>
   </action>
-  <action name="actionCrear_4">
+  <action name="actionCrearProgramacion">
    <property name="text">
     <string>Crear</string>
    </property>
   </action>
-  <action name="actionConsulta_completa_3">
+  <action name="actionConsultaCompletaProgramacion">
    <property name="text">
     <string>Consulta completa</string>
    </property>
   </action>
-  <action name="actionConsulta_individual_3">
+  <action name="actionConsultaIndividualProgramacion">
    <property name="text">
     <string>Consulta individual</string>
    </property>
   </action>
-  <action name="actionVacunar">
+  <action name="actionVacunarUsuario">
    <property name="text">
     <string>Vacunar</string>
    </property>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>consultarUsuario</class>
+ <widget class="QMainWindow" name="consultarUsuario">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,14 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Crear afiliado</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
       <x>630</x>
-      <y>80</y>
+      <y>60</y>
       <width>100</width>
       <height>35</height>
      </rect>
@@ -32,32 +32,11 @@
      <string>Buscar</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>630</x>
-      <y>455</y>
-      <width>100</width>
-      <height>35</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Guardar</string>
-    </property>
-   </widget>
    <widget class="QSplitter" name="splitter_4">
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>80</y>
+      <y>60</y>
       <width>550</width>
       <height>35</height>
      </rect>
@@ -84,7 +63,7 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>140</y>
+      <y>120</y>
       <width>550</width>
       <height>350</height>
      </rect>
@@ -176,7 +155,7 @@
        <string>Fecha de afiliacion</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_9">
+     <widget class="QLabel" name="label_21">
       <property name="font">
        <font>
         <pointsize>16</pointsize>
@@ -186,7 +165,7 @@
        <string>Vacunado</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_10">
+     <widget class="QLabel" name="label_22">
       <property name="font">
        <font>
         <pointsize>16</pointsize>
@@ -198,6 +177,9 @@
      </widget>
     </widget>
     <widget class="QSplitter" name="splitter_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -263,7 +245,7 @@
        <string>dd/MM/yyyy</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="vacunado">
+     <widget class="QCheckBox" name="vacunado_2">
       <property name="font">
        <font>
         <pointsize>11</pointsize>
@@ -279,7 +261,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QDateEdit" name="fechaDesafiliacion">
+     <widget class="QDateEdit" name="fechaDesafiliacion_2">
       <property name="font">
        <font>
         <pointsize>11</pointsize>
@@ -290,6 +272,24 @@
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="buttonAtras">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>500</y>
+      <width>100</width>
+      <height>35</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Atras</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

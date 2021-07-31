@@ -102,16 +102,7 @@ class Ui_CrearPlanVacunacion(object):
         self.label_6.setGeometry(QtCore.QRect(80, 420, 541, 31))
         self.label_6.setObjectName("label_6")
         CrearPlanVacunacion.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(CrearPlanVacunacion)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
-        self.menubar.setObjectName("menubar")
-        self.menuVolver = QtWidgets.QMenu(self.menubar)
-        self.menuVolver.setObjectName("menuVolver")
-        CrearPlanVacunacion.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(CrearPlanVacunacion)
-        self.statusbar.setObjectName("statusbar")
-        CrearPlanVacunacion.setStatusBar(self.statusbar)
-        self.menubar.addAction(self.menuVolver.menuAction())
+        
 
         self.retranslateUi(CrearPlanVacunacion)
         QtCore.QMetaObject.connectSlotsByName(CrearPlanVacunacion)

@@ -297,23 +297,8 @@
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>801</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuVolver">
-    <property name="title">
-     <string>Volver</string>
-    </property>
-   </widget>
-   <addaction name="menuVolver"/>
-  </widget>
  </widget>
  <resources/>
  <connections/>
 </ui>
+

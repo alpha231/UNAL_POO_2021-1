@@ -209,16 +209,7 @@ class Ui_ConsultarLoteIndividual(object):
         self.label_25.setGeometry(QtCore.QRect(80, 570, 611, 31))
         self.label_25.setObjectName("label_25")
         ConsultarLoteIndividual.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(ConsultarLoteIndividual)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
-        self.menubar.setObjectName("menubar")
-        self.menuVolver = QtWidgets.QMenu(self.menubar)
-        self.menuVolver.setObjectName("menuVolver")
-        ConsultarLoteIndividual.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(ConsultarLoteIndividual)
-        self.statusbar.setObjectName("statusbar")
-        ConsultarLoteIndividual.setStatusBar(self.statusbar)
-        self.menubar.addAction(self.menuVolver.menuAction())
+
 
         self.retranslateUi(ConsultarLoteIndividual)
         QtCore.QMetaObject.connectSlotsByName(ConsultarLoteIndividual)

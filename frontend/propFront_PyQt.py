@@ -82,6 +82,7 @@ class PropMainWindow(mywindow,QtWidgets.QMainWindow):
             self.persona.vacunado = 'N'
         self.persona.fechaDesafiliacion = None
         self.logicaPersona.crearUsuario(self.persona)
+        self.ui.label_30.setText("Se registró un nuevo usuario")
 
 
 
@@ -120,7 +121,7 @@ class PropMainWindow(mywindow,QtWidgets.QMainWindow):
             self.ui.label_7.setText(self.persona.fechaNacimiento)
             self.ui.label_8.setText(self.persona.fechaAfiliacion)
             self.ui.label_9.setText(self.persona.vacunado)
-            self.ui.label_10.setText("you fool")
+            self.ui.label_10.setText("Existe, pero no funciona... Aún")
 
 
     def abrir_crearLote(self):
@@ -138,7 +139,7 @@ class PropMainWindow(mywindow,QtWidgets.QMainWindow):
 
        
 
-
+logic.crearTablas()
 app = QtWidgets.QApplication([])
 application = PropMainWindow()
 application.show()

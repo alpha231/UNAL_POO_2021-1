@@ -99,16 +99,7 @@ class Ui_MainWindow(object):
         self.label_3.setGeometry(QtCore.QRect(70, 260, 611, 31))
         self.label_3.setObjectName("label_3")
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 751, 24))
-        self.menubar.setObjectName("menubar")
-        self.menuVolver = QtWidgets.QMenu(self.menubar)
-        self.menuVolver.setObjectName("menuVolver")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
-        self.menubar.addAction(self.menuVolver.menuAction())
+        
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

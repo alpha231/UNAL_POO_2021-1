@@ -161,6 +161,10 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
+        self.label_30 = QtWidgets.QLabel(self.centralwidget)
+        self.label_30.setGeometry(QtCore.QRect(80, 510, 611, 31))
+        self.label_30.setObjectName("label_11")
+        self.label_30.setAlignment(QtCore.Qt.AlignCenter)
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
@@ -186,3 +190,4 @@ class Ui_MainWindow(object):
         self.fechaAfiliacion.setDisplayFormat(_translate("MainWindow", "dd/MM/yyyy"))
         self.vacunado.setText(_translate("MainWindow", "SI"))
         self.fechaDesafiliacion.setDisplayFormat(_translate("MainWindow", "dd/MM/yyyy"))
+

@@ -1,4 +1,5 @@
 import shutil
+import webbrowser
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QWidget, QApplication, QFileDialog
 from user_interface.main import Ui_MainWindow  # importa nuestro archivo generado
@@ -44,6 +45,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.ui.actionConsultaIndividualProgramacion.triggered.connect(self.gotoConsultaIndProgramacion)
         # self.ui.actionConsultaCompletaProgramacion.triggered.connect(self.gotoConsultaComProgramacion)
         
+        self.ui.DocumentacionUsuario.clicked.connect(self.abrirDocumentacionUsuario)
+
     def gotoCrearUsuario(self):
         self.anotherWindow = CrearUsuarioWindow()
         self.anotherWindow.show()
@@ -68,7 +71,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.anotherWindow = ConsultarLoteWindow()
         self.anotherWindow.show()
         self.close()
-        
+    def abrirDocumentacionUsuario(self):
+        path = 'https://docs.google.com/document/d/1RsPZYYKPNPl37ZHKIk5YJEVjrR-C3OAtvPPaQx1nl3A/edit?usp=sharing'
+        webbrowser.open_new(path)
        
 class CrearUsuarioWindow(QtWidgets.QMainWindow):
     def __init__(self):

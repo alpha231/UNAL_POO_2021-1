@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PropMainWindow</class>
+ <widget class="QMainWindow" name="PropMainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>812</width>
+    <height>431</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>812</width>
+    <height>431</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>813</width>
+    <height>431</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <weight>50</weight>
+    <bold>false</bold>
+    <underline>false</underline>
+    <strikeout>false</strikeout>
+   </font>
+  </property>
+  <property name="mouseTracking">
+   <bool>false</bool>
+  </property>
+  <property name="tabletTracking">
+   <bool>false</bool>
+  </property>
+  <property name="windowTitle">
+   <string>P_MainWindow</string>
+  </property>
+  <property name="toolTip">
+   <string>cosas</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="DocumentacionUsuario">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>350</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+      <underline>false</underline>
+      <strikeout>false</strikeout>
+     </font>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(242, 243, 244);</string>
+    </property>
+    <property name="text">
+     <string>Ayuda para usuarios</string>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>50</y>
+      <width>811</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 163, 224);
+border-color: rgb(85, 170, 255);
+</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:16pt; font-weight:600; color:#ffffff;&quot;&gt;Programa de vacunación&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>110</y>
+      <width>301</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <stylestrategy>NoAntialias</stylestrategy>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image: url(:/icono vacuna/icono vacuna.png);
+border-image: url(:/iconoVacuna/icono vacuna.png);</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>812</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuAfiliados">
+    <property name="title">
+     <string>Afiliados</string>
+    </property>
+    <addaction name="actionCrear_5"/>
+    <addaction name="actionConsultar_Afiliado"/>
+    <addaction name="actionDesafiliar"/>
+    <addaction name="actionVacunar"/>
+   </widget>
+   <widget class="QMenu" name="menuLotes_de_vacunas">
+    <property name="title">
+     <string>Lotes de vacunas</string>
+    </property>
+    <widget class="QMenu" name="menuConsultar">
+     <property name="mouseTracking">
+      <bool>true</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
+     <property name="title">
+      <string>Consultar</string>
+     </property>
+     <addaction name="actionConsulta_completa"/>
+     <addaction name="actionIndividual"/>
+    </widget>
+    <addaction name="actionCrear"/>
+    <addaction name="menuConsultar"/>
+   </widget>
+   <widget class="QMenu" name="menuPlan_de_vacunacion">
+    <property name="title">
+     <string>Plan de vacunación</string>
+    </property>
+    <widget class="QMenu" name="menuConsultar_2">
+     <property name="title">
+      <string>Consultar</string>
+     </property>
+     <addaction name="actionCompleta_2"/>
+     <addaction name="actionIndividual_2"/>
+    </widget>
+    <addaction name="actionCrear_3"/>
+    <addaction name="menuConsultar_2"/>
+   </widget>
+   <widget class="QMenu" name="menuProgramacion_de_vacunacion">
+    <property name="title">
+     <string>Programacion de vacunación</string>
+    </property>
+    <widget class="QMenu" name="menuConsultar_3">
+     <property name="title">
+      <string>Consultar</string>
+     </property>
+     <addaction name="actionCompleta_3"/>
+     <addaction name="actionIndividual_3"/>
+    </widget>
+    <addaction name="actionCrear_4"/>
+    <addaction name="menuConsultar_3"/>
+   </widget>
+   <addaction name="menuAfiliados"/>
+   <addaction name="menuLotes_de_vacunas"/>
+   <addaction name="menuPlan_de_vacunacion"/>
+   <addaction name="menuProgramacion_de_vacunacion"/>
+  </widget>
+  <action name="actionConsultar_Afiliado">
+   <property name="text">
+    <string>Consultar</string>
+   </property>
+  </action>
+  <action name="actionDesafiliar">
+   <property name="text">
+    <string>Desafiliar</string>
+   </property>
+  </action>
+  <action name="actionVacunar">
+   <property name="text">
+    <string>Vacunar</string>
+   </property>
+  </action>
+  <action name="actionCrear">
+   <property name="text">
+    <string>Crear</string>
+   </property>
+  </action>
+  <action name="actionCrear_2">
+   <property name="text">
+    <string>Crear</string>
+   </property>
+  </action>
+  <action name="actionConsulta_completa">
+   <property name="text">
+    <string>completa</string>
+   </property>
+   <property name="priority">
+    <enum>QAction::NormalPriority</enum>
+   </property>
+  </action>
+  <action name="actionIndividual">
+   <property name="text">
+    <string>Individual</string>
+   </property>
+  </action>
+  <action name="actionCompleta">
+   <property name="text">
+    <string>Completa</string>
+   </property>
+  </action>
+  <action name="actionCrear_3">
+   <property name="text">
+    <string>Crear</string>
+   </property>
+  </action>
+  <action name="actionCompleta_2">
+   <property name="text">
+    <string>Completa</string>
+   </property>
+  </action>
+  <action name="actionIndividual_2">
+   <property name="text">
+    <string>Individual</string>
+   </property>
+  </action>
+  <action name="actionCrear_4">
+   <property name="text">
+    <string>Crear</string>
+   </property>
+  </action>
+  <action name="actionCompleta_3">
+   <property name="text">
+    <string>Completa</string>
+   </property>
+  </action>
+  <action name="actionIndividual_3">
+   <property name="text">
+    <string>Individual</string>
+   </property>
+  </action>
+  <action name="actionCrear_5">
+   <property name="text">
+    <string>Crear</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>MS Shell Dlg 2</family>
+     <stylestrategy>PreferDefault</stylestrategy>
+    </font>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="imagesForUi.qrc"/>
+ </resources>
+ <connections/>
+</ui>

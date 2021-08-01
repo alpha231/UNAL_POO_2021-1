@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QWidget, QApplication
 from user_interface.main import Ui_MainWindow  # importa nuestro archivo generado
 from user_interface.crearUsuario import Ui_crearUsuario
-from user_interface.consultarUsuario import Ui_consultarUsuario
+from user_interface.consultarUsuarioJJ import Ui_consultarUsuario
 import sys
 sys.path.append('backend_POO')
 import model

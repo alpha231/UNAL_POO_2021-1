@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'frontend/user_interface/crearUsuario.ui'
+# Form implementation generated from reading ui file 'crearUsuario.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -17,12 +17,6 @@ class Ui_crearUsuario(object):
         crearUsuario.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(crearUsuario)
         self.centralwidget.setObjectName("centralwidget")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(630, 80, 100, 35))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.pushButton.setFont(font)
-        self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setEnabled(False)
         self.pushButton_2.setGeometry(QtCore.QRect(630, 385, 100, 35))
@@ -132,8 +126,14 @@ class Ui_crearUsuario(object):
         font.setPointSize(11)
         self.fechaAfiliacion.setFont(font)
         self.fechaAfiliacion.setObjectName("fechaAfiliacion")
+        self.mensaje = QtWidgets.QLabel(self.centralwidget)
+        self.mensaje.setGeometry(QtCore.QRect(160, 500, 550, 35))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.mensaje.setFont(font)
+        self.mensaje.setObjectName("mensaje")
         self.buttonAtras = QtWidgets.QPushButton(self.centralwidget)
-        self.buttonAtras.setGeometry(QtCore.QRect(20, 500, 100, 35))
+        self.buttonAtras.setGeometry(QtCore.QRect(40, 500, 100, 35))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.buttonAtras.setFont(font)
@@ -141,10 +141,6 @@ class Ui_crearUsuario(object):
         crearUsuario.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(crearUsuario)
         self.statusbar.setObjectName("statusbar")
-        self.label_30 = QtWidgets.QLabel(self.centralwidget)
-        self.label_30.setGeometry(QtCore.QRect(80, 510, 611, 31))
-        self.label_30.setObjectName("label_11")
-        self.label_30.setAlignment(QtCore.Qt.AlignCenter)
         crearUsuario.setStatusBar(self.statusbar)
 
         self.retranslateUi(crearUsuario)
@@ -153,7 +149,6 @@ class Ui_crearUsuario(object):
     def retranslateUi(self, crearUsuario):
         _translate = QtCore.QCoreApplication.translate
         crearUsuario.setWindowTitle(_translate("crearUsuario", "Crear afiliado"))
-        self.pushButton.setText(_translate("crearUsuario", "Buscar"))
         self.pushButton_2.setText(_translate("crearUsuario", "Guardar"))
         self.label_11.setText(_translate("crearUsuario", "Documento de identidad"))
         self.label.setText(_translate("crearUsuario", "Nombre"))
@@ -164,10 +159,7 @@ class Ui_crearUsuario(object):
         self.label_6.setText(_translate("crearUsuario", "Ciudad"))
         self.label_7.setText(_translate("crearUsuario", "Fecha de nacimiento"))
         self.label_8.setText(_translate("crearUsuario", "Fecha de afiliacion"))
-        self.label_9.setText(_translate("crearUsuario", "Vacunado"))
-        self.label_10.setText(_translate("crearUsuario", "Fecha desafiliacion"))
         self.fechaNacimiento.setDisplayFormat(_translate("crearUsuario", "dd/MM/yyyy"))
         self.fechaAfiliacion.setDisplayFormat(_translate("crearUsuario", "dd/MM/yyyy"))
-        self.vacunado.setText(_translate("crearUsuario", "SI"))
-        # self.fechaDesafiliacion.setDisplayFormat(_translate("crearUsuario", "dd/MM/yyyy"))
-
+        self.mensaje.setText(_translate("crearUsuario", "<html><head/><body><p align=\"center\"><span style=\" color:#aa0000;\"><br/></span></p></body></html>"))
+        self.buttonAtras.setText(_translate("crearUsuario", "Atras"))

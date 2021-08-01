@@ -140,17 +140,17 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
      <x>0</x>
      <y>0</y>
      <width>812</width>
-     <height>21</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAfiliados">
     <property name="title">
      <string>Afiliados</string>
     </property>
-    <addaction name="actionCrear_5"/>
-    <addaction name="actionConsultar_Afiliado"/>
-    <addaction name="actionDesafiliar"/>
-    <addaction name="actionVacunar"/>
+    <addaction name="actionCrearUsuario"/>
+    <addaction name="actionConsultarUsuario"/>
+    <addaction name="actionDesafiliarUsuario"/>
+    <addaction name="actionVacunarUsuario"/>
    </widget>
    <widget class="QMenu" name="menuLotes_de_vacunas">
     <property name="title">
@@ -166,10 +166,10 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
      <property name="title">
       <string>Consultar</string>
      </property>
-     <addaction name="actionConsulta_completa"/>
-     <addaction name="actionIndividual"/>
+     <addaction name="actionConsultaCompletaLote"/>
+     <addaction name="actionConsultaIndividualLote"/>
     </widget>
-    <addaction name="actionCrear"/>
+    <addaction name="actionCrearLote"/>
     <addaction name="menuConsultar"/>
    </widget>
    <widget class="QMenu" name="menuPlan_de_vacunacion">
@@ -180,10 +180,10 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
      <property name="title">
       <string>Consultar</string>
      </property>
-     <addaction name="actionCompleta_2"/>
-     <addaction name="actionIndividual_2"/>
+     <addaction name="actionConsultaCompletaPlan"/>
+     <addaction name="actionConsultaIndividualPlan"/>
     </widget>
-    <addaction name="actionCrear_3"/>
+    <addaction name="actionCrearPlan"/>
     <addaction name="menuConsultar_2"/>
    </widget>
    <widget class="QMenu" name="menuProgramacion_de_vacunacion">
@@ -194,10 +194,10 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
      <property name="title">
       <string>Consultar</string>
      </property>
-     <addaction name="actionCompleta_3"/>
-     <addaction name="actionIndividual_3"/>
+     <addaction name="actionConsultaCompletaProgramacion"/>
+     <addaction name="actionConsultaIndividualProgramacion"/>
     </widget>
-    <addaction name="actionCrear_4"/>
+    <addaction name="actionCrearProgramacion"/>
     <addaction name="menuConsultar_3"/>
    </widget>
    <addaction name="menuAfiliados"/>
@@ -205,22 +205,22 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
    <addaction name="menuPlan_de_vacunacion"/>
    <addaction name="menuProgramacion_de_vacunacion"/>
   </widget>
-  <action name="actionConsultar_Afiliado">
+  <action name="actionConsultarUsuario">
    <property name="text">
     <string>Consultar</string>
    </property>
   </action>
-  <action name="actionDesafiliar">
+  <action name="actionDesafiliarUsuario">
    <property name="text">
     <string>Desafiliar</string>
    </property>
   </action>
-  <action name="actionVacunar">
+  <action name="actionVacunarUsuario">
    <property name="text">
     <string>Vacunar</string>
    </property>
   </action>
-  <action name="actionCrear">
+  <action name="actionCrearLote">
    <property name="text">
     <string>Crear</string>
    </property>
@@ -230,17 +230,17 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
     <string>Crear</string>
    </property>
   </action>
-  <action name="actionConsulta_completa">
+  <action name="actionConsultaCompletaLote">
    <property name="text">
-    <string>completa</string>
+    <string>Consulta completa</string>
    </property>
    <property name="priority">
     <enum>QAction::NormalPriority</enum>
    </property>
   </action>
-  <action name="actionIndividual">
+  <action name="actionConsultaIndividualLote">
    <property name="text">
-    <string>Individual</string>
+    <string>Consulta individual</string>
    </property>
   </action>
   <action name="actionCompleta">
@@ -248,37 +248,37 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
     <string>Completa</string>
    </property>
   </action>
-  <action name="actionCrear_3">
+  <action name="actionCrearPlan">
    <property name="text">
     <string>Crear</string>
    </property>
   </action>
-  <action name="actionCompleta_2">
+  <action name="actionConsultaCompletaPlan">
    <property name="text">
-    <string>Completa</string>
+    <string>Consulta completa</string>
    </property>
   </action>
-  <action name="actionIndividual_2">
+  <action name="actionConsultaIndividualPlan">
    <property name="text">
-    <string>Individual</string>
+    <string>Consulta individual</string>
    </property>
   </action>
-  <action name="actionCrear_4">
+  <action name="actionCrearProgramacion">
    <property name="text">
     <string>Crear</string>
    </property>
   </action>
-  <action name="actionCompleta_3">
+  <action name="actionConsultaCompletaProgramacion">
    <property name="text">
-    <string>Completa</string>
+    <string>Consulta completa</string>
    </property>
   </action>
-  <action name="actionIndividual_3">
+  <action name="actionConsultaIndividualProgramacion">
    <property name="text">
-    <string>Individual</string>
+    <string>Consulta individual</string>
    </property>
   </action>
-  <action name="actionCrear_5">
+  <action name="actionCrearUsuario">
    <property name="text">
     <string>Crear</string>
    </property>

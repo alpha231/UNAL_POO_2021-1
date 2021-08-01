@@ -170,4 +170,4 @@ class Ui_PropMainWindow(object):
         self.actionCompleta_3.setText(_translate("PropMainWindow", "Completa"))
         self.actionIndividual_3.setText(_translate("PropMainWindow", "Individual"))
         self.actionCrear_5.setText(_translate("PropMainWindow", "Crear"))
-import imagesForUi_rc
+# import imagesForUi_rc

@@ -141,6 +141,10 @@ class Ui_crearUsuario(object):
         crearUsuario.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(crearUsuario)
         self.statusbar.setObjectName("statusbar")
+        self.label_30 = QtWidgets.QLabel(self.centralwidget)
+        self.label_30.setGeometry(QtCore.QRect(80, 510, 611, 31))
+        self.label_30.setObjectName("label_11")
+        self.label_30.setAlignment(QtCore.Qt.AlignCenter)
         crearUsuario.setStatusBar(self.statusbar)
 
         self.retranslateUi(crearUsuario)
@@ -160,6 +164,10 @@ class Ui_crearUsuario(object):
         self.label_6.setText(_translate("crearUsuario", "Ciudad"))
         self.label_7.setText(_translate("crearUsuario", "Fecha de nacimiento"))
         self.label_8.setText(_translate("crearUsuario", "Fecha de afiliacion"))
+        self.label_9.setText(_translate("crearUsuario", "Vacunado"))
+        self.label_10.setText(_translate("crearUsuario", "Fecha desafiliacion"))
         self.fechaNacimiento.setDisplayFormat(_translate("crearUsuario", "dd/MM/yyyy"))
         self.fechaAfiliacion.setDisplayFormat(_translate("crearUsuario", "dd/MM/yyyy"))
-        self.buttonAtras.setText(_translate("crearUsuario", "Atras"))
+        self.vacunado.setText(_translate("crearUsuario", "SI"))
+        # self.fechaDesafiliacion.setDisplayFormat(_translate("crearUsuario", "dd/MM/yyyy"))
+

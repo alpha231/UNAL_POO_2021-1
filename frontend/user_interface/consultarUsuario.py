@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class Ui_ConsultarUsuario(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 601)
@@ -180,17 +180,10 @@ class Ui_MainWindow(object):
         self.label_11 = QtWidgets.QLabel(self.centralwidget)
         self.label_11.setGeometry(QtCore.QRect(80, 510, 611, 31))
         self.label_11.setObjectName("label_11")
+        self.label_11.setAlignment(QtCore.Qt.AlignCenter)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
-        self.menubar.setObjectName("menubar")
-        self.menuVolver = QtWidgets.QMenu(self.menubar)
-        self.menuVolver.setObjectName("menuVolver")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
-        self.menubar.addAction(self.menuVolver.menuAction())
+       
+       
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -211,4 +204,4 @@ class Ui_MainWindow(object):
         self.label_16.setText(_translate("MainWindow", "Nombre"))
         self.label_19.setText(_translate("MainWindow", "Fecha de nacimiento         "))
         self.label_11.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#aa0000;\"><br/></span></p></body></html>"))
-        self.menuVolver.setTitle(_translate("MainWindow", "Volver"))
+        

@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class Ui_CrearLote(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(801, 593)
@@ -154,13 +154,6 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 801, 21))
-        self.menubar.setObjectName("menubar")
-        self.menuVolver = QtWidgets.QMenu(self.menubar)
-        self.menuVolver.setObjectName("menuVolver")
-        MainWindow.setMenuBar(self.menubar)
-        self.menubar.addAction(self.menuVolver.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -183,4 +176,4 @@ class Ui_MainWindow(object):
         self.label_10.setText(_translate("MainWindow", "Ruta completa a la imagen"))
         self.fechaVencimiento.setDisplayFormat(_translate("MainWindow", "dd/MM/yyyy"))
         self.label_12.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#aa0000;\"><br/></span></p></body></html>"))
-        self.menuVolver.setTitle(_translate("MainWindow", "Volver"))
+

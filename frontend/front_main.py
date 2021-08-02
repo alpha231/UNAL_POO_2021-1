@@ -1,6 +1,6 @@
 import shutil
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtWidgets import QWidget, QApplication, QFileDialog
+from PyQt5.QtWidgets import QWidget, QApplication, QFileDialog, QTableWidgetItem
 '''============== Ventana principal=============='''
 from user_interface.main import Ui_MainWindow  # importa nuestro archivo generado
 from user_interface.propMainWindow import Ui_PropMainWindow  # importa nuestro archivo generado
@@ -28,7 +28,6 @@ sys.path.append('backend_POO')
 import model
 import logic
 
-
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -36,7 +35,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.persona = model.Persona()
         self.logicaPersona = logic.Persona()
-        
+
         self.ui.actionCrearUsuario.triggered.connect(self.gotoCrearUsuario)
         self.ui.actionConsultarUsuario.triggered.connect(self.gotoConsultarUsuario)
         self.ui.actionDesafiliarUsuario.triggered.connect(self.gotoDesafiliarUsuario)
@@ -96,7 +95,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.anotherWindow.show()
         self.close()
     def gotoConsultaComPlan(self):
-        self.anotherWindow = ConsultarLoteWindow()
+        self.anotherWindow = ConsultarTodoPlanWindow()
         self.anotherWindow.show()
         self.close()
 
@@ -580,8 +579,45 @@ class ConsultarPlanWindow(QtWidgets.QMainWindow):
         self.anotherWindow.show()
         self.close()
 
+class ConsultarTodoPlanWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(ConsultarTodoPlanWindow, self).__init__()
+        self.ui = Ui_ConsultarTodoPlan()
+        self.ui.setupUi(self)
+        self.Plan = model.PlanDeVacunacion()
+        self.logicaPlan = logic.PlanDeVacunacion()
+        self.ui.pushButton.clicked.connect(self.goAtras)
+        self.mostrarTabla()
+        
+    def goAtras(self):
+        self.anotherWindow = MainWindow()
+        self.anotherWindow.show()
+        self.close()
+
+    def mostrarTabla(self):
+        data = []
+        resultado = self.logicaPlan.consultarPlanesVacunacion()
+        if resultado:
+            for plan in resultado:
+                data.append((plan.idPlan, plan.edadMinima, plan.edadMaxima, plan.fechaInicio, plan.fechaFinal  ))
+        else:
+            self.ui.label_2.setText('<font color="red">No existe ningún plan de vacunación</font>')
+
+        row=0
+        for tup in data:
+            col=0
+            for item in tup:
+                cellinfo=QTableWidgetItem(item)
+                self.ui.tableWidget.setItem(row, col, cellinfo)
+                col+=1
+            row += 1
+
+
+
 class ConsultaLotesWindow(QtWidgets.QMainWindow):
     pass
+
+logic.crearTablas()
 
 app = QApplication([])
 application = MainWindow()

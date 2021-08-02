@@ -742,6 +742,8 @@ class ConsultarPlanesWindow(QtWidgets.QMainWindow):
         self.close()
 
 
+logic.crearTablas()
+
 app = QApplication([])
 application = MainWindow()
 application.show()

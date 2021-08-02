@@ -144,7 +144,6 @@ class Ui_PropMainWindow(object):
     def retranslateUi(self, PropMainWindow):
         _translate = QtCore.QCoreApplication.translate
         PropMainWindow.setWindowTitle(_translate("PropMainWindow", "P_MainWindow"))
-        PropMainWindow.setToolTip(_translate("PropMainWindow", "cosas"))
         self.DocumentacionUsuario.setText(_translate("PropMainWindow", "Ayuda para usuarios"))
         self.label.setText(_translate("PropMainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:16pt; font-weight:600; color:#ffffff;\">Programa de vacunación</span></p></body></html>"))
         self.label_2.setText(_translate("PropMainWindow", "<html><head/><body><p><br/></p></body></html>"))

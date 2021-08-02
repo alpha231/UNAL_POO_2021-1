@@ -1,14 +1,24 @@
 import shutil
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QWidget, QApplication, QFileDialog
+'''============== Ventana principal=============='''
 from user_interface.main import Ui_MainWindow  # importa nuestro archivo generado
 from user_interface.propMainWindow import Ui_PropMainWindow  # importa nuestro archivo generado
+'''============== Ventanas usuario=============='''
 from user_interface.crearUsuario import Ui_crearUsuario
 from user_interface.consultarUsuario import Ui_consultarUsuario
 from user_interface.desafiliarUsuario import Ui_desafiliarUsuario
 from user_interface.vacunarUsuario import Ui_vacunarUsuario
+'''============== Ventanas lote=============='''
 from user_interface.crearLote import Ui_crearLote
 from user_interface.consultaLoteIndividual import Ui_ConsultarLoteIndividual
+'''============== Ventanas plan=============='''
+from user_interface.crearPlanVacunacion import Ui_CrearPlanVacunacion
+from user_interface.consultaPlanVacunacionIndividual import Ui_MainWindow as Ui_ConsultarPlanIndividual
+from user_interface.consultaTodoPlan import Ui_ConsultarTodoPlan
+'''============== Ventanas programacion=============='''
+from user_interface.crearProgramacionVacunacion import Ui_CrearProgramacionVacunacion
+# from user_interface.consultaProgramacionVacuna import 
 
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QDir
@@ -34,15 +44,17 @@ class MainWindow(QtWidgets.QMainWindow):
         
         self.ui.actionCrearLote.triggered.connect(self.gotoCrearLote)
         self.ui.actionConsultaIndividualLote.triggered.connect(self.gotoConsultaIndLote)
-        # self.ui.actionConsultaCompletaLote.triggered.connect(self.gotoConsultaComLote)
+        self.ui.actionConsultaCompletaLote.triggered.connect(self.gotoConsultaComLote)
         
-        # self.ui.actionCrearPlan.triggered.connect(self.gotoCrearPlan)
-        # self.ui.actionConsultaIndividualPlan.triggered.connect(self.gotoConsultaIndPlan)
-        # self.ui.actionConsultaCompletaPlan.triggered.connect(self.gotoConsultaComPlan)
+        self.ui.actionCrearPlan.triggered.connect(self.gotoCrearPlan)
+        self.ui.actionConsultaIndividualPlan.triggered.connect(self.gotoConsultaIndPlan)
+        self.ui.actionConsultaCompletaPlan.triggered.connect(self.gotoConsultaComPlan)
         
-        # self.ui.actionCrearProgramacion.triggered.connect(self.gotoCrearProgramacion)
-        # self.ui.actionConsultaIndividualProgramacion.triggered.connect(self.gotoConsultaIndProgramacion)
-        # self.ui.actionConsultaCompletaProgramacion.triggered.connect(self.gotoConsultaComProgramacion)
+        self.ui.actionCrearProgramacion.triggered.connect(self.gotoCrearProgramacion)
+        self.ui.actionConsultaIndividualProgramacion.triggered.connect(self.gotoConsultaIndProgramacion)
+        self.ui.actionConsultaCompletaProgramacion.triggered.connect(self.gotoConsultaComProgramacion)
+        
+        self.ui.DocumentacionUsuario.clicked.connect(self.gotoDocumentacion)
         
     def gotoCrearUsuario(self):
         self.anotherWindow = CrearUsuarioWindow()
@@ -60,6 +72,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.anotherWindow = VacunarUsuarioWindow()
         self.anotherWindow.show()
         self.close()
+        
     def gotoCrearLote(self):
         self.anotherWindow = CrearLoteWindow()
         self.anotherWindow.show()
@@ -68,8 +81,43 @@ class MainWindow(QtWidgets.QMainWindow):
         self.anotherWindow = ConsultarLoteWindow()
         self.anotherWindow.show()
         self.close()
+    def gotoConsultaComLote(self):
+        # self.anotherWindow = ConsultarLoteWindow()
+        # self.anotherWindow.show()
+        # self.close()
+        pass
+
+    def gotoCrearPlan(self):
+        self.anotherWindow = CrearPlanWindow()
+        self.anotherWindow.show()
+        self.close()
+    def gotoConsultaIndPlan(self):
+        self.anotherWindow = ConsultarPlanWindow()
+        self.anotherWindow.show()
+        self.close()
+    def gotoConsultaComPlan(self):
+        self.anotherWindow = ConsultarLoteWindow()
+        self.anotherWindow.show()
+        self.close()
+
+    def gotoCrearProgramacion(self):
+        self.anotherWindow = ConsultarLoteWindow()
+        self.anotherWindow.show()
+        self.close()
+    def gotoConsultaIndProgramacion(self):
+        self.anotherWindow = ConsultarLoteWindow()
+        self.anotherWindow.show()
+        self.close()
+    def gotoConsultaComProgramacion(self):
+        self.anotherWindow = ConsultarLoteWindow()
+        self.anotherWindow.show()
+        self.close()
         
-       
+    def gotoDocumentacion(self):
+        logic.documentacionUsuario()
+        
+'''============Modulo de usuarios============'''
+   
 class CrearUsuarioWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(CrearUsuarioWindow, self).__init__()
@@ -272,12 +320,12 @@ class VacunarUsuarioWindow(QtWidgets.QMainWindow):
                 else:
                     self.ui.mensaje.setText('')
                     self.ui.pushButton.setEnabled(True)
-                if self.persona.fechaDesafiliacion:
-                    self.ui.mensaje.setText('Este usuario es encuentra desafiliado')
-                    self.ui.pushButton.setEnabled(False)
-                else:
-                    self.ui.mensaje.setText('')
-                    self.ui.pushButton.setEnabled(True)
+                    if self.persona.fechaDesafiliacion:
+                        self.ui.mensaje.setText('Este usuario es encuentra desafiliado')
+                        self.ui.pushButton.setEnabled(False)
+                    else:
+                        self.ui.mensaje.setText('')
+                        self.ui.pushButton.setEnabled(True)
             else:
                 self.ui.pushButton.setEnabled(False)
                 self.ui.mensaje.setText('<font color="red">El usuario con el numero de documento '+self.persona.noId+' no existe</font>')
@@ -296,6 +344,8 @@ class VacunarUsuarioWindow(QtWidgets.QMainWindow):
         self.anotherWindow = MainWindow()
         self.anotherWindow.show()
         self.close()
+
+'''============Modulo de lotes============'''
    
 class CrearLoteWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -408,6 +458,7 @@ class ConsultarLoteWindow(QtWidgets.QMainWindow):
             self.ui.efectividad.setText(str(self.lote.efectividad))
             self.ui.tiempoProteccion.setText(str(self.lote.tiempoProteccion))
             self.ui.fechaVencimiento.setText(str(self.lote.fechaVencimiento))
+            self.ui.mensaje.setText('')
             directorio = "imagenesDescargadas/"
             try:
                 os.stat(directorio)
@@ -432,13 +483,105 @@ class ConsultarLoteWindow(QtWidgets.QMainWindow):
             self.ui.tiempoProteccion.setText('')
             self.ui.fechaVencimiento.setText('')
             self.ui.imagen.setText('')
-            self.ui.mensaje.setText('<font color="red">El usuario con el numero de documento '+self.persona.noId+' no existe</font>')
+            self.ui.mensaje.setText('<font color="red">El lote con el numero de lote '+self.lote.noLote+' no existe</font>')
     
     def goAtras(self):
         self.anotherWindow = MainWindow()
         self.anotherWindow.show()
         self.close()
 
+class ConsultaLotesWindow(QtWidgets.QMainWindow):
+    pass
+
+'''============Modulo de plan============'''
+
+class CrearPlanWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(CrearPlanWindow, self).__init__()
+        self.ui = Ui_CrearPlanVacunacion()
+        self.ui.setupUi(self)
+        self.plan = model.PlanDeVacunacion()
+        self.logicaPlan = logic.PlanDeVacunacion()
+        self.ui.idPlan.textEdited.connect(self.BuscarPlan)
+        self.ui.btnGuardar.clicked.connect(self.btnGuardarClicked)
+        self.ui.buttonAtras.clicked.connect(self.goAtras)
+        
+    def BuscarPlan(self):
+        self.plan.idPlan = self.ui.idPlan.text()
+        if self.plan.idPlan != '':
+            resultado = self.logicaPlan.consultarPlanVacunacion(self.plan.idPlan)
+            if not resultado:
+                self.ui.edadMinima.setEnabled(True)
+                self.ui.edadMaxima.setEnabled(True)
+                self.ui.fechaInicio.setEnabled(True)
+                self.ui.fechaFinal.setEnabled(True)
+                self.ui.btnGuardar.setEnabled(True)
+                self.ui.mensaje.setText('')
+            else:
+                self.ui.edadMinima.setEnabled(False)
+                self.ui.edadMaxima.setEnabled(False)
+                self.ui.fechaInicio.setEnabled(False)
+                self.ui.fechaFinal.setEnabled(False)
+                self.ui.btnGuardar.setEnabled(False)
+                self.ui.mensaje.setText('<font color="red">El plan con el numero de plan '+self.plan.idPlan+' ya existe</font>')
+            
+    def btnGuardarClicked(self):
+        self.plan.idPlan = self.ui.idPlan.text()
+        self.plan.edadMinima = self.ui.edadMinima.text()
+        self.plan.edadMaxima = self.ui.edadMaxima.text()
+        fechaInicio = self.ui.fechaInicio.date()
+        fechaFinal = self.ui.fechaFinal.date()
+        self.plan.fechaInicio = fechaInicio
+        self.plan.fechaFinal = fechaFinal
+        self.logicaPlan.crearPlanVacunacion(self.plan)
+        self.ui.mensaje.setText('El plan ha sido creado')
+        self.ui.btnGuardar.setEnabled(False)
+        
+    def goAtras(self):
+        self.anotherWindow = MainWindow()
+        self.anotherWindow.show()
+        self.close()
+     
+class ConsultarPlanWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(ConsultarPlanWindow, self).__init__()
+        self.ui = Ui_ConsultarPlanIndividual()
+        self.ui.setupUi(self)
+        self.plan = model.PlanDeVacunacion()
+        self.logicaPlan = logic.PlanDeVacunacion()
+        self.ui.btnBuscar.clicked.connect(self.btnBuscarClicked)
+        self.ui.buttonAtras.clicked.connect(self.goAtras)
+        
+        self.ui.edadMinima.setText('')
+        self.ui.edadMaxima.setText('')
+        self.ui.fechaInicio.setText('')
+        self.ui.fechaFinal.setText('')
+        
+    def btnBuscarClicked(self):
+        self.plan = model.PlanDeVacunacion()
+        self.plan.idPlan = self.ui.idPlan.text()
+        resultado = self.logicaPlan.consultarPlanVacunacion(self.plan.idPlan)
+        if resultado:
+            self.plan = resultado
+            self.ui.edadMinima.setText(str(self.plan.edadMinima))
+            self.ui.edadMaxima.setText(str(self.plan.edadMaxima))
+            self.ui.fechaInicio.setText(str(self.plan.fechaInicio))
+            self.ui.fechaFinal.setText(str(self.plan.fechaFinal))
+            self.ui.mensaje.setText('')
+        else:
+            self.ui.edadMinima.setText('')
+            self.ui.edadMaxima.setText('')
+            self.ui.fechaInicio.setText('')
+            self.ui.fechaFinal.setText('')
+            self.ui.mensaje.setText('<font color="red">El plan con el numero de plan '+self.plan.idPlan+' no existe</font>')
+    
+    def goAtras(self):
+        self.anotherWindow = MainWindow()
+        self.anotherWindow.show()
+        self.close()
+
+class ConsultaLotesWindow(QtWidgets.QMainWindow):
+    pass
 
 app = QApplication([])
 application = MainWindow()

@@ -143,9 +143,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="fabricante">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -179,9 +176,6 @@
      </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="tipoVacuna">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -215,9 +209,6 @@
      </item>
      <item row="2" column="1">
       <widget class="QLineEdit" name="cantidadRecibida">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -251,9 +242,6 @@
      </item>
      <item row="3" column="1">
       <widget class="QLineEdit" name="dosisNecesarias">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -287,9 +275,6 @@
      </item>
      <item row="4" column="1">
       <widget class="QLineEdit" name="temperatura">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -323,9 +308,6 @@
      </item>
      <item row="5" column="1">
       <widget class="QLineEdit" name="efectividad">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -359,9 +341,6 @@
      </item>
      <item row="6" column="1">
       <widget class="QLineEdit" name="tiempoProteccion">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -395,9 +374,6 @@
      </item>
      <item row="7" column="1">
       <widget class="QDateEdit" name="fechaVencimiento">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -434,9 +410,6 @@
      </item>
      <item row="8" column="1">
       <widget class="QPushButton" name="buscarImagen">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>
@@ -468,9 +441,6 @@
      </item>
      <item row="9" column="1">
       <widget class="QLabel" name="imagen">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>225</width>

@@ -190,15 +190,8 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
     <property name="title">
      <string>Programacion de vacunación</string>
     </property>
-    <widget class="QMenu" name="menuConsultar_3">
-     <property name="title">
-      <string>Consultar</string>
-     </property>
-     <addaction name="actionConsultaCompletaProgramacion"/>
-     <addaction name="actionConsultaIndividualProgramacion"/>
-    </widget>
     <addaction name="actionCrearProgramacion"/>
-    <addaction name="menuConsultar_3"/>
+    <addaction name="actionConsultarProgramacion"/>
    </widget>
    <addaction name="menuAfiliados"/>
    <addaction name="menuLotes_de_vacunas"/>
@@ -268,16 +261,6 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
     <string>Crear</string>
    </property>
   </action>
-  <action name="actionConsultaCompletaProgramacion">
-   <property name="text">
-    <string>Consulta completa</string>
-   </property>
-  </action>
-  <action name="actionConsultaIndividualProgramacion">
-   <property name="text">
-    <string>Consulta individual</string>
-   </property>
-  </action>
   <action name="actionCrearUsuario">
    <property name="text">
     <string>Crear</string>
@@ -287,6 +270,11 @@ border-image: url(:/iconoVacuna/icono vacuna.png);</string>
      <family>MS Shell Dlg 2</family>
      <stylestrategy>PreferDefault</stylestrategy>
     </font>
+   </property>
+  </action>
+  <action name="actionConsultarProgramacion">
+   <property name="text">
+    <string>Consultar</string>
    </property>
   </action>
  </widget>

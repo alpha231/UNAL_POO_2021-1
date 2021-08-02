@@ -1,7 +1,7 @@
 from datetime import datetime
 import shutil
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QTableWidgetItem, QWidget, QApplication, QFileDialog
+from PyQt5.QtWidgets import QTableWidgetItem, QApplication, QFileDialog
 '''============== Ventana principal=============='''
 from user_interface.main import Ui_MainWindow  # importa nuestro archivo generado
 from user_interface.propMainWindow import Ui_PropMainWindow  # importa nuestro archivo generado
@@ -13,6 +13,7 @@ from user_interface.vacunarUsuario import Ui_vacunarUsuario
 '''============== Ventanas lote=============='''
 from user_interface.crearLote import Ui_crearLote
 from user_interface.consultaLoteIndividual import Ui_ConsultarLoteIndividual
+from user_interface.consultaTodoLote import Ui_ConsultarTodoLote
 '''============== Ventanas plan=============='''
 from user_interface.crearPlanVacunacion import Ui_CrearPlanVacunacion
 from user_interface.consultaPlanVacunacionIndividual import Ui_MainWindow as Ui_ConsultarPlanIndividual
@@ -22,7 +23,6 @@ from user_interface.crearProgramacionVacunacion import Ui_CrearProgramacionVacun
 from user_interface.consultaProgramacionVacuna import Ui_ConsultaProgramacion
 
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import QDate, QDateTime
 import sys
 import os
 sys.path.append('backend_POO')
@@ -52,8 +52,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionConsultaCompletaPlan.triggered.connect(self.gotoConsultaComPlan)
         
         self.ui.actionCrearProgramacion.triggered.connect(self.gotoCrearProgramacion)
-        self.ui.actionConsultaIndividualProgramacion.triggered.connect(self.gotoConsultaIndProgramacion)
-        self.ui.actionConsultaCompletaProgramacion.triggered.connect(self.gotoConsultaComProgramacion)
+        self.ui.actionConsultarProgramacion.triggered.connect(self.gotoConsultaProgramacion)
         
         self.ui.DocumentacionUsuario.clicked.connect(self.gotoDocumentacion)
 
@@ -83,9 +82,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.anotherWindow.show()
         self.close()
     def gotoConsultaComLote(self):
-        # self.anotherWindow = ConsultarLoteWindow()
-        # self.anotherWindow.show()
-        # self.close()
+        self.anotherWindow = ConsultarLotesWindow()
+        self.anotherWindow.show()
+        self.close()
         pass
 
     def gotoCrearPlan(self):
@@ -105,12 +104,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.anotherWindow = CrearVacunacionWindow()
         self.anotherWindow.show()
         self.close()
-    def gotoConsultaIndProgramacion(self):
+    def gotoConsultaProgramacion(self):
         self.anotherWindow = ConsultarVacunacionWindow()
-        self.anotherWindow.show()
-        self.close()
-    def gotoConsultaComProgramacion(self):
-        self.anotherWindow = ConsultarLoteWindow()
         self.anotherWindow.show()
         self.close()
         
@@ -522,7 +517,36 @@ class ConsultarLoteWindow(QtWidgets.QMainWindow):
         self.close()
 
 class ConsultarLotesWindow(QtWidgets.QMainWindow):
-    pass
+    def __init__(self):
+        super(ConsultarLotesWindow, self).__init__()
+        self.ui = Ui_ConsultarTodoLote()
+        self.ui.setupUi(self)
+        self.lote = model.Lote()
+        self.logicaLote = logic.Lote()
+        self.ui.btnBuscar.clicked.connect(self.btnCargarDataClicked)
+        self.ui.buttonAtras.clicked.connect(self.goAtras)
+    
+    def btnCargarDataClicked(self):
+        resultados = self.logicaLote.consultarLotes()
+        data = []
+        if resultados:
+            for lote in resultados:
+                data.append((str(lote.noLote), str(lote.fabricante), str(lote.tipoVacuna), str(lote.cantidadRecibida), str(lote.cantidadAsignada), str(lote.cantidadUsada), str(lote.dosisNecesaria), str(lote.temperatura), str(lote.efectividad), str(lote.tiempoProteccion), str(lote.fechaVencimiento)))
+        self.ui.tableWidget.setRowCount(len(resultados)) 
+        row=0
+        for tup in data:
+            col=0
+            for item in tup:
+                cellinfo = QTableWidgetItem(item)
+                cellinfo.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled) #make it not editable
+                self.ui.tableWidget.setItem(row, col, cellinfo)
+                col += 1
+            row += 1
+
+    def goAtras(self):
+        self.anotherWindow = MainWindow()
+        self.anotherWindow.show()
+        self.close()
 
 '''============Modulo de plan============'''
 

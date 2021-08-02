@@ -150,9 +150,6 @@ class ProgramacionDeVacunas(Persona, Lote, PlanDeVacunacion):
                         else:
                             message = 'Limite de vacunas alcanzado'
                             flag = 1
-                else:
-                    message = 'No hay pacientes a vacunar'
-                    flag = 2
         else:
             message = 'No hay planes de vacunacion'
             flag = 3

@@ -1,6 +1,6 @@
 from datetime import datetime
 import shutil
-from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem, QWidget, QApplication, QFileDialog
 '''============== Ventana principal=============='''
 from user_interface.main import Ui_MainWindow  # importa nuestro archivo generado
@@ -22,7 +22,7 @@ from user_interface.crearProgramacionVacunacion import Ui_CrearProgramacionVacun
 from user_interface.consultaProgramacionVacuna import Ui_ConsultaProgramacion
 
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import QDir
+from PyQt5.QtCore import QDate, QDateTime
 import sys
 import os
 sys.path.append('backend_POO')
@@ -127,9 +127,20 @@ class CrearUsuarioWindow(QtWidgets.QMainWindow):
         self.persona = model.Persona()
         self.logicaPersona = logic.Persona()
         self.ui.noId.textEdited.connect(self.BuscarUsuario)
+        self.ui.fechaNacimiento.dateChanged.connect(self.verificarFechas)
+        self.ui.fechaAfiliacion.dateChanged.connect(self.verificarFechas)
         self.ui.pushButton_2.clicked.connect(self.btnGuardarClicked)
         self.ui.buttonAtras.clicked.connect(self.goAtras)
         
+    def verificarFechas(self):
+        fechaNacimientoDt = self.ui.fechaNacimiento.dateTime().toPyDateTime()
+        fechaAfiliacionDt = self.ui.fechaAfiliacion.dateTime().toPyDateTime()
+        fechaActual = datetime.now()
+        if (fechaActual > fechaAfiliacionDt > fechaNacimientoDt):
+            self.ui.pushButton_2.setEnabled(True)
+        else:
+            self.ui.pushButton_2.setEnabled(False)
+    
     def BuscarUsuario(self):
         self.persona.noId = self.ui.noId.text()
         if self.persona.noId != '':
@@ -152,10 +163,10 @@ class CrearUsuarioWindow(QtWidgets.QMainWindow):
         self.persona.telefono = self.ui.telefono.text()
         self.persona.correo = self.ui.correo.text()
         self.persona.ciudad = self.ui.ciudad.text()
-        fechaNacimiento = self.ui.fechaNacimiento.date()
-        fechaAfiliacion = self.ui.fechaAfiliacion.date()
-        self.persona.fechaNacimiento = fechaNacimiento
-        self.persona.fechaAfiliacion = fechaAfiliacion
+        fechaNacimientoDt = self.ui.fechaNacimiento.dateTime().toPyDateTime()
+        fechaAfiliacionDt = self.ui.fechaAfiliacion.dateTime().toPyDateTime()
+        self.persona.fechaNacimiento = fechaNacimientoDt.strftime("%Y-%m-%d")
+        self.persona.fechaAfiliacion = fechaAfiliacionDt.strftime("%Y-%m-%d")
         self.persona.vacunado = 'N'
         self.persona.fechaDesafiliacion = None
         self.logicaPersona.crearUsuario(self.persona)
@@ -237,10 +248,21 @@ class DesafiliarUsuarioWindow(QtWidgets.QMainWindow):
         self.persona = model.Persona()
         self.logicaPersona = logic.Persona()
         self.ui.noId.textEdited.connect(self.BuscarUsuario)
+        self.ui.fechaDesafiliacion.dateChanged.connect(self.verificarFechas)
         self.ui.pushButton_2.clicked.connect(self.btnActualizarClicked)
         self.ui.buttonAtras.clicked.connect(self.goAtras)
         self.ui.pushButton_2.setEnabled(False)
+        self.ui.fechaDesafiliacion.setEnabled(False)
         
+    def verificarFechas(self):
+        fechaDesafiliacionDt = self.ui.fechaDesafiliacion.dateTime().toPyDateTime()
+        fechaAfiliacionDt = datetime.strptime(self.ui.fechaAfiliacion.text(), "%Y-%m-%d")
+        fechaActual = datetime.now()
+        if (fechaActual > fechaDesafiliacionDt > fechaAfiliacionDt):
+            self.ui.pushButton_2.setEnabled(True)
+        else:
+            self.ui.pushButton_2.setEnabled(False)
+
     def BuscarUsuario(self):
         self.persona.noId = self.ui.noId.text()
         if self.persona.noId != '':
@@ -261,10 +283,10 @@ class DesafiliarUsuarioWindow(QtWidgets.QMainWindow):
                     self.ui.vacunado.setText('No')
                 if self.persona.fechaDesafiliacion:
                     self.ui.mensaje.setText('Este usuario ya es encuentra desafiliado')
-                    self.ui.fechaAfiliacion.setEnabled(False)
+                    self.ui.fechaDesafiliacion.setEnabled(False)
                     self.ui.pushButton_2.setEnabled(False)
                 else:
-                    self.ui.fechaAfiliacion.setEnabled(True)
+                    self.ui.fechaDesafiliacion.setEnabled(True)
                     self.ui.pushButton_2.setEnabled(True)
                     self.ui.mensaje.setText('')
             else:
@@ -277,17 +299,16 @@ class DesafiliarUsuarioWindow(QtWidgets.QMainWindow):
                 self.ui.fechaNacimiento.setText('')
                 self.ui.fechaAfiliacion.setText('')
                 self.ui.vacunado.setText('')
-                self.ui.fechaAfiliacion.setEnabled(False)
+                self.ui.fechaDesafiliacion.setEnabled(False)
                 self.ui.pushButton_2.setEnabled(False)
                 self.ui.mensaje.setText('<font color="red">El usuario con el numero de documento '+self.persona.noId+' no existe</font>')
         
-            
     def btnActualizarClicked(self):
         self.persona.noId = self.ui.noId.text()
         resultado = self.logicaPersona.consultarUsuario(self.persona.noId)
         self.persona = resultado
-        fechaDesafiliacion = self.ui.fechaDesafiliacion.date()
-        self.persona.fechaDesafiliacion = fechaDesafiliacion
+        fechaDesafiliacionDt = self.ui.fechaDesafiliacion.dateTime().toPyDateTime()
+        self.persona.fechaDesafiliacion = fechaDesafiliacionDt.strftime("%Y-%m-%d")
         self.logicaPersona.desafiliarUsuario(self.persona)
         self.ui.mensaje.setText('El paciente ha sido desafiliado')
         self.ui.pushButton_2.setEnabled(False)
@@ -357,10 +378,20 @@ class CrearLoteWindow(QtWidgets.QMainWindow):
         self.logicaLote = logic.Lote()
         self.ruta = None
         self.ui.noLote.textEdited.connect(self.BuscarLote)
+        self.ui.fechaVencimiento.dateChanged.connect(self.verificarFechas)
         self.ui.buscarImagen.clicked.connect(self.btnBuscarImagenClicked)
         self.ui.btnGuardar.clicked.connect(self.btnGuardarClicked)
         self.ui.buttonAtras.clicked.connect(self.goAtras)
+        self.ui.btnGuardar.setEnabled(False)
         
+    def verificarFechas(self):
+        fechaVencimientoDt = self.ui.fechaVencimiento.dateTime().toPyDateTime()
+        fechaActual = datetime.now()
+        if fechaVencimientoDt > fechaActual:
+            self.ui.btnGuardar.setEnabled(True)
+        else:
+            self.ui.btnGuardar.setEnabled(False)
+
     def BuscarLote(self):
         self.lote.noLote = self.ui.noLote.text()
         if self.lote.noLote != '':
@@ -376,7 +407,6 @@ class CrearLoteWindow(QtWidgets.QMainWindow):
                 self.ui.fechaVencimiento.setEnabled(True)
                 self.ui.buscarImagen.setEnabled(True)
                 self.ui.imagen.setEnabled(True)
-                self.ui.btnGuardar.setEnabled(True)
                 self.ui.mensaje.setText('')
             else:
                 self.ui.fabricante.setEnabled(False)
@@ -403,8 +433,8 @@ class CrearLoteWindow(QtWidgets.QMainWindow):
         self.lote.temperatura = self.ui.temperatura.text()
         self.lote.efectividad = self.ui.efectividad.text()
         self.lote.tiempoProteccion = self.ui.tiempoProteccion.text()
-        fechaVencimiento = self.ui.fechaVencimiento.date()
-        # self.lote.fechaVencimiento = fechaVencimiento
+        fechaVencimientoDt = self.ui.fechaVencimiento.dateTime().toPyDateTime()
+        self.lote.fechaVencimiento = fechaVencimientoDt.strftime("%Y-%m-%d")
         with open(self.ruta, "rb") as File:
             self.lote.imagen = File.read()
         self.logicaLote.crearLote(self.lote)
@@ -504,9 +534,33 @@ class CrearPlanWindow(QtWidgets.QMainWindow):
         self.plan = model.PlanDeVacunacion()
         self.logicaPlan = logic.PlanDeVacunacion()
         self.ui.idPlan.textEdited.connect(self.BuscarPlan)
+        self.ui.edadMinima.textEdited.connect(self.verificarEdades)
+        self.ui.edadMaxima.textEdited.connect(self.verificarEdades)
+        self.ui.fechaInicio.dateChanged.connect(self.verificarFechas)
+        self.ui.fechaFinal.dateChanged.connect(self.verificarFechas)
         self.ui.btnGuardar.clicked.connect(self.btnGuardarClicked)
         self.ui.buttonAtras.clicked.connect(self.goAtras)
         
+    def verificarEdades(self):
+        if self.ui.edadMaxima.text() != '' and self.ui.edadMinima.text() != '':
+            retornoEdadMinima = self.logicaPlan.verificarEdad(int(self.ui.edadMinima.text()))
+            retornoEdadMaxima = self.logicaPlan.verificarEdad(int(self.ui.edadMaxima.text()))
+            if retornoEdadMinima[0] and retornoEdadMaxima[0]: 
+                self.ui.mensaje.setText('')
+                self.ui.btnGuardar.setEnabled(True)
+            else: 
+                self.ui.mensaje.setText(retornoEdadMaxima[1])
+                self.ui.btnGuardar.setEnabled(False)
+        
+    def verificarFechas(self):
+        fechaInicioDt = self.ui.fechaInicio.dateTime().toPyDateTime()
+        fechaFinalDt = self.ui.fechaFinal.dateTime().toPyDateTime()
+        fechaActual = datetime.now()
+        if (fechaFinalDt >= fechaInicioDt > fechaActual):
+            self.ui.btnGuardar.setEnabled(True)
+        else:
+            self.ui.btnGuardar.setEnabled(False)
+    
     def BuscarPlan(self):
         self.plan.idPlan = self.ui.idPlan.text()
         if self.plan.idPlan != '':
@@ -516,7 +570,6 @@ class CrearPlanWindow(QtWidgets.QMainWindow):
                 self.ui.edadMaxima.setEnabled(True)
                 self.ui.fechaInicio.setEnabled(True)
                 self.ui.fechaFinal.setEnabled(True)
-                self.ui.btnGuardar.setEnabled(True)
                 self.ui.mensaje.setText('')
             else:
                 self.ui.edadMinima.setEnabled(False)
@@ -530,10 +583,10 @@ class CrearPlanWindow(QtWidgets.QMainWindow):
         self.plan.idPlan = self.ui.idPlan.text()
         self.plan.edadMinima = self.ui.edadMinima.text()
         self.plan.edadMaxima = self.ui.edadMaxima.text()
-        fechaInicio = self.ui.fechaInicio.date()
-        fechaFinal = self.ui.fechaFinal.date()
-        self.plan.fechaInicio = fechaInicio
-        self.plan.fechaFinal = fechaFinal
+        fechaInicioDt = self.ui.fechaInicio.dateTime().toPyDateTime()
+        self.plan.fechaInicio = fechaInicioDt.strftime("%Y-%m-%d")
+        fechaFinalDt = self.ui.fechaFinal.dateTime().toPyDateTime()
+        self.plan.fechaFinal = fechaFinalDt.strftime("%Y-%m-%d")
         self.logicaPlan.crearPlanVacunacion(self.plan)
         self.ui.mensaje.setText('El plan ha sido creado')
         self.ui.btnGuardar.setEnabled(False)
@@ -623,16 +676,23 @@ class CrearVacunacionWindow(QtWidgets.QMainWindow):
         self.programacion = model.ProgramacionDeVacunas()
         self.logicaProgramacion = logic.ProgramacionDeVacunas()
         self.fechaInicioIngresada = None
+        self.ui.fechaInicio.dateChanged.connect(self.verificarFechas)
         self.ui.btnCrear.clicked.connect(self.btnCrearClicked)
         self.ui.buttonAtras.clicked.connect(self.goAtras)
-        self.ui.btnCrear.setEnabled(True)
         
-    def btnGuardarClicked(self):
-        fechaIngresada = self.ui.fechaInicio.date()
-        self.fechaInicioIngresada = fechaIngresada
+    def verificarFechas(self):
+        fechaInicioIngresadaDt = self.ui.fechaInicio.dateTime().toPyDateTime()
+        fechaActual = datetime.now()
+        if (fechaInicioIngresadaDt > fechaActual):
+            self.ui.btnCrear.setEnabled(True)
+        else:
+            self.ui.btnCrear.setEnabled(False)
+            
+    def btnCrearClicked(self):
+        fechaIngresadaDt = self.ui.fechaInicio.dateTime().toPyDateTime()
+        retorno = self.logicaProgramacion.crearProgramacion(fechaIngresadaDt)
         self.ui.mensaje.setText('La programacion de vacunacion ha sido creado')
-        self.logicaProgramacion.crearProgramacion(self.fechaInicioIngresada)
-        # self.ui.btnGuardar.setEnabled(False)
+        self.ui.btnCrear.setEnabled(False)
         
     def goAtras(self):
         self.anotherWindow = MainWindow()
@@ -704,43 +764,11 @@ class ConsultarVacunacionWindow(QtWidgets.QMainWindow):
                 self.ui.tableWidget.setItem(row, col, cellinfo)
                 col += 1
             row += 1
+        self.ui.mensaje.setText('')
     def goAtras(self):
         self.anotherWindow = MainWindow()
         self.anotherWindow.show()
         self.close()
-
-class ConsultarPlanesWindow(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(ConsultarPlanesWindow, self).__init__()
-        self.ui = Ui_ConsultarTodoPlan()
-        self.ui.setupUi(self)
-        self.plan = model.PlanDeVacunacion()
-        self.logicaPlan = logic.PlanDeVacunacion()
-        self.ui.btnBuscar.clicked.connect(self.btnCargarDataClicked)
-        self.ui.buttonAtras.clicked.connect(self.goAtras)
-    
-    def btnCargarDataClicked(self):
-        resultados = self.logicaPlan.consultarPlanesVacunacion()
-        data = []
-        if resultados:
-            for plan in resultados:
-                data.append((str(plan.idPlan), str(plan.edadMinima), str(plan.edadMaxima), plan.fechaInicio, plan.fechaFinal))
-        self.ui.tableWidget.setRowCount(len(resultados)) 
-        row=0
-        for tup in data:
-            col=0
-            for item in tup:
-                cellinfo = QTableWidgetItem(item)
-                cellinfo.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled) #make it not editable
-                self.ui.tableWidget.setItem(row, col, cellinfo)
-                col += 1
-            row += 1
-
-    def goAtras(self):
-        self.anotherWindow = MainWindow()
-        self.anotherWindow.show()
-        self.close()
-
 
 logic.crearTablas()
 

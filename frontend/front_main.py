@@ -1,6 +1,7 @@
+from datetime import datetime
 import shutil
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtWidgets import QWidget, QApplication, QFileDialog
+from PyQt5.QtWidgets import QTableWidgetItem, QWidget, QApplication, QFileDialog
 '''============== Ventana principal=============='''
 from user_interface.main import Ui_MainWindow  # importa nuestro archivo generado
 from user_interface.propMainWindow import Ui_PropMainWindow  # importa nuestro archivo generado
@@ -18,7 +19,7 @@ from user_interface.consultaPlanVacunacionIndividual import Ui_MainWindow as Ui_
 from user_interface.consultaTodoPlan import Ui_ConsultarTodoPlan
 '''============== Ventanas programacion=============='''
 from user_interface.crearProgramacionVacunacion import Ui_CrearProgramacionVacunacion
-# from user_interface.consultaProgramacionVacuna import 
+from user_interface.consultaProgramacionVacuna import Ui_ConsultaProgramacion
 
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QDir
@@ -55,7 +56,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.actionConsultaCompletaProgramacion.triggered.connect(self.gotoConsultaComProgramacion)
         
         self.ui.DocumentacionUsuario.clicked.connect(self.gotoDocumentacion)
-        
+
     def gotoCrearUsuario(self):
         self.anotherWindow = CrearUsuarioWindow()
         self.anotherWindow.show()
@@ -96,16 +97,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.anotherWindow.show()
         self.close()
     def gotoConsultaComPlan(self):
-        self.anotherWindow = ConsultarLoteWindow()
+        self.anotherWindow = ConsultarPlanesWindow()
         self.anotherWindow.show()
         self.close()
 
     def gotoCrearProgramacion(self):
-        self.anotherWindow = ConsultarLoteWindow()
+        self.anotherWindow = CrearVacunacionWindow()
         self.anotherWindow.show()
         self.close()
     def gotoConsultaIndProgramacion(self):
-        self.anotherWindow = ConsultarLoteWindow()
+        self.anotherWindow = ConsultarVacunacionWindow()
         self.anotherWindow.show()
         self.close()
     def gotoConsultaComProgramacion(self):
@@ -490,7 +491,7 @@ class ConsultarLoteWindow(QtWidgets.QMainWindow):
         self.anotherWindow.show()
         self.close()
 
-class ConsultaLotesWindow(QtWidgets.QMainWindow):
+class ConsultarLotesWindow(QtWidgets.QMainWindow):
     pass
 
 '''============Modulo de plan============'''
@@ -580,8 +581,166 @@ class ConsultarPlanWindow(QtWidgets.QMainWindow):
         self.anotherWindow.show()
         self.close()
 
-class ConsultaLotesWindow(QtWidgets.QMainWindow):
-    pass
+class ConsultarPlanesWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(ConsultarPlanesWindow, self).__init__()
+        self.ui = Ui_ConsultarTodoPlan()
+        self.ui.setupUi(self)
+        self.plan = model.PlanDeVacunacion()
+        self.logicaPlan = logic.PlanDeVacunacion()
+        self.ui.btnBuscar.clicked.connect(self.btnCargarDataClicked)
+        self.ui.buttonAtras.clicked.connect(self.goAtras)
+    
+    def btnCargarDataClicked(self):
+        resultados = self.logicaPlan.consultarPlanesVacunacion()
+        data = []
+        if resultados:
+            for plan in resultados:
+                data.append((str(plan.idPlan), str(plan.edadMinima), str(plan.edadMaxima), plan.fechaInicio, plan.fechaFinal))
+        self.ui.tableWidget.setRowCount(len(resultados)) 
+        row=0
+        for tup in data:
+            col=0
+            for item in tup:
+                cellinfo = QTableWidgetItem(item)
+                cellinfo.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled) #make it not editable
+                self.ui.tableWidget.setItem(row, col, cellinfo)
+                col += 1
+            row += 1
+
+    def goAtras(self):
+        self.anotherWindow = MainWindow()
+        self.anotherWindow.show()
+        self.close()
+
+'''============Modulo de programacion============'''
+
+class CrearVacunacionWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(CrearVacunacionWindow, self).__init__()
+        self.ui = Ui_CrearProgramacionVacunacion()
+        self.ui.setupUi(self)
+        self.programacion = model.ProgramacionDeVacunas()
+        self.logicaProgramacion = logic.ProgramacionDeVacunas()
+        self.fechaInicioIngresada = None
+        self.ui.btnCrear.clicked.connect(self.btnCrearClicked)
+        self.ui.buttonAtras.clicked.connect(self.goAtras)
+        self.ui.btnCrear.setEnabled(True)
+        
+    def btnGuardarClicked(self):
+        fechaIngresada = self.ui.fechaInicio.date()
+        self.fechaInicioIngresada = fechaIngresada
+        self.ui.mensaje.setText('La programacion de vacunacion ha sido creado')
+        self.logicaProgramacion.crearProgramacion(self.fechaInicioIngresada)
+        # self.ui.btnGuardar.setEnabled(False)
+        
+    def goAtras(self):
+        self.anotherWindow = MainWindow()
+        self.anotherWindow.show()
+        self.close()
+     
+class ConsultarVacunacionWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(ConsultarVacunacionWindow, self).__init__()
+        self.ui = Ui_ConsultaProgramacion()
+        self.ui.setupUi(self)
+        self.programacion = model.ProgramacionDeVacunas()
+        self.logicaProgramacion = logic.ProgramacionDeVacunas()
+        self.ui.btnBuscar.clicked.connect(self.btnBuscarClicked)
+        self.ui.btnConsultaCompleta.clicked.connect(self.btnConsultaClicked)
+        self.ui.buttonAtras.clicked.connect(self.goAtras)
+        
+        self.ui.tableWidget.setRowCount(0)
+        
+    def btnBuscarClicked(self):
+        self.programacion = model.ProgramacionDeVacunas()
+        self.programacion.noId = self.ui.noId.text()
+        resultado = self.logicaProgramacion.consultarProgramacionIndividual(self.programacion.noId)
+        if resultado:
+            persona = resultado[0]
+            programacion = resultado[1]
+            lote = resultado[2]
+            data = ((str(persona.noId), str(persona.nombre), str(persona.apellido), str(persona.direccion), str(persona.telefono), str(persona.correo), str(programacion.fechaProgramada), str(programacion.horaProgramada), str(lote.noLote), str(lote.fabricante)))
+            self.ui.tableWidget.setRowCount(1)
+            col = 0
+            for item in data:
+                cellinfo = QTableWidgetItem(item)
+                cellinfo.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled) #make it not editable
+                self.ui.tableWidget.setItem(0, col, cellinfo)
+                col += 1
+                
+            self.ui.mensaje.setText('')
+        else:
+            self.ui.mensaje.setText('<font color="red">La cita del paciente con el numero de identificacion '+self.programacion.noId+' no existe</font>')
+    
+    def btnConsultaClicked(self):
+        opcionConsulta = self.ui.campoConsulta.currentText()
+        if opcionConsulta == 'Número de Identificación': datoConsulta = 0
+        elif opcionConsulta == 'Nombre': datoConsulta = 1
+        elif opcionConsulta == 'Apellido': datoConsulta = 2
+        elif opcionConsulta == 'Dirección': datoConsulta = 3
+        elif opcionConsulta == 'Teléfono': datoConsulta = 4
+        elif opcionConsulta == 'Correo': datoConsulta = 5
+        elif opcionConsulta == 'Fecha Programada': datoConsulta = 6
+        elif opcionConsulta == 'Hora Programada': datoConsulta = 7
+        elif opcionConsulta == 'Número de lote': datoConsulta = 8
+        elif opcionConsulta == 'Fabricante': datoConsulta = 9
+        resultados = self.logicaProgramacion.consultarProgramacionCompleta(datoConsulta)
+        data = []
+        if resultados:
+            for plan in resultados:
+                persona = plan[0]
+                programacion = plan[1]
+                lote = plan[2]
+                tup = (str(persona.noId), str(persona.nombre), str(persona.apellido), str(persona.direccion), str(persona.telefono), str(persona.correo), str(programacion.fechaProgramada), str(programacion.horaProgramada), str(lote.noLote), str(lote.fabricante))
+                data.append(tup)
+        self.ui.tableWidget.setRowCount(len(resultados)) 
+        row=0
+        for tup in data:
+            col=0
+            for item in tup:
+                cellinfo = QTableWidgetItem(item)
+                cellinfo.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled) #make it not editable
+                self.ui.tableWidget.setItem(row, col, cellinfo)
+                col += 1
+            row += 1
+    def goAtras(self):
+        self.anotherWindow = MainWindow()
+        self.anotherWindow.show()
+        self.close()
+
+class ConsultarPlanesWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(ConsultarPlanesWindow, self).__init__()
+        self.ui = Ui_ConsultarTodoPlan()
+        self.ui.setupUi(self)
+        self.plan = model.PlanDeVacunacion()
+        self.logicaPlan = logic.PlanDeVacunacion()
+        self.ui.btnBuscar.clicked.connect(self.btnCargarDataClicked)
+        self.ui.buttonAtras.clicked.connect(self.goAtras)
+    
+    def btnCargarDataClicked(self):
+        resultados = self.logicaPlan.consultarPlanesVacunacion()
+        data = []
+        if resultados:
+            for plan in resultados:
+                data.append((str(plan.idPlan), str(plan.edadMinima), str(plan.edadMaxima), plan.fechaInicio, plan.fechaFinal))
+        self.ui.tableWidget.setRowCount(len(resultados)) 
+        row=0
+        for tup in data:
+            col=0
+            for item in tup:
+                cellinfo = QTableWidgetItem(item)
+                cellinfo.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled) #make it not editable
+                self.ui.tableWidget.setItem(row, col, cellinfo)
+                col += 1
+            row += 1
+
+    def goAtras(self):
+        self.anotherWindow = MainWindow()
+        self.anotherWindow.show()
+        self.close()
+
 
 app = QApplication([])
 application = MainWindow()

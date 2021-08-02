@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>790</width>
-    <height>600</height>
+    <width>850</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>10</y>
-      <width>311</width>
+      <y>20</y>
+      <width>341</width>
       <height>51</height>
      </rect>
     </property>
@@ -30,82 +30,22 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>55</x>
-      <y>90</y>
-      <width>391</width>
-      <height>20</height>
+      <x>30</x>
+      <y>100</y>
+      <width>511</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;¿Por que campo desea organizar la consulta?&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Ingrese el documento de identidad que desea consultar&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>90</y>
-      <width>140</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>Número de Identificación</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Nombre</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Apellido</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Dirección</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Teléfono</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Correo</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Fecha Programada</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Hora Programada</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Número de lote</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Fabricante</string>
-     </property>
-    </item>
    </widget>
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>140</y>
-      <width>749</width>
+      <y>240</y>
+      <width>810</width>
       <height>351</height>
      </rect>
     </property>
@@ -251,11 +191,11 @@
      </property>
     </column>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="buttonAtras">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>510</y>
+      <y>610</y>
       <width>101</width>
       <height>31</height>
      </rect>
@@ -267,11 +207,11 @@
      <string>Volver</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="mensaje">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>510</y>
+      <x>170</x>
+      <y>610</y>
       <width>541</width>
       <height>31</height>
      </rect>
@@ -280,16 +220,120 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>790</width>
-     <height>21</height>
-    </rect>
-   </property>
+   <widget class="QLineEdit" name="noId">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>100</y>
+      <width>161</width>
+      <height>32</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnBuscar">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>100</y>
+      <width>88</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Buscar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnConsultaCompleta">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>180</y>
+      <width>111</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Consultar</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="campoConsulta">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>180</y>
+      <width>231</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Número de Identificación</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Nombre</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Apellido</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dirección</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Teléfono</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Correo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Fecha Programada</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Hora Programada</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Número de lote</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Fabricante</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>180</y>
+      <width>411</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;O consulte la programacion completa ordenada por:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

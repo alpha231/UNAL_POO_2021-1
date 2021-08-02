@@ -17,7 +17,7 @@
    <string>Crear programación de vacunación</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="btnCrear">
     <property name="enabled">
      <bool>false</bool>
     </property>
@@ -35,7 +35,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Guardar</string>
+     <string>Crear</string>
     </property>
    </widget>
    <widget class="QSplitter" name="splitter_3">
@@ -85,7 +85,7 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QDateEdit" name="fechaVencimiento_3">
+     <widget class="QDateEdit" name="fechaInicio">
       <property name="enabled">
        <bool>false</bool>
       </property>
@@ -119,7 +119,7 @@
      <string>Para registrar una nueva programación de citas, ingrese la siguiente información.</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="mensaje">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -132,22 +132,22 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>689</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuVolver">
-    <property name="title">
-     <string>Volver</string>
+   <widget class="QPushButton" name="buttonAtras">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>310</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(208, 208, 208);</string>
+    </property>
+    <property name="text">
+     <string>Atras</string>
     </property>
    </widget>
-   <addaction name="menuVolver"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

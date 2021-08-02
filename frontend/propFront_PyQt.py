@@ -132,7 +132,7 @@ class PropMainWindow(mywindow,QtWidgets.QMainWindow):
 
     def ayudaUsuario(self):
         # Se almacena un link correspondiente a la ubicación del pdf
-        path = 'https://drive.google.com/file/d/1L8BBeJP-mc_QLmNplzYemZgxe4j1F_Bx/view?usp=sharing'
+        path = 'https://docs.google.com/document/d/1RsPZYYKPNPl37ZHKIk5YJEVjrR-C3OAtvPPaQx1nl3A/edit?usp=sharing'
         # Abrimos el archivo en el navegador siguiendo la variable (path) por el método webbrowser.open_new() de la librería webbrowser
         webbrowser.open_new(path)
 

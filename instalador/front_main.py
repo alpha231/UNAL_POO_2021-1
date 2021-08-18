@@ -25,7 +25,6 @@ from user_interface.consultaProgramacionVacuna import Ui_ConsultaProgramacion
 from PyQt5.QtGui import QPixmap
 import sys
 import os
-sys.path.append('backend_POO')
 import model
 import logic
 

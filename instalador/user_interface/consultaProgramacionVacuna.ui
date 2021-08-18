@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConsultaProgramacion</class>
+ <widget class="QMainWindow" name="ConsultaProgramacion">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>850</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>20</y>
+      <width>341</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Programación de vacunación&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>100</y>
+      <width>511</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Ingrese el documento de identidad que desea consultar&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>240</y>
+      <width>810</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="showGrid">
+     <bool>true</bool>
+    </property>
+    <property name="sortingEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+    <property name="cornerButtonEnabled">
+     <bool>true</bool>
+    </property>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>40</number>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>160</number>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>35</number>
+    </attribute>
+    <row>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>3</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>4</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>6</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>7</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>8</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>9</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>10</string>
+     </property>
+    </row>
+    <column>
+     <property name="text">
+      <string>No. Identificación</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Nombre</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Apellido</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Dirección</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Teléfono</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Correo</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Fecha Programada</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Hora programada</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Número de lote de vacuna</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Fabricante de la vacuna</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QPushButton" name="buttonAtras">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>610</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(208, 208, 208);</string>
+    </property>
+    <property name="text">
+     <string>Volver</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mensaje">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>610</y>
+      <width>541</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="noId">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>100</y>
+      <width>161</width>
+      <height>32</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnBuscar">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>100</y>
+      <width>88</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Buscar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnConsultaCompleta">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>180</y>
+      <width>111</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Consultar</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="campoConsulta">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>180</y>
+      <width>231</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Número de Identificación</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Nombre</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Apellido</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dirección</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Teléfono</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Correo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Fecha Programada</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Hora Programada</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Número de lote</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Fabricante</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>180</y>
+      <width>411</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;O consulte la programacion completa ordenada por:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="iconoVacuna">
+    <file>icono vacuna.png</file>
+  </qresource>
+</RCC>

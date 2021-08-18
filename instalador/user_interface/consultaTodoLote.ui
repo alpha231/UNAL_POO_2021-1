@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConsultarTodoLote</class>
+ <widget class="QMainWindow" name="ConsultarTodoLote">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>850</width>
+    <height>587</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>20</y>
+      <width>291</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Lotes de Vacunas&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>80</y>
+      <width>750</width>
+      <height>377</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+      <pointsize>10</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
+    </property>
+    <property name="showGrid">
+     <bool>true</bool>
+    </property>
+    <property name="sortingEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+    <property name="cornerButtonEnabled">
+     <bool>true</bool>
+    </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <attribute name="horizontalHeaderCascadingSectionResizes">
+     <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>145</number>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>35</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string>No. de Lote</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Fabricante</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Tipo de vacuna</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Cantidad recibida</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Cantidad asignada</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Cantidad usada</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Dosis necesarias</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Temperatura de almacenamiento</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Efectividad</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Tiempo de proteccion</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Fecha de vencimiento</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QPushButton" name="buttonAtras">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>500</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(208, 208, 208);</string>
+    </property>
+    <property name="text">
+     <string>Atras</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>500</y>
+      <width>541</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnBuscar">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>460</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(208, 208, 208);</string>
+    </property>
+    <property name="text">
+     <string>Cargar data</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
